@@ -35,7 +35,7 @@ Merged code from Kr3m's missionpack plus features together with my additional th
   - ```3``` Arena
   - ```4``` Team Deathmatch
   - ```5``` Team Arena
-  - ```6``` FT
+  - ```6``` Freeze Tag (Not yet implemented)
   - ```7``` Capture the Flag
   - ```8``` One Flag CTF
   - ```9``` Overload
@@ -117,8 +117,8 @@ The **removeX** cvars allow to choose to remove items from a map, **X** is eithe
   * item_health_mega ```64```
   * holdable_teleporter ```128```
   * holdable_medkit ```256```
-  * holdable_kamikaze ```512``` *-DMISSIONPACK Only*
-  * holdable_portal ```1024``` *-DMISSIONPACK Only*
+  * holdable_kamikaze ```512``` *Team Arena Only*
+  * holdable_portal ```1024``` *Team Arena Only*
   * holdable_invulnerability ```2048``` *-DMISSIONPACK Only*
   * armor_jacket ```4096``` *Ultimate Arena Only*
  * removepowerup "VAL", where VAL can used the following values:
@@ -141,14 +141,21 @@ The build system included should be completely portable provided that you are on
 - FIGHT!
 
 ## To do
-- Finish FFA Arena
+- Finish FFA Arena gametype
+- Implement FT gametype
 - Some custom maps made specifically for this gamemode if time permits
-
+- Fix bots being telepathic in arena gametypes (and generally improve them all around)
+- Spectate team when dead in CA
+- Fully fix shooting during pre-round warmup in arena gametypes
+- Alias command
+- Credits screen in UI
+- VQ3 physics consts to cvars and perhaps preset configs to simulate QW/CPM type craphysics
 
  ## Credits
  - **Kevin "Kr3m" Remisoski** for missionpackplus code (see <https://github.com/Kr3m/missionpackplus> for additional credits for unlagged code, etc)
  - **RemyTek** for their foundation mod code which also ended up merged as it was used as the basis for missionpackplus (see <https://github.com/RemyTek/foundation>)
  - **Kevin "79DieselRabbit" Worrel** for Frozen Colors map (named as mp2team1 -- we needed at least one amazing custom map supporting 1FCTF, etc)
  - **Hubster** for his famous Aerowalk conversion (named as mp2tourney1 -- green armor!)
- - **Dmitri "Dimmskii" Poterianski** (myself) for UI work and upscales, QL model conversions, coding, anything else I forgot to mention
+ - **Promode Team** PM and FB skins
+ - **Dimmskii** for UI work and upscales, QL model conversions, coding, anything else I forgot to mention
  - **Id Software** for Almost Lost map, and everything else making all of this possible!
