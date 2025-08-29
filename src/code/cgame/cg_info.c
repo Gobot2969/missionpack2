@@ -197,6 +197,17 @@ void CG_DrawInformation( void ) {
 		if ( s[0] == '1' ) {
 			ptr = Q_stradd( ptr, "Unlagged" );
 		}
+		
+// ~Dimmskii
+		// noalias
+		s = Info_ValueForKey( info, "g_noalias" );
+		if ( s[0] == '1' ) {
+			if ( buf[0] ) {
+				ptr = Q_stradd( ptr, ", " );
+			}
+			ptr = Q_stradd( ptr, "No Alias" );
+		}
+// END ~Dimmskii
 
 		// pure server
 		s = Info_ValueForKey( sysInfo, "sv_pure" );

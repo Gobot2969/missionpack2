@@ -295,6 +295,48 @@ static void UI_CalcPostGameStats() {
 
 }
 
+// ~Dimmskii
+/*
+==================
+UI_Alias_f
+Based on https://www.icculus.org/~phaethon/q3/aliases/aliases.html
+==================
+*/
+
+static void UI_Alias_f( void )
+{
+	char name[MAX_CVAR_VALUE_STRING];
+	char content[MAX_CVAR_VALUE_STRING];
+	int i;
+
+	if (trap_Argc() == 1)  /* No parameters -- list all aliases. */
+	{
+		trap_Cmd_ExecuteText( EXEC_APPEND, "cvarlist &*\n" );
+		return;
+	}
+	if (trap_Argc() == 2)  /* Alias name only -- list its content. */
+	{
+		trap_Cmd_ExecuteText( EXEC_APPEND, va("cvarlist &%s\n", UI_Argv(1)) );
+		return;
+	}
+
+	/* Construct cvar name of the alias. */
+	Q_strncpyz(name, va("&%s", UI_Argv(1)), sizeof(name));
+
+	/* Construct alias content. */
+	/* String up all the arguments separated by space. */
+	Q_strncpyz(content, UI_Argv(2), sizeof(content));
+	for (i = 3; i < trap_Argc(); i++)
+		Q_strncpyz(content, va("%s %s", content, UI_Argv(i)), sizeof(content));
+
+	/* Stash it. */
+	/* We don't have a cgame-space vmCvar_t to associate, so pass NULL instead. */
+	/* We want the alias to be persistant, so have it saved to q3config.cfg */
+	trap_Cvar_Register(NULL, name, content, CVAR_ARCHIVE);
+	trap_Cvar_Set(name, content);
+}
+// END ~Dimmskii
+
 
 /*
 =================
@@ -355,6 +397,12 @@ qboolean UI_ConsoleCommand( int realTime ) {
 
 	if ( Q_stricmp (cmd, "ui_cdkey") == 0 ) {
 		//UI_CDKeyMenu_f();
+		return qtrue;
+	}
+
+
+	if ( Q_stricmp (cmd, "alias") == 0 ) {
+		UI_Alias_f();
 		return qtrue;
 	}
 
