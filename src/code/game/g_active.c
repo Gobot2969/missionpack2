@@ -845,6 +845,17 @@ void ClientThink_real( gentity_t *ent ) {
 		return;
 	}
 
+	#ifdef MISSIONPACK2
+	// dead players in arena modes act as spectators
+	if ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
+		&& !level.warmupTime
+		&& client->sess.sessionTeam != TEAM_SPECTATOR
+		&& client->sess.spectatorState == SPECTATOR_FOLLOW ) {
+		SpectatorThink( ent, ucmd );
+		return;
+	}
+	#endif
+
 	// check for inactivity timer, but never drop the local client of a non-dedicated server
 	if ( !ClientInactivityTimer( client ) ) {
 		return;
@@ -1028,12 +1039,12 @@ void ClientThink_real( gentity_t *ent ) {
 
 	// check for respawning
 	if ( client->ps.stats[STAT_HEALTH] <= 0 ) {
-#ifdef MISSIONPACK2
-		// Prevent click or forced respawn in arena gamemodes
+	#ifdef MISSIONPACK2
+		// Dead arena players are handled as spectators above
 		if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
 			return;
 		}
-#endif
+	#endif
 		// wait for the attack button to be pressed
 		if ( level.time > client->respawnTime ) {
 			// forcerespawn is to prevent users from waiting out powerups
@@ -1098,6 +1109,16 @@ SpectatorClientEndFrame
 */
 void SpectatorClientEndFrame( gentity_t *ent ) {
 	gclient_t	*cl;
+#ifdef MISSIONPACK2
+	qboolean	isDeadArenaPlayer;
+	int		savedTeam;
+
+	isDeadArenaPlayer = ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
+		&& !level.warmupTime
+		&& ent->client->sess.sessionTeam != TEAM_SPECTATOR
+		&& ent->client->sess.spectatorState == SPECTATOR_FOLLOW );
+	savedTeam = ent->client->ps.persistant[PERS_TEAM];
+#endif
 
 	// if we are doing a chase cam or a remote view, grab the latest info
 	if ( ent->client->sess.spectatorState == SPECTATOR_FOLLOW ) {
@@ -1118,11 +1139,21 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 				ent->client->ps = cl->ps;
 				ent->client->ps.pm_flags |= PMF_FOLLOW;
 				ent->client->ps.eFlags = flags;
+#ifdef MISSIONPACK2
+				// preserve original team for dead arena players
+				if ( isDeadArenaPlayer ) {
+					ent->client->ps.persistant[PERS_TEAM] = savedTeam;
+				}
+#endif
 				return;
 			} else {
 				// drop them to free spectators unless they are dedicated camera followers
 				if ( ent->client->sess.spectatorClient >= 0 ) {
 					ent->client->sess.spectatorState = SPECTATOR_FREE;
+#ifdef MISSIONPACK2
+					// dead arena players should not respawn via ClientBegin
+					if ( !isDeadArenaPlayer )
+#endif
 					ClientBegin( ent->client - level.clients );
 				}
 			}
@@ -1162,6 +1193,17 @@ void ClientEndFrame( gentity_t *ent ) {
 		SpectatorClientEndFrame( ent );
 		return;
 	}
+
+	#ifdef MISSIONPACK2
+	// dead players in arena modes follow like spectators
+	if ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
+		&& !level.warmupTime
+		&& ent->client->sess.sessionTeam != TEAM_SPECTATOR
+		&& ent->client->sess.spectatorState == SPECTATOR_FOLLOW ) {
+		SpectatorClientEndFrame( ent );
+		return;
+	}
+	#endif
 
 	client = ent->client;
 

@@ -321,8 +321,15 @@ qboolean CG_DrawOldScoreboard( void ) {
 		return qfalse;
 	}
 
-	if ( cg.showScores || cg.predictedPlayerState.pm_type == PM_DEAD ||
-		 cg.predictedPlayerState.pm_type == PM_INTERMISSION ) {
+	if ( cg.showScores || cg.predictedPlayerState.pm_type == PM_INTERMISSION
+	#ifdef MISSIONPACK2
+		 || ( cg.predictedPlayerState.pm_type == PM_DEAD
+			&& !( ( cgs.gametype == GT_ARENA || cgs.gametype == GT_TEAMARENA )
+				&& ( cg.snap->ps.pm_flags & PMF_FOLLOW ) ) )
+	#else
+		 || cg.predictedPlayerState.pm_type == PM_DEAD
+	#endif
+		) {
 		fade = 1.0;
 		fadeColor = colorWhite;
 	} else {
