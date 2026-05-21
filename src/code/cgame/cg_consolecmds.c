@@ -430,48 +430,6 @@ static void CG_EditHud_f( void ) {
 
 #endif
 
-// ~Dimmskii
-// From https://www.icculus.org/~phaethon/q3/aliases/aliases.html
-/*
-==================
-CG_Alias_f
-==================
-*/
-
-static void CG_Alias_f( void )
-{
-	char name[MAX_CVAR_VALUE_STRING];
-	char content[MAX_CVAR_VALUE_STRING];
-	int i;
-
-	if (trap_Argc() == 1)  /* No parameters -- list all aliases. */
-	{
-		trap_SendConsoleCommand("cvarlist &*\n");
-		return;
-	}
-	if (trap_Argc() == 2)  /* Alias name only -- list its content. */
-	{
-		trap_SendConsoleCommand(va("cvarlist &%s\n", CG_Argv(1)));
-		return;
-	}
-
-	/* Construct cvar name of the alias. */
-	Q_strncpyz(name, va("&%s", CG_Argv(1)), sizeof(name));
-
-	/* Construct alias content. */
-	/* String up all the arguments separated by space. */
-	Q_strncpyz(content, CG_Argv(2), sizeof(content));
-	for (i = 3; i < trap_Argc(); i++)
-		Q_strncpyz(content, va("%s %s", content, CG_Argv(i)), sizeof(content));
-
-	/* Stash it. */
-	/* We don't have a cgame-space vmCvar_t to associate, so pass NULL instead. */
-	/* We want the alias to be persistant, so have it saved to q3config.cfg */
-	trap_Cvar_Register(NULL, name, content, CVAR_ARCHIVE);
-	trap_Cvar_Set(name, content);
-}
-// END ~Dimmskii
-
 /*
 ==================
 CG_StartOrbit_f
@@ -564,9 +522,6 @@ static consoleCommand_t	commands[] = {
 	{ "scoresDown", CG_scrollScoresDown_f },
 	{ "scoresUp", CG_scrollScoresUp_f },
 #endif
-// ~Dimmskii
-	{ "alias", CG_Alias_f }, // From https://www.icculus.org/~phaethon/q3/aliases/aliases.html
-// END ~Dimmskii
 	{ "startOrbit", CG_StartOrbit_f },
 	//{ "camera", CG_Camera_f },
 	{ "loaddeferred", CG_LoadDeferredPlayers }	
@@ -584,9 +539,6 @@ Cmd_Argc() / Cmd_Argv()
 qboolean CG_ConsoleCommand( void ) {
 	const char	*cmd;
 	int		i;
-	// ~Dimmskii
-	char	cvartest[5]; // From https://www.icculus.org/~phaethon/q3/aliases/aliases.html
-	// END ~Dimmskii
 
 	cmd = CG_Argv(0);
 
@@ -596,25 +548,6 @@ qboolean CG_ConsoleCommand( void ) {
 			return qtrue;
 		}
 	}
-	
-// ~Dimmskii
-// Based on https://www.icculus.org/~phaethon/q3/aliases/aliases.html
-	//Command unknown.  Try as alias.
-	trap_Cvar_VariableStringBuffer(va("&%s", cmd), cvartest, 5);
-	if (*cvartest) {  /* exists? */
-		
-		// Dimmskii mod: Before processing alias, check for noalias serverinfo and prevent it from firing off. Command will still be found (return qtrue).
-		// One might argue that a client having successfully bypassed pure server checks and loaded their own cgame vm could still circumvent this in order to gain an unfair advantage.
-		// However, this is a moot point; we're just going back down the same old rabbithole of debates regarding client-sided anticheat. Devoted cheaters will always find a way to macro!
-		if ( Info_ValueForKey( CG_ConfigString(CS_SERVERINFO), "g_noalias" )[0] == '1' ) {
-			CG_Printf ("Alias is disabled on this server\n");
-		} else {
-			trap_SendConsoleCommand(va("vstr &%s", cmd));
-		}
-		return qtrue;
-	}
-	//Well, tough. Alias unknown.
-// END ~Dimmskii
 
 	return qfalse;
 }
