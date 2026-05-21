@@ -141,19 +141,12 @@ The build system included should be completely portable provided that you are on
 - FIGHT!
 
 ## To do
-- Finish FFA Arena gametype
-- Implement FT gametype
-- Some custom maps made specifically for this gamemode if time permits
-- Fix bots being telepathic in arena gametypes (and generally improve them all around)
-- Spectate team when dead in CA
-- Fully fix shooting during pre-round warmup in arena gametypes
-- Alias command
+- Implement Freeze Tag gametype
+- Improve bots
 - Credits screen in UI
-- VQ3 physics consts to cvars and perhaps preset configs to simulate QW/CPM type craphysics
 
  ## Credits
- - **Kevin "Kr3m" Remisoski** for missionpackplus code (see <https://github.com/Kr3m/missionpackplus> for additional credits for unlagged code, etc)
- - **RemyTek** for their foundation mod code which also ended up merged as it was used as the basis for missionpackplus (see <https://github.com/RemyTek/foundation>)
+ - **Kevin "Kr3m" Remisoski** for missionpackplus and foundation mods (see <https://github.com/Kr3m/missionpackplus> for additional credits for unlagged code, etc)
  - **Kevin "79DieselRabbit" Worrel** for Frozen Colors map (named as mp2team1 -- we needed at least one amazing custom map supporting 1FCTF, etc)
  - **Hubster** for his famous Aerowalk conversion (named as mp2tourney1 -- green armor!)
  - **Promode Team** PM and FB skins
