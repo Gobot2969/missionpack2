@@ -1834,6 +1834,10 @@ static void G_WarmupEnd( void )
 		
 		if (isArena) {
 			client->ps.pm_flags &= ~PMF_NOSHOOT;
+			if ( client->sess.sessionTeam != TEAM_SPECTATOR ) {
+				client->sess.spectatorState = SPECTATOR_NOT;
+				client->ps.pm_flags &= ~PMF_FOLLOW;
+			}
 		} else {
 			// reset player awards
 			client->ps.persistant[PERS_IMPRESSIVE_COUNT] = 0;
