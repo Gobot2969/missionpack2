@@ -1135,7 +1135,7 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 
 	// if we are doing a chase cam or a remote view, grab the latest info
 	if ( ent->client->sess.spectatorState == SPECTATOR_FOLLOW ) {
-		int		clientNum, flags, savedScore;
+		int		clientNum, flags, savedScore, savedRoundWins, savedCaptures;
 
 		clientNum = ent->client->sess.spectatorClient;
 
@@ -1150,10 +1150,14 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 			if ( cl->pers.connected == CON_CONNECTED && cl->sess.sessionTeam != TEAM_SPECTATOR ) {
 				flags = (cl->ps.eFlags & ~(EF_VOTED | EF_TEAMVOTED)) | (ent->client->ps.eFlags & (EF_VOTED | EF_TEAMVOTED));
 				savedScore = ent->client->ps.persistant[PERS_SCORE];
+				savedRoundWins = ent->client->ps.persistant[PERS_ROUNDWINS];
+				savedCaptures = ent->client->ps.persistant[PERS_CAPTURES];
 				ent->client->ps = cl->ps;
 				ent->client->ps.pm_flags |= PMF_FOLLOW;
 				ent->client->ps.eFlags = flags;
 				ent->client->ps.persistant[PERS_SCORE] = savedScore;
+				ent->client->ps.persistant[PERS_ROUNDWINS] = savedRoundWins;
+				ent->client->ps.persistant[PERS_CAPTURES] = savedCaptures;
 #ifdef MISSIONPACK2
 				// preserve original team for dead arena players
 				if ( isDeadArenaPlayer ) {
