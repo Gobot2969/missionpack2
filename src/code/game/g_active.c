@@ -1124,13 +1124,11 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 	gclient_t	*cl;
 #ifdef MISSIONPACK2
 	qboolean	isDeadArenaPlayer;
-	int		savedTeam;
 
 	isDeadArenaPlayer = ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
 		&& !level.warmupTime
 		&& ent->client->sess.sessionTeam != TEAM_SPECTATOR
 		&& ent->client->sess.spectatorState == SPECTATOR_FOLLOW );
-	savedTeam = ent->client->ps.persistant[PERS_TEAM];
 #endif
 
 	// if we are doing a chase cam or a remote view, grab the latest info
@@ -1158,14 +1156,8 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 				ent->client->ps.persistant[PERS_SCORE] = savedScore;
 				ent->client->ps.persistant[PERS_ROUNDWINS] = savedRoundWins;
 				ent->client->ps.persistant[PERS_CAPTURES] = savedCaptures;
-#ifdef MISSIONPACK2
-				// preserve original team for dead arena players
-				if ( isDeadArenaPlayer ) {
-					ent->client->ps.persistant[PERS_TEAM] = savedTeam;
-				}
-#endif
 				return;
-			} else {
+				} else {
 				// drop them to free spectators unless they are dedicated camera followers
 				if ( ent->client->sess.spectatorClient >= 0 ) {
 					ent->client->sess.spectatorState = SPECTATOR_FREE;
