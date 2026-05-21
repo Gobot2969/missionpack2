@@ -712,24 +712,6 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 
 	trap_LinkEntity (self);
 
-	#ifdef MISSIONPACK2
-	// in arena modes, immediately transition dead players into spectator follow mode
-	if ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) && !level.warmupTime ) {
-		// sync entity state so CopyToBodyQue gets the death animation
-		BG_PlayerStateToEntityState( &self->client->ps, &self->s, qtrue );
-		CopyToBodyQue( self );
-		self->client->ps.stats[STAT_HEALTH] = self->health;
-		self->client->sess.spectatorState = SPECTATOR_FOLLOW;
-		self->client->sess.spectatorClient = self->s.number;
-		self->client->ps.pm_type = PM_SPECTATOR;
-		self->takedamage = qfalse;
-		self->r.contents = 0;
-		self->clipmask = MASK_PLAYERSOLID & ~CONTENTS_BODY;
-		trap_UnlinkEntity( self );
-		Cmd_FollowCycle_f( self, 1 );
-	}
-	#endif
-
 	}
 
 

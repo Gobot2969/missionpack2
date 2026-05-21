@@ -1040,8 +1040,21 @@ void ClientThink_real( gentity_t *ent ) {
 	// check for respawning
 	if ( client->ps.stats[STAT_HEALTH] <= 0 ) {
 	#ifdef MISSIONPACK2
-		// Dead arena players are handled as spectators above
-		if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
+		// in arena modes, transition to spectator follow after death anim plays
+		if ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
+			&& !level.warmupTime ) {
+			if ( level.time > client->respawnTime ) {
+				BG_PlayerStateToEntityState( &ent->client->ps, &ent->s, qtrue );
+				CopyToBodyQue( ent );
+				client->sess.spectatorState = SPECTATOR_FOLLOW;
+				client->sess.spectatorClient = ent->s.number;
+				client->ps.pm_type = PM_SPECTATOR;
+				ent->takedamage = qfalse;
+				ent->r.contents = 0;
+				ent->clipmask = MASK_PLAYERSOLID & ~CONTENTS_BODY;
+				trap_UnlinkEntity( ent );
+				Cmd_FollowCycle_f( ent, 1 );
+			}
 			return;
 		}
 	#endif
