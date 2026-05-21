@@ -440,7 +440,12 @@ respawn
 void respawn( gentity_t *ent ) {
 	gentity_t	*tent;
 
+#ifdef MISSIONPACK2
+	if ( ent->health <= 0
+		&& g_gametype.integer != GT_ARENA && g_gametype.integer != GT_TEAMARENA )
+#else
 	if ( ent->health <= 0 )
+#endif
 		CopyToBodyQue( ent );
 
 	ClientSpawn( ent );
