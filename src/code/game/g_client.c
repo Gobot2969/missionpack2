@@ -440,7 +440,12 @@ respawn
 void respawn( gentity_t *ent ) {
 	gentity_t	*tent;
 
+#ifdef MISSIONPACK2
+	if ( ent->health <= 0
+		&& g_gametype.integer != GT_ARENA && g_gametype.integer != GT_TEAMARENA )
+#else
 	if ( ent->health <= 0 )
+#endif
 		CopyToBodyQue( ent );
 
 	ClientSpawn( ent );
@@ -1318,6 +1323,12 @@ void ClientSpawn(gentity_t *ent) {
 			client->ps.stats[STAT_ARMOR] = -500;
 			client->ps.pm_type = PM_SPECTATOR;
 			client->ps.pm_flags &= ~PMF_RESPAWNED;
+			client->sess.spectatorState = SPECTATOR_FOLLOW;
+			client->sess.spectatorClient = index;
+			ent->takedamage = qfalse;
+			ent->r.contents = 0;
+			ent->clipmask = MASK_PLAYERSOLID & ~CONTENTS_BODY;
+			trap_UnlinkEntity( ent );
 		}
 	}
 #endif
@@ -1334,12 +1345,22 @@ void ClientSpawn(gentity_t *ent) {
 	// run the presend to set anything else
 	ClientEndFrame( ent );
 
+	#ifdef MISSIONPACK2
+	// find someone to follow for mid-round arena spawns
+	if ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
+		&& !level.warmupTime
+		&& client->sess.sessionTeam != TEAM_SPECTATOR
+		&& client->sess.spectatorState == SPECTATOR_FOLLOW ) {
+		Cmd_FollowCycle_f( ent, 1 );
+	}
+	#endif
+
 	// clear entity state values
 	BG_PlayerStateToEntityState( &client->ps, &ent->s, qtrue );
-}
+	}
 
 
-/*
+	/*
 ===========
 ClientDisconnect
 
@@ -1367,10 +1388,18 @@ void ClientDisconnect( int clientNum ) {
 
 	// stop any following clients
 	for ( i = 0 ; i < level.maxclients ; i++ ) {
-		if ( level.clients[i].sess.sessionTeam == TEAM_SPECTATOR
-			&& level.clients[i].sess.spectatorState == SPECTATOR_FOLLOW
+		if ( level.clients[i].sess.spectatorState == SPECTATOR_FOLLOW
 			&& level.clients[i].sess.spectatorClient == clientNum ) {
-			StopFollowing( &g_entities[i], qtrue );
+	#ifdef MISSIONPACK2
+			// dead arena players should cycle to next player, not become spectators
+			if ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
+				&& level.clients[i].sess.sessionTeam != TEAM_SPECTATOR ) {
+				Cmd_FollowCycle_f( &g_entities[i], 1 );
+			} else
+	#endif
+			if ( level.clients[i].sess.sessionTeam == TEAM_SPECTATOR ) {
+				StopFollowing( &g_entities[i], qtrue );
+			}
 		}
 	}
 

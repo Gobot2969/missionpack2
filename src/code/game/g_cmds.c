@@ -895,6 +895,9 @@ void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
 	int		clientnum;
 	int		original;
 	gclient_t	*client;
+#ifdef MISSIONPACK2
+	qboolean	isDeadArenaPlayer;
+#endif
 
 	// if they are playing a tournement game, count as a loss
 	if ( (g_gametype.integer == GT_TOURNAMENT )
@@ -904,10 +907,22 @@ void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
 
 	client = ent->client;
 
+#ifdef MISSIONPACK2
+	isDeadArenaPlayer = ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
+		&& !level.warmupTime
+		&& client->sess.sessionTeam != TEAM_SPECTATOR
+		&& ( client->sess.spectatorState == SPECTATOR_FOLLOW
+			|| client->ps.stats[STAT_HEALTH] <= 0 ) );
+
+	if ( !isDeadArenaPlayer ) {
+#endif
 	// first set them to spectator
 	if ( client->sess.spectatorState == SPECTATOR_NOT ) {
 		SetTeam( ent, "spectator" );
 	}
+#ifdef MISSIONPACK2
+	}
+#endif
 
 	if ( dir != 1 && dir != -1 ) {
 		G_Error( "Cmd_FollowCycle_f: bad dir %i", dir );
@@ -934,11 +949,18 @@ void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
 			continue;
 		}
 
+		#ifdef MISSIONPACK2
+		// dead arena players should only follow alive players
+		if ( isDeadArenaPlayer && g_entities[ clientnum ].health <= 0 ) {
+			continue;
+		}
+		#endif
+
 		// this is good, we can use it
 		ent->client->sess.spectatorClient = clientnum;
 		ent->client->sess.spectatorState = SPECTATOR_FOLLOW;
 		return;
-	} while ( clientnum != original );
+		} while ( clientnum != original );
 
 	// leave it where it was
 }

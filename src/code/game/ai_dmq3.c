@@ -191,6 +191,11 @@ qboolean EntityIsDead(aas_entityinfo_t *entinfo) {
 		//retrieve the current client state
 		BotAI_GetClientState( entinfo->number, &ps );
 		if (ps.pm_type != PM_NORMAL) return qtrue;
+#ifdef MISSIONPACK2
+		// dead arena players in follow mode have PM_NORMAL copied from followed player
+		if ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
+			&& g_entities[entinfo->number].health <= 0 ) return qtrue;
+#endif
 	}
 	return qfalse;
 }

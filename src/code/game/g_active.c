@@ -845,6 +845,17 @@ void ClientThink_real( gentity_t *ent ) {
 		return;
 	}
 
+	#ifdef MISSIONPACK2
+	// dead players in arena modes act as spectators
+	if ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
+		&& !level.warmupTime
+		&& client->sess.sessionTeam != TEAM_SPECTATOR
+		&& client->sess.spectatorState == SPECTATOR_FOLLOW ) {
+		SpectatorThink( ent, ucmd );
+		return;
+	}
+	#endif
+
 	// check for inactivity timer, but never drop the local client of a non-dedicated server
 	if ( !ClientInactivityTimer( client ) ) {
 		return;
@@ -1028,12 +1039,25 @@ void ClientThink_real( gentity_t *ent ) {
 
 	// check for respawning
 	if ( client->ps.stats[STAT_HEALTH] <= 0 ) {
-#ifdef MISSIONPACK2
-		// Prevent click or forced respawn in arena gamemodes
-		if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
+	#ifdef MISSIONPACK2
+		// in arena modes, transition to spectator follow after death anim plays
+		if ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
+			&& !level.warmupTime ) {
+			if ( level.time > client->respawnTime ) {
+				BG_PlayerStateToEntityState( &ent->client->ps, &ent->s, qtrue );
+				CopyToBodyQue( ent );
+				client->sess.spectatorState = SPECTATOR_FOLLOW;
+				client->sess.spectatorClient = ent->s.number;
+				client->ps.pm_type = PM_SPECTATOR;
+				ent->takedamage = qfalse;
+				ent->r.contents = 0;
+				ent->clipmask = MASK_PLAYERSOLID & ~CONTENTS_BODY;
+				trap_UnlinkEntity( ent );
+				Cmd_FollowCycle_f( ent, 1 );
+			}
 			return;
 		}
-#endif
+	#endif
 		// wait for the attack button to be pressed
 		if ( level.time > client->respawnTime ) {
 			// forcerespawn is to prevent users from waiting out powerups
@@ -1098,10 +1122,18 @@ SpectatorClientEndFrame
 */
 void SpectatorClientEndFrame( gentity_t *ent ) {
 	gclient_t	*cl;
+#ifdef MISSIONPACK2
+	qboolean	isDeadArenaPlayer;
+
+	isDeadArenaPlayer = ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
+		&& !level.warmupTime
+		&& ent->client->sess.sessionTeam != TEAM_SPECTATOR
+		&& ent->client->sess.spectatorState == SPECTATOR_FOLLOW );
+#endif
 
 	// if we are doing a chase cam or a remote view, grab the latest info
 	if ( ent->client->sess.spectatorState == SPECTATOR_FOLLOW ) {
-		int		clientNum, flags;
+		int		clientNum, flags, savedScore, savedRoundWins, savedCaptures;
 
 		clientNum = ent->client->sess.spectatorClient;
 
@@ -1115,14 +1147,24 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 			cl = &level.clients[ clientNum ];
 			if ( cl->pers.connected == CON_CONNECTED && cl->sess.sessionTeam != TEAM_SPECTATOR ) {
 				flags = (cl->ps.eFlags & ~(EF_VOTED | EF_TEAMVOTED)) | (ent->client->ps.eFlags & (EF_VOTED | EF_TEAMVOTED));
+				savedScore = ent->client->ps.persistant[PERS_SCORE];
+				savedRoundWins = ent->client->ps.persistant[PERS_ROUNDWINS];
+				savedCaptures = ent->client->ps.persistant[PERS_CAPTURES];
 				ent->client->ps = cl->ps;
 				ent->client->ps.pm_flags |= PMF_FOLLOW;
 				ent->client->ps.eFlags = flags;
+				ent->client->ps.persistant[PERS_SCORE] = savedScore;
+				ent->client->ps.persistant[PERS_ROUNDWINS] = savedRoundWins;
+				ent->client->ps.persistant[PERS_CAPTURES] = savedCaptures;
 				return;
-			} else {
+				} else {
 				// drop them to free spectators unless they are dedicated camera followers
 				if ( ent->client->sess.spectatorClient >= 0 ) {
 					ent->client->sess.spectatorState = SPECTATOR_FREE;
+#ifdef MISSIONPACK2
+					// dead arena players should not respawn via ClientBegin
+					if ( !isDeadArenaPlayer )
+#endif
 					ClientBegin( ent->client - level.clients );
 				}
 			}
@@ -1162,6 +1204,17 @@ void ClientEndFrame( gentity_t *ent ) {
 		SpectatorClientEndFrame( ent );
 		return;
 	}
+
+	#ifdef MISSIONPACK2
+	// dead players in arena modes follow like spectators
+	if ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
+		&& !level.warmupTime
+		&& ent->client->sess.sessionTeam != TEAM_SPECTATOR
+		&& ent->client->sess.spectatorState == SPECTATOR_FOLLOW ) {
+		SpectatorClientEndFrame( ent );
+		return;
+	}
+	#endif
 
 	client = ent->client;
 

@@ -309,11 +309,20 @@ static void CG_OffsetFirstPersonView( void ) {
 
 	// if dead, fix the angle and don't add any kick
 	if ( cg.snap->ps.stats[STAT_HEALTH] <= 0 ) {
-		angles[ROLL] = 40;
-		angles[PITCH] = -15;
-		angles[YAW] = cg.snap->ps.stats[STAT_DEAD_YAW];
-		origin[2] += cg.predictedPlayerState.viewheight;
-		return;
+	#ifdef MISSIONPACK2
+		// dead arena players following someone use the followed player's view
+		if ( ( cgs.gametype == GT_ARENA || cgs.gametype == GT_TEAMARENA )
+			&& ( cg.snap->ps.pm_flags & PMF_FOLLOW ) ) {
+			// don't apply death view, let normal follow view work
+		} else
+	#endif
+		{
+			angles[ROLL] = 40;
+			angles[PITCH] = -15;
+			angles[YAW] = cg.snap->ps.stats[STAT_DEAD_YAW];
+			origin[2] += cg.predictedPlayerState.viewheight;
+			return;
+		}
 	}
 
 	// add angles based on weapon kick
@@ -832,6 +841,14 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 	CG_PredictPlayerState();
 
 	// decide on third person view
+	#ifdef MISSIONPACK2
+	// dead arena players following someone should not force third person
+	if ( ( cgs.gametype == GT_ARENA || cgs.gametype == GT_TEAMARENA )
+		&& cg.snap->ps.stats[STAT_HEALTH] <= 0
+		&& ( cg.snap->ps.pm_flags & PMF_FOLLOW ) ) {
+		cg.renderingThirdPerson = cg_thirdPerson.integer;
+	} else
+	#endif
 	cg.renderingThirdPerson = cg_thirdPerson.integer || (cg.snap->ps.stats[STAT_HEALTH] <= 0);
 
 	CG_TrackClientTeamChange();

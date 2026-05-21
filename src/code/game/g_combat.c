@@ -712,12 +712,12 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 
 	trap_LinkEntity (self);
 
-}
+	}
 
 
-/*
-================
-CheckArmor
+	/*
+	================
+	CheckArmor
 ================
 */
 int CheckArmor (gentity_t *ent, int damage, int dflags)

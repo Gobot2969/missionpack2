@@ -6,6 +6,23 @@
 
 #ifdef MISSIONPACK2
 void Arena_BeginRound( void ) {
+	int			i;
+	gclient_t	*client;
+
+	// Reset spectator follow state for dead arena players before respawning
+	for ( i = 0; i < level.maxclients; i++ ) {
+		client = &level.clients[i];
+		if ( client->pers.connected != CON_CONNECTED ) {
+			continue;
+		}
+		if ( client->sess.sessionTeam == TEAM_SPECTATOR ) {
+			continue;
+		}
+		client->sess.spectatorState = SPECTATOR_NOT;
+		client->sess.spectatorClient = i;
+		client->ps.pm_flags &= ~PMF_FOLLOW;
+	}
+
 	// Begin new round code
 	level.warmupTime = level.time + g_warmup.integer * 1000;
 	trap_SetConfigstring( CS_WARMUP, va("%i", level.warmupTime) );

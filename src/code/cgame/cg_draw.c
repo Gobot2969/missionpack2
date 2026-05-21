@@ -2284,7 +2284,15 @@ static qboolean CG_DrawScoreboard( void ) {
 		return qfalse;
 	}
 
-	if ( cg.showScores || cg.predictedPlayerState.pm_type == PM_DEAD || cg.predictedPlayerState.pm_type == PM_INTERMISSION ) {
+	if ( cg.showScores || cg.predictedPlayerState.pm_type == PM_INTERMISSION
+	#ifdef MISSIONPACK2
+		|| ( cg.predictedPlayerState.pm_type == PM_DEAD
+			&& !( ( cgs.gametype == GT_ARENA || cgs.gametype == GT_TEAMARENA )
+				&& ( cg.snap->ps.pm_flags & PMF_FOLLOW ) ) )
+	#else
+		|| cg.predictedPlayerState.pm_type == PM_DEAD
+	#endif
+	) {
 		fade = 1.0;
 		fadeColor = colorWhite;
 	} else {
@@ -2628,6 +2636,13 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 		CG_DrawSpectator();
 		CG_DrawCrosshair();
 		CG_DrawCrosshairNames();
+	#ifdef MISSIONPACK2
+	} else if ( ( cgs.gametype == GT_ARENA || cgs.gametype == GT_TEAMARENA )
+		&& cg.snap->ps.stats[STAT_HEALTH] <= 0
+		&& ( cg.snap->ps.pm_flags & PMF_FOLLOW ) ) {
+		CG_DrawCrosshair();
+		CG_DrawCrosshairNames();
+	#endif
 	} else {
 		// don't draw any status if dead or the scoreboard is being explicitly shown
 		if ( !cg.showScores && cg.snap->ps.stats[STAT_HEALTH] > 0 ) {
