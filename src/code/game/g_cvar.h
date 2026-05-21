@@ -90,7 +90,7 @@ G_CVAR( g_unlagged, "g_unlagged", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qfalse
 G_CVAR( g_predictPVS, "g_predictPVS", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
 
 // ~Dimmskii
-G_CVAR( g_noalias, "g_noalias", "0", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qfalse, qfalse )
+G_CVAR( g_unlagged, "g_noalias", "0", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qfalse, qfalse )
 // END ~Dimmskii
 
 #ifdef MISSIONPACK
