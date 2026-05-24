@@ -882,6 +882,11 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.medalDefend = trap_R_RegisterShaderNoMip( "medal_defend" );
 	cgs.media.medalAssist = trap_R_RegisterShaderNoMip( "medal_assist" );
 	cgs.media.medalCapture = trap_R_RegisterShaderNoMip( "medal_capture" );
+	cgs.media.medalVictory = trap_R_RegisterShaderNoMip( "medal_victory" );
+
+#ifdef MISSIONPACK2
+	cgs.media.medalArena = trap_R_RegisterShaderNoMip( "medal_arena" );
+#endif
 
 
 	memset( cg_items, 0, sizeof( cg_items ) );
@@ -1534,15 +1539,14 @@ static const char *CG_FeederItemText(float feederID, int index, int column, qhan
 // ~Dimmskii
 #ifdef MISSIONPACK2
 				if ( cgs.gametype == GT_ARENA ) {
-					return va("(%i) %i", sp->captures, info->score);
+					return va("(%i) %i", sp->roundWins, info->score);
 				} else {
 					return va("%i", info->score);
 				}
 #else
 				return va("%i", info->score);
-#endif //MISISONPACK2
+#endif //MISSIONPACK2
 // END ~Dimmskii
-//				return va("%i", info->score);
 			break;
 			case 5:
 				return va("%4i", sp->time);

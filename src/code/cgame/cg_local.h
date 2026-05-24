@@ -304,6 +304,9 @@ typedef struct {
 	int				assistCount;
 	int				captures;
 	qboolean		perfect;
+	#ifdef MISSIONPACK2
+	int				roundWins;
+	#endif
 	team_t			team;
 
 	int				minx, maxx;
@@ -866,6 +869,10 @@ typedef struct {
 	qhandle_t	medalDefend;
 	qhandle_t	medalAssist;
 	qhandle_t	medalCapture;
+	qhandle_t	medalVictory;
+#ifdef MISSIONPACK2
+	qhandle_t	medalArena;
+#endif
 
 	// sounds
 	sfxHandle_t	quadSound;

@@ -398,6 +398,15 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
 		reward = qtrue;
 		//Com_Printf("assist\n");
 	}
+	// ~Dimmskii
+#ifdef MISSIONPACK2
+	if (ps->persistant[PERS_ROUNDWINS] != ops->persistant[PERS_ROUNDWINS]) {
+		pushReward(cgs.media.winnerSound, cgs.media.medalArena, ps->persistant[PERS_ROUNDWINS]);
+		reward = qtrue;
+		//Com_Printf("assist\n");
+	}
+#endif
+// END ~Dimmskii
 	// if any of the player event bits changed
 	if (ps->persistant[PERS_PLAYEREVENTS] != ops->persistant[PERS_PLAYEREVENTS]) {
 		if ((ps->persistant[PERS_PLAYEREVENTS] & PLAYEREVENT_DENIEDREWARD) !=

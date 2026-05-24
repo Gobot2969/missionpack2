@@ -403,6 +403,25 @@ medal_capture
 	}
 }
 
+medal_victory
+{
+	nopicmip
+	{
+		clampmap menu/medals/medal_victory.tga
+		blendFunc blend
+	}
+}
+
+// FFA Arena
+medal_arena
+{
+	nopicmip
+	{
+		clampmap menu/medals/medal_arena.tga
+		blendFunc blend
+	}
+}
+
 
 //
 // weapon icons

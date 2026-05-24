@@ -13,7 +13,7 @@ DeathmatchScoreboardMessage
 ==================
 */
 void DeathmatchScoreboardMessage( gentity_t *ent ) {
-	char		entry[256]; // enough to hold 14 integers
+	char		entry[256]; // enough to hold 14 (or 15 with MISSIONPACK2) integers
 	char		string[MAX_STRING_CHARS-1];
 	int			stringlength;
 	int			i, j, ping, prefix;
@@ -48,21 +48,40 @@ void DeathmatchScoreboardMessage( gentity_t *ent ) {
 
 		perfect = ( cl->ps.persistant[PERS_RANK] == 0 && cl->ps.persistant[PERS_KILLED] == 0 ) ? 1 : 0;
 
-		j = BG_sprintf( entry, " %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
-			level.sortedClients[i],
-			cl->ps.persistant[PERS_SCORE],
-			ping,
-			(level.time - cl->pers.enterTime)/60000,
-			scoreFlags,
-			g_entities[level.sortedClients[i]].s.powerups,
-			accuracy, 
-			cl->ps.persistant[PERS_IMPRESSIVE_COUNT],
-			cl->ps.persistant[PERS_EXCELLENT_COUNT],
-			cl->ps.persistant[PERS_GAUNTLET_FRAG_COUNT], 
-			cl->ps.persistant[PERS_DEFEND_COUNT], 
-			cl->ps.persistant[PERS_ASSIST_COUNT], 
-			perfect,
-			cl->ps.persistant[PERS_CAPTURES]);
+		#ifdef MISSIONPACK2
+				j = BG_sprintf( entry, " %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
+					level.sortedClients[i],
+					cl->ps.persistant[PERS_SCORE],
+					ping,
+					(level.time - cl->pers.enterTime)/60000,
+					scoreFlags,
+					g_entities[level.sortedClients[i]].s.powerups,
+					accuracy,
+					cl->ps.persistant[PERS_IMPRESSIVE_COUNT],
+					cl->ps.persistant[PERS_EXCELLENT_COUNT],
+					cl->ps.persistant[PERS_GAUNTLET_FRAG_COUNT],
+					cl->ps.persistant[PERS_DEFEND_COUNT],
+					cl->ps.persistant[PERS_ASSIST_COUNT],
+					perfect,
+					cl->ps.persistant[PERS_CAPTURES],
+					cl->ps.persistant[PERS_ROUNDWINS]);
+		#else
+				j = BG_sprintf( entry, " %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
+					level.sortedClients[i],
+					cl->ps.persistant[PERS_SCORE],
+					ping,
+					(level.time - cl->pers.enterTime)/60000,
+					scoreFlags,
+					g_entities[level.sortedClients[i]].s.powerups,
+					accuracy,
+					cl->ps.persistant[PERS_IMPRESSIVE_COUNT],
+					cl->ps.persistant[PERS_EXCELLENT_COUNT],
+					cl->ps.persistant[PERS_GAUNTLET_FRAG_COUNT],
+					cl->ps.persistant[PERS_DEFEND_COUNT],
+					cl->ps.persistant[PERS_ASSIST_COUNT],
+					perfect,
+					cl->ps.persistant[PERS_CAPTURES]);
+		#endif
 
 		if ( stringlength + j + prefix >= sizeof( string ) )
 			break;
