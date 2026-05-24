@@ -1317,7 +1317,7 @@ void ClientSpawn(gentity_t *ent) {
 #ifdef MISSIONPACK2
 	// Set the entity/client hp, etc back to zero (kill again) if spawned mid-round in an arena game
 	if (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) {
-		if (!level.warmupTime) {
+		if (!level.warmupTime && !level.intermissiontime) {
 			ent->health = -500;
 			client->ps.stats[STAT_HEALTH] = -500;
 			client->ps.stats[STAT_ARMOR] = -500;
