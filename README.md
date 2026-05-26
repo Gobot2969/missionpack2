@@ -1,14 +1,13 @@
 # Quake III Ultimate Arena
-How Quake Zero should have been.
 
-Merged code from Kr3m's missionpack plus features together with my additional things like Arena/Clan Arena gametypes, green armor and HMG from QL. Unlike missionpackplus, this is a standalone mod which doesn't require Team Arena to be installed.
+Mod based off of Kr3m's missionpack plus with QL features, gametypes, and more!
  
 **This is not a replacement for Team Arena! TA maps and virtually all their textures aren't included, meaning you'd still have to legally purchase Team Arena in order to enjoy all of its maps, along with most custom ones designed for TA!**
 
 ## Installation
- - Download the release from the side
- - Extract the ```missionpack2``` folder into your Quake 3 install folder. The ```missionpack2``` folder should be same folder as ```quake3.exe``` file and ```baseq3``` folder.
- - Ensure directory looks as follows:
+ 1. Download the release from the side
+ 2. Extract the ```missionpack2``` folder into your Quake 3 install folder. The ```missionpack2``` folder should be same folder as ```quake3.exe``` file and ```baseq3``` folder.
+ 3. Ensure directory looks as follows:
  ```
 |-C:\Program Files {x86)\Steam\steamapps\common\Quake 3 Arena\ (or something)
    |-quake3.exe
@@ -29,17 +28,18 @@ Merged code from Kr3m's missionpack plus features together with my additional th
 #### New in Ultimate Arena
 * ```g_gametype <0|10>``` : the gametype ints have changed since Q3 and Q3TA. The gametype values are:
 
-  - ```0``` Free For All
-  - ```1``` Tournament
-  - ```2``` SP
-  - ```3``` Arena
-  - ```4``` Team Deathmatch
-  - ```5``` Team Arena
-  - ```6``` Freeze Tag (Not yet implemented)
-  - ```7``` Capture the Flag
-  - ```8``` One Flag CTF
-  - ```9``` Overload
-  - ```10``` Harvester
+  * ```0``` Free For All
+  * ```1``` Tournament
+  * ```2``` GT_SINGLE_PLAYER (Does nothing right now)
+  * ```3``` Arena
+  * ```4``` Team Deathmatch
+  * ```5``` Team Arena
+  * ```6``` Freeze Tag (Does nothing right now)
+  * ```7``` Capture the Flag
+  * ```8``` One Flag CTF
+  * ```9``` Overload
+  * ```10``` Harvester
+  * ```11``` GT_TEAMTOURNAMENT (Does nothing right now)
 * ```g_nailBounce <0|1>``` : defaults to ```1```.  QL-Style nail bounce. A value of ```1``` is on; ```0``` means off.
 * ```g_arenaArmor <0|200>``` : allow to define the amount of armor at spawn
 * ```g_arenaHealth <0|200>``` : allow to define the amount of health at spawn
@@ -131,19 +131,27 @@ The **removeX** cvars allow to choose to remove items from a map, **X** is eithe
 
 ## Build Instructions
 The build system included should be completely portable provided that you are on Windows (with Powershell for final pk3 zipping command).
-- Download the repository in zip file
-- Make a gamedir folder in the root of your Quake 3/ioquake3 install called `missionpack2`
-- Extract the *contents* of the repository folder into `missionpack2`
-- Navigate to `missionpack2\src`
-- Run `make.bat` -- this will compile all 3 QVM modules with `-DMISSIONPACK` and `-DMISSIONPACK2`, copy assets and create core/map .pk3 files ready to go
-- Use the `missionpack2.bat` file in its place to run. Alternatively, as always, you can start the mod with any engine of your choice:
+1. Download the repository in zip file
+2. Make a gamedir folder in the root of your Quake 3/ioquake3 install called `missionpack2`
+3. Extract the *contents* of the repository folder into `missionpack2`
+4. Navigate to `missionpack2\src`
+5. Run `make.bat` -- this will compile all 3 QVM modules with `-DMISSIONPACK` and `-DMISSIONPACK2`, copy assets and create core/map .pk3 files ready to go
+6. Use the `missionpack2.bat` file in its place to run. Alternatively, as always, you can start the mod with any engine of your choice:
   `<ENGINE_BINARY>.exe +set fs_game missionpack2`
-- FIGHT!
+7. FIGHT!
 
 ## To do
-- Implement Freeze Tag gametype
-- Improve bots
-- Credits screen in UI
+* 0.50+
+   * Implement arena last standing announcer like in QL
+   * Show dead players in round-based gamemodes (scoreboard and team info)
+   * Fix gaunthack exploit during pre-round
+   * Fix scores still being weird pre-round and spectator
+   * ~~Credit screen~~
+   * Cvar to control settings for dead chat and team spec(?)
+* 0.60+
+   * Freeze Tag
+* 0.70+
+   * New bot difficulty 'Competitive' overrides weapon preferences and bunnyhops at least(?)
 
  ## Credits
  - **Kevin "Kr3m" Remisoski** for missionpackplus and foundation mods (see <https://github.com/Kr3m/missionpackplus> for additional credits for unlagged code, etc)
