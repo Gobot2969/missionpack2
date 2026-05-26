@@ -7,8 +7,8 @@
     	name "credit"
     	visible 0
     	fullscreen 1
-    	rect 0 0 640 480
-    	background "menuback_a"
+		rect 0 0 640 480
+    	background "menuback_b"
     	focusColor 1 .67 0 1
     	style 1
     	border 1
@@ -25,21 +25,7 @@
 
 	    
 
-// LEVEL SELECTION BAR	//
-
-
-itemDef {
-	name mappreview
-      	style 5
-	cinematic "idlogo.roq"
-	rect 0 0 640 480
-	backcolor 1 1 1 .25
-	border 1
-	bordersize 1
-	bordercolor .5 .5 .5 1
-	decoration
-	visible 1
-	}
+// CREDITS	//
 
 
 itemDef {
