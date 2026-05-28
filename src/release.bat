@@ -3,7 +3,7 @@ setlocal
 
 set oldcd=%cd%
 
-set VERSION=055
+set VERSION=056
 set PK3_NAME=pak%VERSION%
 
 cd %~dp0
