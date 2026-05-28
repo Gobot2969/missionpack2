@@ -142,7 +142,6 @@ The build system included should be completely portable provided that you are on
 
 ## To do
 * 0.50+
-   * Implement arena last standing announcer like in QL
    * Show dead players in round-based gamemodes (scoreboard and team info)
    * Fix gaunthack exploit during pre-round
    * Fix scores still being weird pre-round and spectator
@@ -150,6 +149,7 @@ The build system included should be completely portable provided that you are on
    * Cvar to control settings for dead chat and team spec(?)
 * 0.60+
    * Freeze Tag
+   * Implement arena last standing announcer like in QL
 * 0.70+
    * New bot difficulty 'Competitive' overrides weapon preferences and bunnyhops at least(?)
 
