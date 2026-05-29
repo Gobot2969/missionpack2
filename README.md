@@ -81,7 +81,7 @@ Mod based off of Kr3m's missionpack plus with QL features, gametypes, and more!
 The following cvars use a "bit flag" value which acts as a combination of integers to specify a group of items:
 
 #### New in Ultimate Arena
-* ```arenaWpflags <VAL>``` : defaults to ```2175```.  Starting weapons in loudouts for Arena / Team Arena gametypes. Default value of ```2175``` is QL CA loadout. See ```g_wpflags``` for weapon bits. A zero value means no change (spawn with Gauntlet and MG).
+* ```arenaWpflags <VAL>``` : defaults to ```2175```.  Starting weapons in loudouts for Arena / Team Arena gametypes. Default value of ```2175``` is QL CA loadout. See ```wpflags``` for weapon bits. A zero value means no change (spawn with Gauntlet and MG).
 
 #### From Kr3m's missionpackplus
 * ```wpflags <VAL>``` : defaults to ```0```. what weapons a player should have at spawn. A zero value means no change (spawn with Gauntlet and MG).
@@ -150,8 +150,12 @@ The build system included should be completely portable provided that you are on
 * 0.60+
    * Freeze Tag
    * Implement arena last standing announcer like in QL
-* 0.70+
+* TBD
+   * At least one FFA gametype to replace GT_SINGLE_PLAYER
+   * At least one team-based gametype to replace GT_TEAMTOURNAMENT
    * New bot difficulty 'Competitive' overrides weapon preferences and bunnyhops at least(?)
+   * Off-hand hook
+   * Bots can use either type of hook
 
  ## Credits
  - **Kevin "Kr3m" Remisoski** for missionpackplus and foundation mods (see <https://github.com/Kr3m/missionpackplus> for additional credits for unlagged code, etc)
