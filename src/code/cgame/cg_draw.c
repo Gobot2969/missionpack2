@@ -2674,9 +2674,12 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 		}
     
 		if ( cgs.gametype >= GT_TEAM ) {
-#ifndef MISSIONPACK
+			// ~DIMMSKII
+			CG_DrawTeammatePOIs();
+			// END DIMMSKII
+		#ifndef MISSIONPACK
 			CG_DrawTeamInfo();
-#endif
+		#endif
 		}
 	}
 
@@ -2914,7 +2917,6 @@ void CG_TrackClientTeamChange( void )
 	}
 }
 
-
 /*
 =====================
 CG_DrawActive
@@ -2952,3 +2954,171 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 	// draw status bar and other floating elements
  	CG_Draw2D( stereoView );
 }
+
+// ~DIMMSKII
+
+#define CG_TEAMMATE_POI_WORLD_Z_OFFSET  48.0f
+
+/*
+=============
+CG_WorldToScreen
+
+Projects a world-space position to virtual 640x480 screen coordinates.
+Returns qfalse if the point is behind the camera.
+=============
+*/
+static qboolean CG_WorldToScreen( vec3_t worldPos, float *x, float *y ) {
+	vec3_t delta;
+	float dot, px, py;
+	float halfW, halfH, centerX, centerY;
+
+	VectorSubtract( worldPos, cg.refdef.vieworg, delta );
+
+	dot = DotProduct( delta, cg.refdef.viewaxis[0] );
+	if ( dot < 1.0f ) {
+		return qfalse;
+	}
+
+	px = DotProduct( delta, cg.refdef.viewaxis[1] );
+	py = DotProduct( delta, cg.refdef.viewaxis[2] );
+
+	centerX = ( cg.refdef.x + cg.refdef.width  * 0.5f - cgs.screenXBias ) / cgs.screenXScale;
+	centerY = ( cg.refdef.y + cg.refdef.height * 0.5f - cgs.screenYBias ) / cgs.screenYScale;
+	halfW   = ( cg.refdef.width  * 0.5f ) / cgs.screenXScale;
+	halfH   = ( cg.refdef.height * 0.5f ) / cgs.screenYScale;
+
+	*x = centerX - halfW * px / ( dot * tan( DEG2RAD( cg.refdef.fov_x * 0.5f ) ) );
+	*y = centerY - halfH * py / ( dot * tan( DEG2RAD( cg.refdef.fov_y * 0.5f ) ) );
+
+	return qtrue;
+}
+
+/*
+=============
+CG_ShouldDrawTeammatePOIs
+
+Returns whether or not to draw teammate POIs.
+=============
+*/
+static qboolean CG_ShouldDrawTeammatePOIs( void ) {
+	team_t	myTeam;
+
+	// Make sure it's a team game
+	if ( !cg.snap || cgs.gametype < GT_TEAM ) {
+		return qfalse;
+	}
+
+	// Must be on a valid team
+	myTeam = (team_t)cg.snap->ps.persistant[PERS_TEAM];
+	if ( myTeam != TEAM_RED && myTeam != TEAM_BLUE ) {
+		return qfalse;
+	}
+
+	// Don't show if player is dead
+	if ( cg.predictedPlayerState.stats[STAT_HEALTH] <= 0 ) {
+		return qfalse;
+	}
+
+	if ( cg_drawFriend.integer < 2 ) { // cg_drawFriend 2 to enable POIs (not old quake 3 markers)
+		return qfalse;
+	}
+
+	return qtrue;
+}
+
+/*
+=============
+CG_DrawTeammatePOI
+
+Draws a single teammate POI marker at world position.
+=============
+*/
+static void CG_DrawTeammatePOI( const char *name, int health, int armor, vec3_t worldPos ) {
+	float	sx, sy, w, h;
+	vec4_t	color;
+
+	if ( !CG_WorldToScreen( worldPos, &sx, &sy ) ) {
+		return;
+	}
+
+
+	CG_DrawPic( sx - 8, sy - 8, 16, 16, cgs.media.friendShader );
+
+	color[0] = 1.0f;
+	color[1] = (float)health/100.0f;
+	color[2] = (float)health/100.0f;
+	color[3] = 0.8f;
+	CG_DrawString( sx, sy - 14, name, color,
+		TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0,
+		DS_CENTER | DS_SHADOW | DS_PROPORTIONAL );
+}
+
+/*
+=============
+CG_DrawTeammatePOIs
+
+Draws teammate location POIs that are visible through walls.
+=============
+*/
+static void CG_DrawTeammatePOIs( void ) {
+	int			i, localTeam;
+	centity_t	*cent;
+	clientInfo_t *ci;
+	vec3_t		pos;
+	int			health, armor;
+
+	if ( !CG_ShouldDrawTeammatePOIs() ) {
+		return;
+	}
+
+	localTeam = cg.snap->ps.persistant[PERS_TEAM];
+
+	// Iterate through all entities (up to MAX_GENTITIES)
+	for ( i = 0; i < MAX_GENTITIES; i++ ) {
+		cent = &cg_entities[i];
+		
+		if ( !cent->currentValid ) {
+			continue;
+		}
+
+		// Only process players
+		if ( cent->currentState.eType != ET_PLAYER ) {
+			continue;
+		}
+
+		// Get client info
+		if ( cent->currentState.clientNum < 0 || cent->currentState.clientNum >= MAX_CLIENTS ) {
+			continue;
+		}
+
+		ci = &cgs.clientinfo[cent->currentState.clientNum];
+
+		// Only teammates
+		if ( ci->team != localTeam ) {
+			continue;
+		}
+
+		// Skip dead
+		if (cent->currentState.eFlags & EF_DEAD) {
+			continue;
+		}
+
+		// Skip self
+		if ( cent->currentState.clientNum == cg.snap->ps.clientNum ) {
+			continue;
+		}
+
+		// Get teammate position (with Z offset for visibility above model)
+		VectorCopy( cent->lerpOrigin, pos );
+		pos[2] += CG_TEAMMATE_POI_WORLD_Z_OFFSET;
+
+		// Get health and armor from clientinfo (these are tracked by server)
+		health = ci->health;
+		armor = ci->armor;
+
+		// Draw the marker
+		CG_DrawTeammatePOI( ci->name, health, armor, pos );
+	}
+}
+
+// ~END DIMMSKII
