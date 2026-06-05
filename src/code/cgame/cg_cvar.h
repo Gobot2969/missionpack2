@@ -132,4 +132,10 @@ CG_CVAR( cg_deadBodyDarken, "cg_deadBodyDarken", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_fovAdjust, "cg_fovAdjust", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_followKiller, "cg_followKiller", "0", CVAR_ARCHIVE )
 
+//  ~DIMMSKII
+CG_CVAR( cg_drawFriend_size, "cg_drawFriend_size", "8", CVAR_ARCHIVE ) // No effect unless cg_drawFriend is 2
+CG_CVAR( cg_drawFriend_sizeMax, "cg_drawFriend_sizeMax", "12", CVAR_ARCHIVE ) // No effect unless cg_drawFriend is 2
+CG_CVAR( cg_drawFriend_dist, "cg_drawFriend_dist", "4000", CVAR_ARCHIVE ) // No effect unless cg_drawFriend is 2
+// END DIMMSKII
+
 #undef CG_CVAR

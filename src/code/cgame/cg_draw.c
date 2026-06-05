@@ -2969,7 +2969,7 @@ Projects a world-space position to virtual 640x480 screen coordinates.
 Returns qfalse if the point is behind the camera.
 =============
 */
-static qboolean CG_WorldToScreen( vec3_t worldPos, float *x, float *y ) {
+static qboolean CG_WorldToScreen( vec3_t worldPos, float *x, float *y, float *dist ) {
 	vec3_t delta;
 	float dot, px, py;
 	float halfW, halfH, centerX, centerY;
@@ -2991,6 +2991,7 @@ static qboolean CG_WorldToScreen( vec3_t worldPos, float *x, float *y ) {
 
 	*x = centerX - halfW * px / ( dot * tan( DEG2RAD( cg.refdef.fov_x * 0.5f ) ) );
 	*y = centerY - halfH * py / ( dot * tan( DEG2RAD( cg.refdef.fov_y * 0.5f ) ) );
+	*dist = VectorLength(delta);
 
 	return qtrue;
 }
@@ -3036,20 +3037,29 @@ Draws a single teammate POI marker at world position.
 =============
 */
 static void CG_DrawTeammatePOI( const char *name, int health, int armor, vec3_t worldPos ) {
-	float	sx, sy, w, hw;
+	float sx, sy, dist, maxdist, w, hw, wmax, maxDist;
 	vec3_t delta;
 	vec4_t	color;
 
-	if ( !CG_WorldToScreen( worldPos, &sx, &sy ) ) {
+	if ( !CG_WorldToScreen( worldPos, &sx, &sy, &dist ) ) {
+		return;
+	}
+
+	maxDist = cg_drawFriend_dist.value;
+
+	// Return if the alpha value will end up as zero regardless
+	if (dist > maxDist) {
 		return;
 	}
 	
-	VectorSubtract(worldPos, cg.refdef.vieworg, delta);
-	w = CG_TEAMMATE_POI_ICON_SIZE * 640.0f / VectorLength(delta);
-	if (w > CG_TEAMMATE_POI_ICON_SIZE_MAX) {
-		w = CG_TEAMMATE_POI_ICON_SIZE_MAX;
-	}
+	//VectorSubtract(worldPos, cg.refdef.vieworg, delta);
+	//dist = VectorLength(delta);
+	w = cg_drawFriend_size.value * 640.0f / dist;
 	hw = w/2.0f;
+	wmax = cg_drawFriend_sizeMax.value;
+	if (w > wmax) {
+		w = wmax;
+	}
 
 
 	CG_DrawPic( sx - hw, sy - hw, w, w, cgs.media.friendShader );
@@ -3057,7 +3067,7 @@ static void CG_DrawTeammatePOI( const char *name, int health, int armor, vec3_t 
 	color[0] = 1.0f;
 	color[1] = (float)health/100.0f;
 	color[2] = (float)health/100.0f;
-	color[3] = w / CG_TEAMMATE_POI_ICON_SIZE_MAX;
+	color[3] = 1.0f - dist / maxDist;
 	CG_DrawString( sx, sy - 14, name, color,
 		TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0,
 		DS_CENTER | DS_SHADOW | DS_PROPORTIONAL );
