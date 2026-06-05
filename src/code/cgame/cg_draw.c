@@ -3093,52 +3093,114 @@ static void CG_DrawTeammatePOIs( void ) {
 
 	localTeam = cg.snap->ps.persistant[PERS_TEAM];
 
-	// Iterate through all entities (up to MAX_GENTITIES)
-	for ( i = 0; i < MAX_GENTITIES; i++ ) {
-		cent = &cg_entities[i];
-		
-		if ( !cent->currentValid ) {
-			continue;
+	if ( !cgs.g_teamVisibility ) {
+		// Iterate through all entities (up to MAX_GENTITIES)
+		for ( i = 0; i < MAX_GENTITIES; i++ ) {
+			cent = &cg_entities[i];
+			
+			if ( !cent->currentValid ) {
+				continue;
+			}
+
+			// Only process players
+			if ( cent->currentState.eType != ET_PLAYER ) {
+				continue;
+			}
+
+			// Get client info
+			if ( cent->currentState.clientNum < 0 || cent->currentState.clientNum >= MAX_CLIENTS ) {
+				continue;
+			}
+
+			ci = &cgs.clientinfo[cent->currentState.clientNum];
+
+			// Only teammates
+			if ( ci->team != localTeam ) {
+				continue;
+			}
+
+			// Skip dead
+			if (cent->currentState.eFlags & EF_DEAD) {
+				continue;
+			}
+
+			// Skip self
+			if ( cent->currentState.clientNum == cg.snap->ps.clientNum ) {
+				continue;
+			}
+
+			// Get teammate position (with Z offset for visibility above model)
+			VectorCopy( cent->lerpOrigin, pos );
+			pos[2] += CG_TEAMMATE_POI_WORLD_Z_OFFSET;
+
+			// Get health and armor from clientinfo (these are tracked by server)
+			health = ci->health;
+			armor = ci->armor;
+
+			// Draw the marker
+			CG_DrawTeammatePOI( ci->name, health, armor, pos );
 		}
-
-		// Only process players
-		if ( cent->currentState.eType != ET_PLAYER ) {
-			continue;
-		}
-
-		// Get client info
-		if ( cent->currentState.clientNum < 0 || cent->currentState.clientNum >= MAX_CLIENTS ) {
-			continue;
-		}
-
-		ci = &cgs.clientinfo[cent->currentState.clientNum];
-
-		// Only teammates
-		if ( ci->team != localTeam ) {
-			continue;
-		}
-
-		// Skip dead
-		if (cent->currentState.eFlags & EF_DEAD) {
-			continue;
-		}
-
-		// Skip self
-		if ( cent->currentState.clientNum == cg.snap->ps.clientNum ) {
-			continue;
-		}
-
-		// Get teammate position (with Z offset for visibility above model)
-		VectorCopy( cent->lerpOrigin, pos );
-		pos[2] += CG_TEAMMATE_POI_WORLD_Z_OFFSET;
-
-		// Get health and armor from clientinfo (these are tracked by server)
-		health = ci->health;
-		armor = ci->armor;
-
-		// Draw the marker
-		CG_DrawTeammatePOI( ci->name, health, armor, pos );
+		return;
 	}
+
+	// g_teamVisibility is on: use tpos for all teammates,
+    // prefer PVS entity data when available (smoother)
+    for ( i = 0; i < MAX_CLIENTS; i++ ) {
+        teammatePos_t *tp;
+
+        if ( i == cg.snap->ps.clientNum ) {
+            continue;
+        }
+
+        ci = &cgs.clientinfo[i];
+
+        if ( !ci->infoValid || ci->team != localTeam || ci->health <= 0 ) {
+            continue;
+        }
+
+        // Check if this teammate is in PVS (use entity data)
+        cent = &cg_entities[i];
+        if ( cent->currentValid &&
+             cent->currentState.eType == ET_PLAYER &&
+             !( cent->currentState.eFlags & EF_DEAD ) ) {
+            VectorCopy( cent->lerpOrigin, pos );
+            pos[2] += CG_TEAMMATE_POI_WORLD_Z_OFFSET;
+            CG_DrawTeammatePOI( ci->name, ci->health, ci->armor, pos );
+            continue;
+        }
+
+        // Off-PVS: fall back to tpos
+        tp = &cg_teammatePositions[i];
+
+        if ( !tp->valid ) {
+            continue;
+        }
+
+        {
+            float   f;
+            int     dt;
+
+            dt = tp->serverTime - tp->prevServerTime;
+            if ( dt > 0 ) {
+                f = (float)( cg.time - tp->serverTime ) / (float)dt;
+                if ( f < 0.0f ) f = 0.0f;
+                if ( f > 1.0f ) f = 1.0f;
+                LerpPosition( tp->prevOrigin, tp->origin, f, pos );
+            } else {
+                VectorCopy( tp->origin, pos );
+            }
+        }
+
+        pos[2] += CG_TEAMMATE_POI_WORLD_Z_OFFSET;
+
+        CG_DrawTeammatePOI( ci->name, ci->health, ci->armor, pos );
+    }
+}
+
+static void LerpPosition( const vec3_t from, const vec3_t to, float f, vec3_t out ) {
+    out[0] = from[0] + f * ( to[0] - from[0] );
+    out[1] = from[1] + f * ( to[1] - from[1] );
+    out[2] = from[2] + f * ( to[2] - from[2] );
 }
 
 // ~END DIMMSKII

@@ -197,6 +197,61 @@ int Team_CountTotalArmor( team_t team, qboolean includeDead ) {
 	
 	return totalArmor;
 }
+
+/*
+==================
+TeamplayPositionMessage
+
+Lightweight position-only message for teammates, fires every server frame.
+Format: "tpos <count> <clientNum> <x> <y> <z> ..."
+==================
+*/
+static void TeamplayPositionMessage( gentity_t *ent ) {
+    char        entry[64];
+    char        string[MAX_STRING_CHARS - 12];
+    int         stringlength;
+    int         i, j, cnt;
+    gentity_t   *player;
+
+    string[0] = '\0';
+    stringlength = 0;
+    cnt = 0;
+
+    for ( i = 0; i < level.maxclients; i++ ) {
+        player = g_entities + i;
+
+        if ( player->client->pers.connected != CON_CONNECTED ) {
+            continue;
+        }
+
+        if ( player->client->sess.sessionTeam != ent->client->sess.sessionTeam ) {
+            continue;
+        }
+
+        if ( i == ent - g_entities ) {
+            continue;
+        }
+
+        if ( player->client->ps.stats[STAT_HEALTH] <= 0 ) {
+            continue;
+        }
+
+        j = BG_sprintf( entry, " %i %i %i %i",
+            i,
+            (int)player->client->ps.origin[0],
+            (int)player->client->ps.origin[1],
+            (int)player->client->ps.origin[2] );
+
+        if ( stringlength + j >= sizeof( string ) )
+            break;
+
+        strcpy( string + stringlength, entry );
+        stringlength += j;
+        cnt++;
+    }
+
+    trap_SendServerCommand( ent - g_entities, va( "tpos %i%s", cnt, string ) );
+}
 // END ~DIMMSKII
 
 
@@ -1305,6 +1360,26 @@ void CheckTeamStatus( void ) {
 			}
 		}
 	}
+
+	// ~DIMMSKII
+	// team position relay
+    if ( g_teamVisibility.integer ) {
+		if (level.time - level.lastTeamPositionTime > TEAM_LOCATION_UPDATE_TIME) {
+			for ( i = 0; i < level.maxclients; i++ ) {
+				ent = g_entities + i;
+
+				if ( ent->client->pers.connected != CON_CONNECTED ) {
+					continue;
+				}
+
+				if ( ent->client->sess.sessionTeam == TEAM_RED ||
+					ent->client->sess.sessionTeam == TEAM_BLUE ) {
+					TeamplayPositionMessage( ent );
+				}
+			}
+		}
+    }
+	// END DIMMSKII
 }
 
 

@@ -148,6 +148,7 @@ void CG_ParseServerinfo( void ) {
 #ifdef MISSIONPACK2
 	cgs.winlimit = atoi( Info_ValueForKey( info, "winlimit" ) );
 #endif
+	cgs.g_teamVisibility = atoi( Info_ValueForKey( info, "g_teamVisibility" ) );
 // END ~Dimmskii
 	cgs.timelimit = atoi( Info_ValueForKey( info, "timelimit" ) );
 	cgs.maxclients = atoi( Info_ValueForKey( info, "sv_maxclients" ) );
@@ -1127,6 +1128,13 @@ static void CG_ServerCommand( void ) {
 		return;
 	}
 
+	// ~DIMMSKII
+	if ( !strcmp( cmd, "tpos" ) ) { // Server sends if g_teamVisibility is 1
+        CG_ParseTeamPositions();
+        return;
+    }
+	// END DIMMSKII
+
 	if ( !strcmp( cmd, "map_restart" ) ) {
 		CG_MapRestart();
 		return;
@@ -1188,3 +1196,33 @@ void CG_ExecuteNewServerCommands( int latestSequence ) {
 		}
 	}
 }
+
+// ~DIMMSKII
+/*
+====================
+CG_ParseTeamPositions
+
+Parses team origins message when the server allows full team visibility.
+====================
+*/
+static void CG_ParseTeamPositions( void ) {
+    int     i, count, client;
+
+    count = atoi( CG_Argv( 1 ) );
+
+    for ( i = 0; i < count; i++ ) {
+        client = atoi( CG_Argv( i * 4 + 2 ) );
+        if ( (unsigned)client >= MAX_CLIENTS )
+            continue;
+
+        VectorCopy( cg_teammatePositions[client].origin, cg_teammatePositions[client].prevOrigin );
+        cg_teammatePositions[client].prevServerTime = cg_teammatePositions[client].serverTime;
+
+        cg_teammatePositions[client].origin[0] = atoi( CG_Argv( i * 4 + 3 ) );
+        cg_teammatePositions[client].origin[1] = atoi( CG_Argv( i * 4 + 4 ) );
+        cg_teammatePositions[client].origin[2] = atoi( CG_Argv( i * 4 + 5 ) );
+        cg_teammatePositions[client].serverTime = cg.snap->serverTime;
+        cg_teammatePositions[client].valid = qtrue;
+    }
+}
+// END DIMMSKII

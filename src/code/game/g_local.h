@@ -371,6 +371,10 @@ typedef struct {
 	int			teamScores[TEAM_NUM_TEAMS];
 	int			lastTeamLocationTime;		// last time of client team location update
 
+	// ~DIMMSKII
+	int         lastTeamPositionTime;
+	// END DIMMSKII
+
 	qboolean	newSession;				// don't use any old session data, because
 										// we changed gametype
 

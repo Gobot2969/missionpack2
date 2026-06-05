@@ -87,6 +87,10 @@ centity_t			cg_entities[MAX_GENTITIES];
 weaponInfo_t		cg_weapons[MAX_WEAPONS];
 itemInfo_t			cg_items[MAX_ITEMS];
 
+// ~DIMMSKII
+teammatePos_t cg_teammatePositions[MAX_CLIENTS];
+// END DIMMSKII
+
 #define DECLARE_CG_CVAR
 	#include "cg_cvar.h"
 #undef DECLARE_CG_CVAR

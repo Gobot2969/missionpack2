@@ -1076,6 +1076,7 @@ typedef struct {
 #ifdef MISSIONPACK2
 	int				winlimit;
 #endif
+	int				g_teamVisibility;
 // END ~Dimmskii
 	int				timelimit;
 	int				maxclients;
@@ -1169,6 +1170,16 @@ typedef struct {
 	float			cursorY;
 } cgs_t;
 
+// ~DIMMSKII
+typedef struct {
+    vec3_t      origin;
+    vec3_t      prevOrigin;
+    int         serverTime;
+    int         prevServerTime;
+    qboolean    valid;
+} teammatePos_t;
+// END DIMMSKII
+
 //==============================================================================
 
 extern	cgs_t			cgs;
@@ -1178,6 +1189,10 @@ extern	weaponInfo_t		cg_weapons[MAX_WEAPONS];
 extern	itemInfo_t		cg_items[MAX_ITEMS];
 extern	markPoly_t		cg_markPolys[MAX_MARK_POLYS];
 extern	int			cg_playback_follow;
+
+// ~DIMMSKII
+extern teammatePos_t cg_teammatePositions[MAX_CLIENTS];
+// END DIMMSKII
 
 #define EXTERN_CG_CVAR
 	#include "cg_cvar.h"
