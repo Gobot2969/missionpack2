@@ -1022,6 +1022,12 @@ static float CG_DrawTeamOverlay( float y, qboolean right, qboolean upper ) {
 				p = CG_ConfigString(CS_LOCATIONS + ci->location);
 				if (!p || !*p)
 					p = "unknown";
+
+				// ~Dimmskii
+				if (ci->health <= 0) // Empty string if dead
+					p = "";
+				// END Dimmskii
+
 				len = CG_DrawStrlen(p);
 				if (len > lwidth)
 					len = lwidth;

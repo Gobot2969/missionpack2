@@ -202,7 +202,7 @@ int Team_CountTotalArmor( team_t team, qboolean includeDead ) {
 ==================
 TeamplayPositionMessage
 
-Lightweight position-only message for teammates, fires every server frame.
+Lightweight position-only message for teammates
 Format: "tpos <count> <clientNum> <x> <y> <z> ..."
 ==================
 */
@@ -232,9 +232,15 @@ static void TeamplayPositionMessage( gentity_t *ent ) {
             continue;
         }
 
+		// Make sure it's not dead -- TODO: doesn't really seem to work with dead spec
         if ( player->client->ps.stats[STAT_HEALTH] <= 0 ) {
             continue;
         }
+
+		// Make sure it's not spectating (presumably)  // TODO: actually keep track of deaths
+		if ( player->client->ps.pm_flags & PMF_FOLLOW ) {
+			continue;
+		}
 
         j = BG_sprintf( entry, " %i %i %i %i",
             i,
@@ -1302,6 +1308,20 @@ void TeamplayInfoMessage( gentity_t *ent ) {
 		player = g_entities + i;
 		if ( player->inuse && player->client->sess.sessionTeam ==
 			ent->client->sess.sessionTeam ) {
+
+			// ~DIMMSKII
+
+			// Make sure it's not spectating (presumably) // TODO: actually keep track of deaths
+			if ( player->client->ps.pm_flags & PMF_FOLLOW ) {
+				j = BG_sprintf( entry, " %i %i %i %i %i %i", i, 0, 0, 0, 0, 0);
+				strcpy( string + stringlength, entry );
+				stringlength += j;
+				cnt++;
+				continue;
+			}
+
+			// END DIMMSKII
+
 
 			h = player->client->ps.stats[STAT_HEALTH];
 			a = player->client->ps.stats[STAT_ARMOR];
