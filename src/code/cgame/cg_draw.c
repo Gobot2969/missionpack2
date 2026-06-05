@@ -2957,6 +2957,8 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 
 // ~DIMMSKII
 
+#define CG_TEAMMATE_POI_ICON_SIZE  8.0f
+#define CG_TEAMMATE_POI_ICON_SIZE_MAX  12.0f
 #define CG_TEAMMATE_POI_WORLD_Z_OFFSET  48.0f
 
 /*
@@ -3034,20 +3036,28 @@ Draws a single teammate POI marker at world position.
 =============
 */
 static void CG_DrawTeammatePOI( const char *name, int health, int armor, vec3_t worldPos ) {
-	float	sx, sy, w, h;
+	float	sx, sy, w, hw;
+	vec3_t delta;
 	vec4_t	color;
 
 	if ( !CG_WorldToScreen( worldPos, &sx, &sy ) ) {
 		return;
 	}
+	
+	VectorSubtract(worldPos, cg.refdef.vieworg, delta);
+	w = CG_TEAMMATE_POI_ICON_SIZE * 640.0f / VectorLength(delta);
+	if (w > CG_TEAMMATE_POI_ICON_SIZE_MAX) {
+		w = CG_TEAMMATE_POI_ICON_SIZE_MAX;
+	}
+	hw = w/2.0f;
 
 
-	CG_DrawPic( sx - 8, sy - 8, 16, 16, cgs.media.friendShader );
+	CG_DrawPic( sx - hw, sy - hw, w, w, cgs.media.friendShader );
 
 	color[0] = 1.0f;
 	color[1] = (float)health/100.0f;
 	color[2] = (float)health/100.0f;
-	color[3] = 0.8f;
+	color[3] = w / CG_TEAMMATE_POI_ICON_SIZE_MAX;
 	CG_DrawString( sx, sy - 14, name, color,
 		TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0,
 		DS_CENTER | DS_SHADOW | DS_PROPORTIONAL );
