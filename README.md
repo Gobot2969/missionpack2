@@ -156,6 +156,7 @@ The build system included should be completely portable provided that you are on
    * New bot difficulty 'Competitive' overrides weapon preferences and bunnyhops at least(?)
    * Off-hand hook
    * Bots can use either type of hook
+   * Always-visible team markers like in QL/OSP
 
  ## Credits
  - **Kevin "Kr3m" Remisoski** for missionpackplus and foundation mods (see <https://github.com/Kr3m/missionpackplus> for additional credits for unlagged code, etc)
