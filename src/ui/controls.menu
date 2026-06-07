@@ -47,7 +47,7 @@ itemDef {
 
 itemDef {
       	name keyBindStatus
-      	rect 0 15 640 30 
+      	rect 0 396 640 30 
 	ownerdraw UI_KEYBINDSTATUS
 	text " "      
 	forecolor 1 .75 0 1
@@ -59,6 +59,15 @@ itemDef {
       	decoration 
 	}
 
+itemDef {
+      	name look
+		group grpControls
+	style WINDOW_STYLE_FILLED
+	backcolor 0 0 0 .25 
+ 	rect 17 6 45 24
+      	visible 1 
+	decoration  	  
+    	}
 
 itemDef {
 	name ctr_look
@@ -68,48 +77,28 @@ itemDef {
 	group grpControlbutton
 	type ITEM_TYPE_BUTTON
 	style WINDOW_STYLE_FILLED
-	background "ui/assets/button_back.tga"
-	rect 17 395 45 26
+	rect 17 6 45 24
 	textalign 1
 	textalignx 22
 	textaligny 20
 	forecolor 1 1 1 1
-	backcolor .37 .1 .1 1
 	visible 1
 	action { play "sound/misc/menu1.wav" ; 
 	hide grpControls ; show look }
-	mouseEnter { show message_look ; setitemcolor ctr_look backcolor .1 .37 .1 1 } 
-	mouseExit { hide message_look ; setitemcolor ctr_look backcolor .37 .1 .1 1 } 
+	mouseEnter { show message_look } 
+	mouseExit { hide message_look} 
 	}
+
 itemDef {
-      	name ctr_look
-	group grpControlbutton
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/framebutton.tga"
- 	rect 17 395 45 26
+      	name look
+		group grpControls
+	style WINDOW_STYLE_FILLED
+	backcolor 0 0 0 .25 
+ 	rect 2 30 439 396
       	visible 1 
 	decoration  	  
     	}
 
-itemDef {
-      	name ctr_look
-	group grpControlbutton
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/leftbutton.tga"
-      	rect 5 395 13 26
-      	visible 1 
-	decoration  	  
-    	}
-
-itemDef {
-      	name ctr_look
-	group grpControlbutton
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/rightbutton.tga"
-      	rect 61 395 13 26
-      	visible 1 
-	decoration  	  
-    	}
 	itemDef {
       		name look
 		group grpControls
@@ -213,6 +202,16 @@ itemDef {
     		}
 
 itemDef {
+      	name move
+		group grpControls
+	style WINDOW_STYLE_FILLED
+	backcolor 0 0 0 .25 
+ 	rect 90 6 45 24
+      	visible 1 
+	decoration  	  
+    	}
+
+itemDef {
 	name ctr_move
 	text "Move"
 	type 1
@@ -220,45 +219,24 @@ itemDef {
 	group grpControlbutton
 	type ITEM_TYPE_BUTTON
 	style WINDOW_STYLE_FILLED
-	background "ui/assets/button_back.tga"
-	rect 90 395 45 26
+	rect 90 6 45 24
 	textalign 1
 	textalignx 22
 	textaligny 20
-	forecolor 1 1 1 1 
-	backcolor .37 .1 .1 1
+	forecolor 1 1 1 1
 	visible 1
 	action { play "sound/misc/menu1.wav" ; 
 	hide grpControls ; show move }
-	mouseEnter { show message_move ; setitemcolor ctr_move backcolor .1 .37 .1 1  } 
-	mouseExit { hide message_move ; setitemcolor ctr_move backcolor .37 .1 .1 1 } 
+	mouseEnter { show message_move } 
+	mouseExit { hide message_move } 
 	}
-itemDef {
-      	name ctr_move
-	group grpControlbutton
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/framebutton.tga"
- 	rect 90 395 45 26
-      	visible 1 
-	decoration  	  
-    	}
 
 itemDef {
-      	name ctr_move
-	group grpControlbutton
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/leftbutton.tga"
-      	rect 78 395 13 26
-      	visible 1 
-	decoration  	  
-    	}
-
-itemDef {
-      	name ctr_move
-	group grpControlbutton
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/rightbutton.tga"
-      	rect 134 395 13 26
+      	name move
+		group grpControls
+	style WINDOW_STYLE_FILLED
+	backcolor 0 0 0 .25 
+ 	rect 2 30 439 396
       	visible 1 
 	decoration  	  
     	}
@@ -449,6 +427,15 @@ itemDef {
     		}
 
 
+itemDef {
+      	name shoot
+		group grpControls
+	style WINDOW_STYLE_FILLED
+	backcolor 0 0 0 .25 
+ 	rect 163 6 45 24
+      	visible 1 
+	decoration  	  
+    	}
 
 itemDef {
 	name ctr_shoot
@@ -458,46 +445,24 @@ itemDef {
 	group grpControlbutton
 	type ITEM_TYPE_BUTTON
 	style WINDOW_STYLE_FILLED
-	background "ui/assets/button_back.tga"
-	rect 163 395 45 26
+	rect 163 6 45 24
 	textalign 1
 	textalignx 22
 	textaligny 20
 	forecolor 1 1 1 1
-	backcolor .37 .1 .1 1 
 	visible 1
 	action { play "sound/misc/menu1.wav" ; 
 	hide grpControls ; show shoot }
-	mouseEnter { show message_shoot ; setitemcolor ctr_shoot backcolor .1 .37 .1 1 } 
-	mouseExit { hide message_shoot ; setitemcolor ctr_shoot backcolor .37 .1 .1 1 }
+	mouseEnter { show message_shoot } 
+	mouseExit { hide message_shoot }
 	}
- 
-itemDef {
-   	name ctr_shoot
-	group grpControlbutton
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/framebutton.tga"
- 	rect 163 395 45 26
-   	visible 1 
-	decoration  	  
- 	}
 
 itemDef {
-      	name ctr_shoot
-	group grpControlbutton
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/leftbutton.tga"
-      	rect 151 395 13 26
-      	visible 1 
-	decoration  	  
-    	}
-
-itemDef {
-      	name ctr_shoot
-	group grpControlbutton
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/rightbutton.tga"
-      	rect 207 395 13 26
+      	name shoot
+		group grpControls
+	style WINDOW_STYLE_FILLED
+	backcolor 0 0 0 .25 
+ 	rect 2 30 439 396
       	visible 1 
 	decoration  	  
     	}
@@ -769,54 +734,59 @@ itemDef {
 		mouseenter { show keyBindStatus }
 		mouseexit { hide keyBindStatus }
     		}
+	itemDef {
+      		name shoot
+		group grpControls
+      		type ITEM_TYPE_BIND
+		text "Heavy Machinegun:"
+		cvar "weapon 14"
+		rect 99 370 256 20
+      		textalign ITEM_ALIGN_RIGHT
+      		textalignx 128
+      		textaligny 20
+		textscale .3        
+      		forecolor 1 1 1 1
+      		visible 0 
+		mouseenter { show keyBindStatus }
+		mouseexit { hide keyBindStatus }
+    		}
 
 itemDef {
+      	name misc
+		group grpControls
+	style WINDOW_STYLE_FILLED
+	backcolor 0 0 0 .25 
+ 	rect 236 6 45 24
+      	visible 1 
+	decoration  	  
+    	}
+
+	itemDef {
 	name ctr_miscellaneous
 	text "Misc"
 	type 1
 	textscale .3
 	group grpControlbutton
 	style WINDOW_STYLE_FILLED
-	background "ui/assets/button_back.tga"
-	rect 236 395 45 26
+	rect 236 6 45 24
 	textalign 1
 	textalignx 22
 	textaligny 20
 	forecolor 1 1 1 1
-	backcolor .37 .1 .1 1 
 	visible 1
 	action { play "sound/misc/menu1.wav" ; 
 	hide grpControls ; show misc }
-	mouseEnter { show message_misc ; setitemcolor ctr_miscellaneous backcolor .1 .37 .1 1 } 
-	mouseExit { hide message_misc ; setitemcolor ctr_miscellaneous backcolor .37 .1 .1 1 } 
+	mouseEnter { show message_misc } 
+	mouseExit { hide message_misc } 
 	}
+	
 
 itemDef {
-      	name ctr_miscellaneous
-	group grpControlbutton
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/framebutton.tga"
- 	rect 236 395 45 26
-      	visible 1 
-	decoration  	  
-    	}
-
-itemDef {
-      	name ctr_miscellaneous
-	group grpControlbutton
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/leftbutton.tga"
-      	rect 224 395 13 26
-      	visible 1 
-	decoration  	  
-    	}
-
-itemDef {
-      	name ctr_miscellaneous
-	group grpControlbutton
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/rightbutton.tga"
-      	rect 280 395 13 26
+      	name misc
+		group grpControls
+	style WINDOW_STYLE_FILLED
+	backcolor 0 0 0 .25 
+ 	rect 2 30 439 396
       	visible 1 
 	decoration  	  
     	}
@@ -943,52 +913,40 @@ itemDef {
 		
 
 itemDef {
+      	name orders
+		group grpControls
+	style WINDOW_STYLE_FILLED
+	backcolor 0 0 0 .25 
+ 	rect 309 6 47 24
+      	visible 1 
+	decoration  	  
+    	}
+
+	itemDef {
 	name ctr_orders
 	text "Orders"
 	type 1
 	textscale .3
 	group grpControlbutton
 	style WINDOW_STYLE_FILLED
-	background "ui/assets/button_back.tga"
-	rect 309 395 47 26
+	rect 309 6 47 24
 	textalign 1
 	textalignx 23
 	textaligny 20
 	forecolor 1 1 1 1
-	backcolor .37 .1 .1 1 
 	visible 1
 	action { play "sound/misc/menu1.wav" ; 
 	hide grpControls ; show orders}
-	mouseEnter { show message_misc ; setitemcolor ctr_orders backcolor .1 .37 .1 1 } 
-	mouseExit { hide message_misc ; setitemcolor ctr_orders backcolor .37 .1 .1 1 } 
+	mouseEnter { show message_misc } 
+	mouseExit { hide message_misc } 
 	}
 
 itemDef {
-      	name ctr_orders
-	group grpControlbutton
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/framebutton.tga"
- 	rect 309 395 47 26
-      	visible 1 
-	decoration  	  
-    	}
-
-itemDef {
-      	name ctr_orders
-	group grpControlbutton
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/leftbutton.tga"
-      	rect 297 395 13 26
-      	visible 1 
-	decoration  	  
-    	}
-
-itemDef {
-      	name ctr_orders
-	group grpControlbutton
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/rightbutton.tga"
-      	rect 355 395 13 26
+      	name orders
+		group grpControls
+	style WINDOW_STYLE_FILLED
+	backcolor 0 0 0 .25 
+ 	rect 2 30 439 396
       	visible 1 
 	decoration  	  
     	}
@@ -1208,51 +1166,40 @@ itemDef {
 
 
 itemDef {
+      	name chat
+		group grpControls
+	style WINDOW_STYLE_FILLED
+	backcolor 0 0 0 .25 
+ 	rect 382 6 45 24
+      	visible 1 
+	decoration  	  
+    	}
+
+itemDef {
 	name ctr_chat
 	text "Chat"
 	type 1
 	textscale .3
 	group grpControlbutton
 	style WINDOW_STYLE_FILLED
-	background "ui/assets/button_back.tga"
-	rect 382 395 45 26
+	rect 382 6 45 24
 	textalign 1
 	textalignx 23
 	textaligny 20
 	forecolor 1 1 1 1
-	backcolor .37 .1 .1 1 
 	visible 1
 	action { play "sound/misc/menu1.wav" ; 
 	hide grpControls ; show chat}
-	mouseEnter { show message_misc ; setitemcolor ctr_chat backcolor .1 .37 .1 1 } 
-	mouseExit { hide message_misc ; setitemcolor ctr_chat backcolor .37 .1 .1 1 } 
+	mouseEnter { show message_misc } 
+	mouseExit { hide message_misc } 
 	}
 
 itemDef {
-      	name ctr_chat
-	group grpControlbutton
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/framebutton.tga"
- 	rect 382 395 45 26
-      	visible 1 
-	decoration  	  
-    	}
-
-itemDef {
-      	name ctr_chat
-	group grpControlbutton
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/leftbutton.tga"
-      	rect 370 395 13 26
-      	visible 1 
-	decoration  	  
-    	}
-itemDef {
-      	name ctr_chat
-	group grpControlbutton
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/rightbutton.tga"
-      	rect 426 395 13 26
+      	name chat
+		group grpControls
+	style WINDOW_STYLE_FILLED
+	backcolor 0 0 0 .25 
+ 	rect 2 30 439 396
       	visible 1 
 	decoration  	  
     	}
@@ -1364,7 +1311,7 @@ itemDef {
 
 itemDef {
       	name yesno_message
-      	rect 0 15 640 30 
+      	rect 0 396 640 30 
 	text "Select the Item to Toggle to Yes or No"      
 	forecolor 1 .75 0 1
 	textscale .25
@@ -1376,7 +1323,7 @@ itemDef {
 	}
 itemDef {
       	name slider_message
-      	rect 0 15 640 30 
+      	rect 0 396 640 30 
 	text "Drag the Slider to Increase and Decrease"      
 	forecolor 1 .75 0 1
 	textscale .25

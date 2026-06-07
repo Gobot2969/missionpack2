@@ -31,7 +31,17 @@ itemDef {
 
 
 
-// 	System		//
+// 	Graphics		//
+
+itemDef {
+      	name graphics
+		group grpSystem
+		style WINDOW_STYLE_FILLED
+	backcolor 0 0 0 .25 
+ 	rect 56 6 100 26
+      	visible 1 
+	decoration  	  
+    	}
 
 itemDef {
 	name ctr_graphics
@@ -40,46 +50,31 @@ itemDef {
 	textscale .3
 	group grpSystembutton
 	style WINDOW_STYLE_FILLED
-	background "ui/assets/button_back.tga"
-	rect 56 395 100 26
+	rect 56 6 100 26
 	textalign 1
 	textalignx 50
 	textaligny 20
 	forecolor 1 1 1 1
-	backcolor .37 .1 .1 1 
 	visible 1
 	action { play "sound/misc/menu1.wav" ; 
 	hide grpSystem ; show graphics }
-	mouseEnter { show message_graphics ; setitemcolor ctr_graphics backcolor .1 .37 .1 1 } 
-	mouseExit { hide message_graphics ; setitemcolor ctr_graphics backcolor .37 .1 .1 1 } 
+	mouseEnter { show message_graphics } 
+	mouseExit { hide message_graphics } 
 	}
 
-itemDef {
-      	name ctr_graphics
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/framebutton.tga"
- 	rect 56 395 100 26
-      	visible 1 
-	decoration  	  
-    	}
 
 itemDef {
-      	name ctr_graphics
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/leftbutton.tga"
-      	rect 44 395 13 26
-      	visible 1 
-	decoration  	  
-    	}
-
-itemDef {
-      	name ctr_graphics
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/rightbutton.tga"
-      	rect 155 395 13 26
-      	visible 1 
-	decoration  	  
-    	}
+	name graphics
+	group grpSystem
+	rect 2 30 439 396	
+	style WINDOW_STYLE_FILLED
+	border 1
+	bordercolor .5 .5 .5 .5
+	forecolor 1 1 1 1
+	backcolor 0 0 0 .25
+	visible 0
+	decoration
+}
 
 
 	itemDef {
@@ -89,7 +84,7 @@ itemDef {
    		type ITEM_TYPE_MULTI	
 		cvar "ui_glCustom"
 		cvarFloatList { "High Quality" 0 "Normal" 1 "Fast" 2 "Fastest" 3 "Custom" 4 }
-		rect 99 42 256 20
+		rect 99 52 256 20
    		textalign ITEM_ALIGN_RIGHT
    		textalignx 128 
    		textaligny 20
@@ -99,21 +94,22 @@ itemDef {
 		action { uiScript update "ui_glCustom" }
 	}
 
-	itemDef {
-  		name graphics
+
+itemDef {
+      		name graphics			
 		group grpSystem
-   		type ITEM_TYPE_EDITFIELD
-		text "GL Driver:"
-		cvar "r_gldriver"
-		rect 99 67 256 20
+      		type ITEM_TYPE_SLIDER
+		text "Brightness:"
+		cvarfloat "r_gamma" 1 0.5 2
+		rect 99 79 256 20
    		textalign ITEM_ALIGN_RIGHT
   		textalignx 128
    		textaligny 20
+		textscale .333
 		textscale .333        
-   		forecolor 1 1 1 1
-   		visible 0 
-		decoration
-	}
+      		forecolor 1 1 1 1
+      		visible 0 
+    		}
 
 	itemDef {
    		name graphics
@@ -121,7 +117,7 @@ itemDef {
       		type ITEM_TYPE_YESNO
 		text "GL Extensions:"
 		cvar "r_allowExtensions"
-		rect 99 92 256 20
+		rect 99 106 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
@@ -137,8 +133,8 @@ itemDef {
    		type ITEM_TYPE_MULTI	
 		text "Video Mode:"
 		cvar "r_mode"
-		cvarFloatList { "320*240" 0 "400*300" 1 "512*384" 2 "640*480" 3 "800*600" 4 "960*720" 5 "1024*768" 6 "1152*864" 7 "1280*1024" 8 "1600*1200" 9 "2048*1536" 10 "856*480 Wide Screen" 11 }
-		rect 99 117 256 20
+		cvarFloatList { "Desktop Default" -2 "320*240 (4:3)" 0 "400*300 (4:3)" 1 "512*384 (4:3)" 2 "640*480 (4:3)" 3 "800*600 (4:3)" 4 "960*720 (4:3)" 5 "1024*768 (4:3)" 6 "1152*864 (4:3)" 7 "1280*1024 (5:4)" 8 "1600*1200 (4:3)" 9 "2048*1536 (4:3)" 10 "856*480 (16:9)" 11 }
+		rect 99 133 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
@@ -155,7 +151,7 @@ itemDef {
 		text "Color Depth:"
 		cvar "r_colorbits"
 		cvarFloatList { "Desktop Default" 0 "16-bit" 16 "32-bit" 32 }
-		rect 99 142 256 20
+		rect 99 160 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
@@ -171,7 +167,7 @@ itemDef {
       		type ITEM_TYPE_YESNO
 		text "Fullscreen:"
 		cvar "r_fullscreen"
-		rect 99 167 256 20
+		rect 99 187 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
@@ -188,7 +184,7 @@ itemDef {
 		text "Lighting:"
 		cvar "r_vertexlight"
 		cvarFloatList { "Light Map (high)" 0 "Vertex (low)" 1  }
-		rect 99 192 256 20
+		rect 99 214 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
@@ -205,7 +201,7 @@ itemDef {
 		text "Geometric Detail:"
 		cvar "r_lodbias"
 		cvarFloatList { "High" 0 "Medium" 1 "Low" 2 }
-		rect 99 217 256 20
+		rect 99 241 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
@@ -222,7 +218,7 @@ itemDef {
 		text "Texture Detail:"
 		cvar "r_picmip"
 		cvarFloatList { "Low" 2 "Normal" 1 "High" 0 }
-		rect 99 242 256 20
+		rect 99 268 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
@@ -239,7 +235,7 @@ itemDef {
 		text "Texture Quality:"
 		cvar "r_texturebits"
 		cvarFloatList { "Default" 0 "16 bit" 16 "32 bit" 32 }
-		rect 99 269 256 20
+		rect 99 295 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
@@ -255,7 +251,7 @@ itemDef {
 		text "Texture Filter:"
 		cvar "r_texturemode"
 		cvarStrList { "Bilinear", "GL_LINEAR_MIPMAP_NEAREST", "Trilinear", "GL_LINEAR_MIPMAP_LINEAR"  }
-		rect 99 294 256 20
+		rect 99 322 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
@@ -270,7 +266,7 @@ itemDef {
       		type ITEM_TYPE_YESNO
 		text "Compress Textures:"
 		cvar "r_ext_compressed_textures"
-		rect 99 319 256 20
+		rect 99 349 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
@@ -288,7 +284,7 @@ itemDef {
 	textscale .3
 	style WINDOW_STYLE_FILLED
 	background "ui/assets/button_back.tga"
-	rect 181 357 100 26
+	rect 181 390 100 26
 	textalign 1
 	textalignx 50
 	textaligny 20
@@ -297,8 +293,6 @@ itemDef {
 	visible 1
 	action { play "sound/misc/menu1.wav" ; 
 	open vid_restart_popmenu }
-	mouseEnter { setitemcolor graphics backcolor .1 .37 .1 1 } 
-	mouseExit { setitemcolor graphics backcolor .37 .1 .1 1 } 
 		}
 	
 	itemDef {
@@ -306,7 +300,7 @@ itemDef {
 		group grpSystem
 		style WINDOW_STYLE_SHADER
 		background "ui/assets/framebutton.tga"
- 		rect 181 357 100 26
+ 		rect 181 390 100 26
       		visible 1 
 		decoration  	  
     		}
@@ -316,7 +310,7 @@ itemDef {
 		group grpSystem
 		style WINDOW_STYLE_SHADER
 		background "ui/assets/leftbutton.tga"
-   	   	rect 169 357 13 26
+   	   	rect 169 390 13 26
    	   	visible 1 
 		decoration  	  
    	 	}
@@ -326,247 +320,63 @@ itemDef {
 		group grpSystem
 		style WINDOW_STYLE_SHADER
 		background "ui/assets/rightbutton.tga"
-      		rect 280 357 13 26
+      		rect 280 390 13 26
      	 	visible 1 
 		decoration  	  
     		}
 
-	
-    		
 
-
-itemDef {
-	name ctr_driver
-	text "Driver Info"
-	type 1
-	textscale .3
-	group grpSystembutton
-	style WINDOW_STYLE_FILLED
-	background "ui/assets/button_back.tga"
-	rect 181 395 100 26
-	textalign 1
-	textalignx 50
-	textaligny 20
-	forecolor 1 1 1 1
-	backcolor .37 .1 .1 1 
-	visible 1
-	action { play "sound/misc/menu1.wav" ; 
-	hide grpSystem ; show driver }
-	mouseEnter { show message_driver ; setitemcolor ctr_driver backcolor .1 .37 .1 1 } 
-	mouseExit { hide message_driver ; setitemcolor ctr_driver backcolor .37 .1 .1 1 } 
-	}
+// 	Sound		//	
 
 itemDef {
-      	name ctr_driver
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/framebutton.tga"
- 	rect 181 395 100 26
-      	visible 1 
-	decoration  	  
-    	}
-
-itemDef {
-      	name ctr_driver
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/leftbutton.tga"
-      	rect 169 395 13 26
-      	visible 1 
-	decoration  	  
-    	}
-
-itemDef {
-      	name ctr_driver
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/rightbutton.tga"
-      	rect 280 395 13 26
-      	visible 1 
-	decoration  	  
-    	}
-
-	itemDef {
-		name driver
+      	name sound
 		group grpSystem
-		rect 0 32 454 256	
-		text "Driver Information" 
-		textalign 1
-		textscale .333
-		textalignx 227
-		textaligny 23
-		forecolor 1 1 1 1
-		visible 0
-		decoration
-	}
-	
-	itemDef {
-		name driver
-		group grpSystem
-		rect 10 70 400 300	
-		ownerdraw UI_GLINFO
-		textalign 0
-		textalignx 0
-		textaligny 23
-		textscale .25
-		forecolor 1 1 1 1
-		visible 0
-		decoration
-		style 1
-		
-	}
- 	
-
-
-itemDef {
-	name ctr_other
-	text "Other"
-	type 1
-	textscale .3
-	group grpSystembutton
 	style WINDOW_STYLE_FILLED
-	background "ui/assets/button_back.tga"
-	rect 306 395 100 26
-	textalign 1
-	textalignx 50
-	textaligny 20
-	forecolor 1 1 1 1
-	backcolor .37 .1 .1 1 
-	visible 1
-	action { play "sound/misc/menu1.wav" ; 
-	hide grpSystem ; show other }
-	mouseEnter { show message_other ; setitemcolor ctr_other backcolor .1 .37 .1 1 } 
-	mouseExit { hide message_other ; setitemcolor ctr_other backcolor .37 .1 .1 1} 	
-	}
-
-itemDef {
-      	name ctr_other
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/framebutton.tga"
- 	rect 306 395 100 26
+	backcolor 0 0 0 .25 
+ 	rect 181 6 100 26
       	visible 1 
 	decoration  	  
     	}
 
 itemDef {
-      	name ctr_other
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/leftbutton.tga"
-      	rect 294 395 13 26
-      	visible 1 
-	decoration  	  
-    	}
-
-itemDef {
-      	name ctr_other
-	style WINDOW_STYLE_SHADER
-	background "ui/assets/rightbutton.tga"
-      	rect 405 395 13 26
-      	visible 1 
-	decoration  	  
-    	}
-
-itemDef {
-	name other
-	group grpSystem
-	rect 2 4 439 125	
-	style WINDOW_STYLE_FILLED
-	border 1
-	bordercolor .5 .5 .5 .5
-	forecolor 1 1 1 1
-	backcolor 0 0 0 .25
-	visible 0
-	decoration
-}
-
-itemDef {
-	name other
-	group grpSystem
-	rect 2 131 439 150	
-	style WINDOW_STYLE_FILLED
-	border 1
-	bordercolor .5 .5 .5 .5
-	forecolor 1 1 1 1
-	backcolor 0 0 0 .25
-	visible 0
-	decoration
-}
-itemDef {
-	name other
-	group grpSystem
-	rect 2 283 439 100	
-	style WINDOW_STYLE_FILLED
-	border 1
-	bordercolor .5 .5 .5 .5
-	forecolor 1 1 1 1
-	backcolor 0 0 0 .25
-	visible 0
-	decoration
-}
-itemDef {
-      	name other			
-	group grpSystem
-      	style 1
-	text "Display"
-	rect 163 8 128 20
-      	textalign ITEM_ALIGN_CENTER
-      	textalignx 64 
-      	textaligny 20
-	textscale .3         
-      	forecolor .4 .4 .65 1
-      	visible 0 
-	decoration
-    	}
-	
-		itemDef {
-      		name other			
-		group grpSystem
-      		type ITEM_TYPE_SLIDER
-		text "Brightness:"
-		cvarfloat "r_gamma" 1 0.5 2
- 		rect 99 52 256 20
-      		textalign ITEM_ALIGN_RIGHT
-      		textalignx 128 
-      		textaligny 20
-		textscale .333        
-      		forecolor 1 1 1 1
-      		visible 0 
-    		}
-
-	itemDef {
-      		name other
-		group grpSystem
-      		type ITEM_TYPE_SLIDER
-		text "Screen Size:"
-		cvarfloat "cg_viewsize" 100 30 100
-		rect 99 79 256 20
-      		textalign ITEM_ALIGN_RIGHT
-      		textalignx 128
-      		textaligny 20
-		textscale .333        
-      		forecolor 1 1 1 1
-      		visible 0 
-    		}
-
-itemDef {
-      	name other			
-	group grpSystem
-      	style 1
+	name ctr_sound
 	text "Sound"
-	rect 163 135 128 20
-      	textalign ITEM_ALIGN_CENTER
-      	textalignx 64 
-      	textaligny 20
-	textscale .333
-      	forecolor .4 .4 .65 1
-      	visible 0 
+	type 1
+	textscale .3
+	group grpSystembutton
+	style WINDOW_STYLE_FILLED
+	rect 181 6 100 26
+	textalign 1
+	textalignx 50
+	textaligny 20
+	forecolor 1 1 1 1
+	visible 1
+	action { play "sound/misc/menu1.wav" ; 
+	hide grpSystem ; show sound }
+	mouseEnter { show message_driver } 
+	mouseExit { hide message_driver } 
+	}
+
+itemDef {
+	name sound
+	group grpSystem
+	rect 2 30 439 396	
+	style WINDOW_STYLE_FILLED
+	border 1
+	bordercolor .5 .5 .5 .5
+	forecolor 1 1 1 1
+	backcolor 0 0 0 .25
+	visible 0
 	decoration
-    	}
+}
 
 	itemDef {
-      		name other
+      		name sound
 		group grpSystem
       		type ITEM_TYPE_SLIDER
 		text "Effects Volume:"
 		cvarfloat "s_volume" 0.7 0 1
-		rect 99 160 256 20
+		rect 99 52 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
@@ -576,12 +386,12 @@ itemDef {
     		}
 	
 	itemDef {
-      		name other
+      		name sound
 		group grpSystem
       		type ITEM_TYPE_SLIDER
 		text "Music Volume:"
 		cvarfloat "s_musicvolume" 0.25 0 1
-		rect 99 187 256 20
+		rect 99 79 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
@@ -591,13 +401,13 @@ itemDef {
     		}
 
 	itemDef {
-      		name other
+      		name sound
 		group grpSystem
       		type ITEM_TYPE_MULTI
 		text "Sound Quality:"
 		cvar "s_khz"
-		cvarFloatList { "22 khz (high)" 22 "11 khz (low)" 11 }
-		rect 99 214 256 20
+		cvarFloatList { "11 khz (low)" 11 "22 khz (medium)" 22 "44 khz (high)" 44 }
+		rect 99 106 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
@@ -607,12 +417,12 @@ itemDef {
     		}
 
 	itemDef {
-      		name other
+      		name sound
 		group grpSystem
       		type ITEM_TYPE_YESNO
 		text "Doppler Sound:"
 		cvar "s_doppler"
-		rect 99 241 256 20
+		rect 99 133 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
@@ -620,32 +430,60 @@ itemDef {
       		forecolor 1 1 1 1
       		visible 0 
     		}
+ 	
 
+// 	Network		//
+
+itemDef {
+      	name network
+		group grpSystem
+	style WINDOW_STYLE_FILLED
+	backcolor 0 0 0 .25 
+ 	rect 306 6 100 26
+      	visible 1 
+	decoration  	  
+}
+
+itemDef {
+	name ctr_network
+	text "Network"
+	type 1
+	textscale .3
+	group grpSystembutton
+	style WINDOW_STYLE_FILLED
+	rect 306 6 100 26
+	textalign 1
+	textalignx 50
+	textaligny 20
+	forecolor 1 1 1 1
+	visible 1
+	action { play "sound/misc/menu1.wav" ; 
+	hide grpSystem ; show network }
+	mouseEnter { show message_other } 
+	mouseExit { hide message_other } 	
+	}
+itemDef {
+	name network
+	group grpSystem
+	rect 2 30 439 396	
+	style WINDOW_STYLE_FILLED
+	border 1
+	bordercolor .5 .5 .5 .5
+	forecolor 1 1 1 1
+	backcolor 0 0 0 .25
+	visible 0
+	decoration
+}
 
 
 itemDef {
-      	name other			
-	group grpSystem
-      	style 1
-	text "Network"
-	rect 163 285 128 20
-      	textalign 1
-      	textalignx 64 
-      	textaligny 20
-	textscale .333        
-      	forecolor .4 .4 .65 1
-      	visible 0 
-	decoration
-    	}
-
-	itemDef {
-      		name other
+      		name network
 		group grpSystem
       		type ITEM_TYPE_MULTI
 		text "Net Data Rate:"
 		cvar "rate"
 		cvarFloatList { "<=28.8k" 2500 "33.6k" 3000 "56k" 4000 "ISDN" 5000 "LAN/CABLE/xDSl" 25000  }
-		rect 99 327 256 20
+		rect 99 52 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
@@ -653,7 +491,22 @@ itemDef {
       		forecolor 1 1 1 1
       		visible 0 
 			action { uiScript update ui_setRate }
-   		}
+}
+
+	itemDef {
+      		name network
+		group grpSystem
+      		type ITEM_TYPE_YESNO
+		text "Auto Download:"
+		cvar "cl_allowDownload"
+		rect 99 79 256 20
+      		textalign ITEM_ALIGN_RIGHT
+      		textalignx 128
+      		textaligny 20
+		textscale .333
+      		forecolor 1 1 1 1
+      		visible 0 
+    		}
 
 
 itemDef {

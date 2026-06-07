@@ -204,14 +204,14 @@ itemDef {
 	itemDef {
       		name options
 		group grpOptions
-      		type ITEM_TYPE_YESNO
-		text "Auto Download:"
-		cvar "cl_allowDownload"
+      		type ITEM_TYPE_SLIDER
+		text "Screen Size:"
+		cvarfloat "cg_viewsize" 100 30 100
 		rect 99 235 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
-		textscale .3
+		textscale .333        
       		forecolor 1 1 1 1
       		visible 1 
     		}
