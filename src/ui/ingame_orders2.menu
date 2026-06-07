@@ -7,7 +7,7 @@ menuDef {
     	name "ingame_orders"
     	visible 0
     	fullscreen 0
-    	rect 45 30 200 240
+		rect 65 30 200 240
 			outOfBoundsClick			// this closes the window if it gets a click out of the rectangle
     	focusColor 1 .75 0 1
     	style 1

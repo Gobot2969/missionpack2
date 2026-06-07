@@ -7,7 +7,7 @@ menuDef {
     	name "ingame_callvote"
     	visible 0
     	fullscreen 0
-    	rect 347 30 290 190
+		rect 301 30 290 190
 	outOfBoundsClick			// this closes the window if it gets a click out of the rectangle
     	focusColor 1 .75 0 1
     	style 1

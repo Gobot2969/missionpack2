@@ -9,7 +9,7 @@
     	visible 1
     	fullScreen 0
 			outOfBoundsClick			// this closes the window if it gets a click out of the rectangle
-    	rect 23 32 128 128
+		rect 33 32 128 128
 	focusColor 1 .75 0 1
 	disableColor .5 .5 .5 1			// For join team butts ~Dimmskii
 
