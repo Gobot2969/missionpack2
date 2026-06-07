@@ -183,7 +183,7 @@ itemDef {
       		type ITEM_TYPE_MULTI			
 		text "Lighting:"
 		cvar "r_vertexlight"
-		cvarFloatList { "Light Map (high)" 0 "Vertex (low)" 1  }
+		cvarFloatList { "Light Map (High)" 0 "Vertex (Low)" 1  }
 		rect 99 214 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
