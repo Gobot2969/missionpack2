@@ -12,7 +12,7 @@ menuDef {
     	style 1
     	border 1
 	onOpen { setitemcolor fadebox backcolor 0 0 0 1 ; 
-		fadeout fadebox }
+		fadeout fadebox ; hide grpOptions ; show hud }
 	onEsc { close options_menu ; close setup_menu }
 	
 

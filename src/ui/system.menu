@@ -250,7 +250,7 @@ itemDef {
       		type ITEM_TYPE_MULTI
 		text "Texture Filter:"
 		cvar "r_texturemode"
-		cvarStrList { "Bilinear", "GL_LINEAR_MIPMAP_NEAREST", "Trilinear", "GL_LINEAR_MIPMAP_LINEAR"  }
+		cvarStrList { "Nearest Neighbor (Low)", "GL_NEAREST", "Bilinear (Medium)", "GL_LINEAR_MIPMAP_NEAREST", "Trilinear (High)", "GL_LINEAR_MIPMAP_LINEAR"  }
 		rect 99 322 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
