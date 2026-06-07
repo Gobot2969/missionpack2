@@ -25,6 +25,7 @@ goto COPYFILES_UI
 
 :COPYFILES_UI
 echo COPY UI FILES
+del /F /Q ..\ui
 md ..\ui
 xcopy /S /E ui ..\ui\
 echo ...Done!
