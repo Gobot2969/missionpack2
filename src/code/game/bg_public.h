@@ -576,7 +576,13 @@ typedef enum {
 } tag_t;
 
 // Time between location updates
-#define TEAM_LOCATION_UPDATE_TIME		1000
+//#define TEAM_LOCATION_UPDATE_TIME		1000
+#define TEAM_LOCATION_UPDATE_TIME		250	// ~Dimmskii
+
+// ~DIMMSKII
+// Time between team position updates (when g_teamVisibility is enabled)
+#define TEAM_POSITION_UPDATE_TIME		250
+// END DIMMSKII
 
 // How many players on the overlay
 #define TEAM_MAXOVERLAY		32

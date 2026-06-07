@@ -1384,7 +1384,7 @@ void CheckTeamStatus( void ) {
 	// ~DIMMSKII
 	// team position relay
     if ( g_teamVisibility.integer ) {
-		if (level.time - level.lastTeamPositionTime > TEAM_LOCATION_UPDATE_TIME) {
+		if (level.time - level.lastTeamPositionTime > TEAM_POSITION_UPDATE_TIME) {
 			for ( i = 0; i < level.maxclients; i++ ) {
 				ent = g_entities + i;
 

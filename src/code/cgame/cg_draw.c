@@ -3084,6 +3084,7 @@ static void CG_DrawTeammatePOI( const char *name, int health, int armor, vec3_t 
 CG_DrawTeammatePOIs
 
 Draws teammate location POIs that are visible through walls.
+TODO: Sample multi pointi for the trace if g_teamVisibility is 0
 =============
 */
 static void CG_DrawTeammatePOIs( void ) {
@@ -3092,6 +3093,7 @@ static void CG_DrawTeammatePOIs( void ) {
 	clientInfo_t *ci;
 	vec3_t		pos;
 	int			health, armor;
+	trace_t		tr;
 
 	if ( !CG_ShouldDrawTeammatePOIs() ) {
 		return;
@@ -3137,11 +3139,26 @@ static void CG_DrawTeammatePOIs( void ) {
 
 			// Get teammate position (with Z offset for visibility above model)
 			VectorCopy( cent->lerpOrigin, pos );
-			pos[2] += CG_TEAMMATE_POI_WORLD_Z_OFFSET;
+
+			// Perform the trace from the viewer's eye to the teammate
+        	CG_Trace( &tr,
+                  cg.refdef.vieworg,    // start: camera/eye position
+                  NULL,                 // mins (NULL for a ray, not a box)
+                  NULL,                 // maxs (NULL for a ray)
+                  pos,       			// end: teammate's position
+                  cg.snap->ps.clientNum, // skip the local player entity
+                  CONTENTS_SOLID );     // only test against solid world geometry
+
+			// Check the trace result and skip occulted
+			if ( tr.fraction < 1.0f && tr.entityNum != cent->currentState.number ) {\
+				continue;
+			}
 
 			// Get health and armor from clientinfo (these are tracked by server)
 			health = ci->health;
 			armor = ci->armor;
+
+			pos[2] += CG_TEAMMATE_POI_WORLD_Z_OFFSET; // Add offset AFTER trace
 
 			// Draw the marker
 			CG_DrawTeammatePOI( ci->name, health, armor, pos );
