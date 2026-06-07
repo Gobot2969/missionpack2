@@ -13,7 +13,7 @@ menuDef {
     	border 1
 	onOpen { setitemcolor fadebox backcolor 0 0 0 1 ; 
 		fadeout fadebox }
-	onEsc { close options_menu ; close setup_menu ; open main }
+	onEsc { close options_menu ; close setup_menu }
 	
 
 
@@ -307,7 +307,8 @@ itemDef {
       		type ITEM_TYPE_MULTI	
 		text "Statusbar:"
 		cvar "cg_hudfiles"
-		cvarStrList { Normal "ui/hud.txt" Small "ui/hud2.txt" }
+	//	cvarStrList { Normal "ui/hud.txt" Small "ui/hud2.txt" }
+		cvarStrList { Normal "ui/hud.txt" }
 		rect 99 375 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128

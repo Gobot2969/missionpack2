@@ -236,7 +236,7 @@ itemDef {
       	forecolor 1 1 1 1
 	backcolor 0 0 0 0.5 
       	visible 1 
-	action { open ingame_options }
+	action { close ingame ; open setup_menu ; open control_menu }
 	mouseEnter { setitemcolor options backcolor 0.25 0.25 0.25 0.25 0.5 }
       	mouseExit { setitemcolor options backcolor 0 0 0 0.5 }
 	}
