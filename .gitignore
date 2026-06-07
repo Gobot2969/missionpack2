@@ -7,5 +7,7 @@ src/code/ui/vm
 src/code/ui/vm/*.*
 src/_temp
 src/_temp/*.*
+ui
+ui/*.*
 vm
 vm/*.*

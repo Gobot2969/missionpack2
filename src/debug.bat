@@ -20,15 +20,13 @@ copy code\game\vm\qagame.qvm ..\vm\
 copy code\cgame\vm\cgame.qvm ..\vm\
 copy code\ui\vm\ui.qvm ..\vm\
 echo ...Done!
-::goto COPYFILES_UI
-goto RUN_GAME
+goto COPYFILES_UI
+::goto RUN_GAME
 
 :COPYFILES_UI
 echo COPY UI FILES
 md ..\ui
 xcopy /S /E ui ..\ui\
-cd ..
-xcopy /S /E ..\assets\* .\
 echo ...Done!
 goto RUN_GAME
 
