@@ -6,7 +6,6 @@
 	loadMenu { "ui/ingame_about.menu" }
 	loadMenu { "ui/ingame_join.menu" }
 	loadMenu { "ui/ingame_leave.menu" }
-	loadMenu { "ui/ingame_player.menu" }
 	loadMenu { "ui/ingame_addbot.menu" }
 	loadMenu { "ui/ingame_callvote.menu" }
 	loadMenu { "ui/ingame_orders.menu" }

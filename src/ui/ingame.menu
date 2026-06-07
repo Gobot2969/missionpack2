@@ -177,7 +177,7 @@ itemDef {
       	forecolor 1 1 1 1
 	backcolor 0 0 0 0.5
       	visible 1
-	action { open ingame_player }
+	action { close ingame ; open player_menu }
 	mouseEnter { setitemcolor player backcolor 0.25 0.25 0.25 0.25 0.5 }
       	mouseExit { setitemcolor player backcolor 0 0 0 0.5 }
 	}

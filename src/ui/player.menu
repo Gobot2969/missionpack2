@@ -21,7 +21,7 @@ menuDef {
 		show back ;
 		hide grpmessage }
 		onClose { uiScript update "ui_SetName" }
-		onEsc { close player_menu ; open main }
+		onEsc { close player_menu }
 
 
 
@@ -296,7 +296,7 @@ itemDef {
       	background "ui/assets/backarrow.tga"
 	rect 16 424 50 50 
       	visible 1 
-      	action { close player_menu ; open main }
+      	action { close player_menu }
 	mouseEnter { hide back ; show back_alt ; show message_back }
     	}
 
@@ -310,7 +310,7 @@ itemDef {
       	visible 0
 	type ITEM_TYPE_BUTTON
       	mouseExit { hide back_alt ; show back ; hide message_back }	  
-      	action { close player_menu ; open main }
+      	action { close player_menu }
     	}
 
 //	MESSAGES	//
@@ -324,7 +324,7 @@ itemDef {
 	textalignx 0
 	textaligny 25
 	textscale .416
-	text "Return to Main Menu"
+	text "Go Back"
 	forecolor 1 1 1 1
 	decoration 
 	visible 0
