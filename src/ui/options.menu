@@ -78,7 +78,7 @@ itemDef {
 	bordercolor .5 .5 .5 .5
 	forecolor 1 1 1 1
 	backcolor 0 0 0 .25
-	visible 0
+	visible 1
 	decoration
 }
 
@@ -184,7 +184,7 @@ itemDef {
 		style WINDOW_STYLE_FILLED
 	backcolor 0 0 0 .25 
  	rect 181 6 100 26
-      	visible 1 
+      	visible 0 
 	decoration  	  
     	}
 
@@ -233,7 +233,7 @@ itemDef {
       		textaligny 20
 		textscale .3
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0
     		}
 
 	itemDef {
@@ -248,7 +248,7 @@ itemDef {
       		textaligny 20
 		textscale .3
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0
     		}
 	
 	itemDef {
@@ -264,7 +264,7 @@ itemDef {
       		textaligny 20
 		textscale .3
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0
     		}
 
 	itemDef {
@@ -279,7 +279,7 @@ itemDef {
       		textaligny 20
 		textscale .3
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0
     		}
 
 	itemDef {
@@ -294,7 +294,7 @@ itemDef {
       		textaligny 20
 		textscale .3
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0
     		}
 
 	itemDef {
@@ -309,7 +309,7 @@ itemDef {
       		textaligny 20
 		textscale .3
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0
     		}
 
 	itemDef {
@@ -324,7 +324,7 @@ itemDef {
       		textaligny 20
 		textscale .3
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0 
     		}
 
 	itemDef {
@@ -339,7 +339,7 @@ itemDef {
       		textaligny 20
 		textscale .3
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0 
     		}
 	
 	itemDef {
@@ -354,7 +354,7 @@ itemDef {
       		textaligny 20
 		textscale .3
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0 
     		}
 
 	itemDef {
@@ -369,7 +369,7 @@ itemDef {
       		textaligny 20
 		textscale .3       
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0 
     		}
 
 
@@ -377,21 +377,21 @@ itemDef {
 
 
 
-// 	OTHER		//
+// 	COMMS		//
 
 itemDef {
-      	name other
+      	name comms
 		group grpOptions
 		style WINDOW_STYLE_FILLED
 	backcolor 0 0 0 .25 
  	rect 306 6 100 26
-      	visible 1 
+      	visible 0 
 	decoration  	  
     	}
 
 itemDef {
-	name ctr_other
-	text "Other"
+	name ctr_comms
+	text "Comms"
 	type 1
 	textscale .3
 	group grpOptionsbutton
@@ -403,14 +403,14 @@ itemDef {
 	forecolor 1 1 1 1
 	visible 1
 	action { play "sound/misc/menu1.wav" ; 
-	hide grpOptions ; show other }
-	mouseEnter { show message_other } 
-	mouseExit { hide message_other } 
+	hide grpOptions ; show comms }
+	mouseEnter { show message_comms } 
+	mouseExit { hide message_comms } 
 	}
 
 
 itemDef {
-	name other
+	name comms
 	group grpOptions
 	rect 2 30 439 396	
 	style WINDOW_STYLE_FILLED
@@ -423,7 +423,7 @@ itemDef {
 }
 
 	itemDef {
-      		name other
+      		name comms
 		group grpOptions
       		type ITEM_TYPE_YESNO
 		text "Voices Off:"
@@ -434,10 +434,10 @@ itemDef {
       		textaligny 20
 		textscale .3       
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0 
     		}
 	itemDef {
-      		name other
+      		name comms
 		group grpOptions
       		type ITEM_TYPE_YESNO
 		text "Taunts Off:"
@@ -448,10 +448,10 @@ itemDef {
       		textaligny 20
 		textscale .3       
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0 
     		}
 	itemDef {
-      		name other
+      		name comms
 		group grpOptions
       		type ITEM_TYPE_YESNO
 		text "Voice Text Off:"
@@ -462,10 +462,10 @@ itemDef {
       		textaligny 20
 		textscale .3       
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0
     		}
 	itemDef {
-      		name other
+      		name comms
 		group grpOptions
       		type ITEM_TYPE_YESNO
 		text "Team Chats Only:"
@@ -476,7 +476,7 @@ itemDef {
       		textaligny 20
 		textscale .3       
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0
     		}
 
 
