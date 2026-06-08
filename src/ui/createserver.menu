@@ -11,6 +11,7 @@
 	background "menuback_b"
 	outOfBoundsClick	
 	focusColor 1 .75 0 1
+	disableColor .5 .5 .5 1
 	onEsc { close maps ; close createserver ; open main }
 	onOpen { setitemcolor fadebox backcolor 0 0 0 1 ; 
 	fadeout fadebox ;  
@@ -499,7 +500,7 @@ itemDef {
       	forecolor 1 1 1 1
       	visible 1  
 		cvarTest "ui_actualNetGameType"
-		hideCvar { "0" ; "1" ; "2" ; "3" }
+		disableCvar { "0" ; "1" ; "2" ; "3" }
     }
 
 
@@ -598,7 +599,7 @@ itemDef {
       	forecolor 1 1 1 1
       	visible 1  
 		cvarTest "ui_actualNetGameType"
-		hideCvar { "0" ; "1" ; "2" ; "3" }
+		disableCvar { "0" ; "1" ; "2" ; "3" }
     	}
 
     itemDef {
@@ -660,7 +661,7 @@ itemDef {
       	forecolor 1 1 1 1
       	visible 1  
 		cvarTest "ui_actualNetGameType"
-		hideCvar { "0" ; "1" ; "2" ; "3" }
+		disableCvar { "0" ; "1" ; "2" ; "3" }
     	}
 
 
