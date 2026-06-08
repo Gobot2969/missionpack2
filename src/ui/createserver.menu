@@ -498,6 +498,8 @@ itemDef {
 	textscale .25        
       	forecolor 1 1 1 1
       	visible 1  
+		cvarTest "ui_actualNetGameType"
+		hideCvar { "0" ; "1" ; "2" ; "3" }
     }
 
 
@@ -586,6 +588,23 @@ itemDef {
       	name expert
 	group grpsettings
       	type ITEM_TYPE_YESNO
+	text "Full Team Visibility:"
+	cvar "g_teamVisibility"
+      	rect 260 205 128 12 
+      	textalign ITEM_ALIGN_RIGHT
+      	textalignx 65
+      	textaligny 12
+	textscale .25        
+      	forecolor 1 1 1 1
+      	visible 1  
+		cvarTest "ui_actualNetGameType"
+		hideCvar { "0" ; "1" ; "2" ; "3" }
+    	}
+
+    itemDef {
+      	name expert
+	group grpsettings
+      	type ITEM_TYPE_YESNO
 	text "Enable Voting:"
 	cvar "g_allowvote"
       	rect 260 220 128 12 
@@ -640,6 +659,8 @@ itemDef {
 	textscale .25        
       	forecolor 1 1 1 1
       	visible 1  
+		cvarTest "ui_actualNetGameType"
+		hideCvar { "0" ; "1" ; "2" ; "3" }
     	}
 
 
