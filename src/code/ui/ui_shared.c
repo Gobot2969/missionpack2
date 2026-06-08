@@ -3045,6 +3045,8 @@ void Item_TextField_Paint(itemDef_t *item) {
 		memcpy(&newColor, &item->window.foreColor, sizeof(vec4_t));
 	}
 
+	Item_TextColor(item, &newColor); // ~DIMMSKII - Fix value not being colored consistently for things like disableColor
+
 	offset = (item->text && *item->text) ? 8 : 0;
 	if (item->window.flags & WINDOW_HASFOCUS && g_editingField) {
 		char cursor = DC->getOverstrikeMode() ? '_' : '|';
@@ -3072,6 +3074,8 @@ void Item_YesNo_Paint(itemDef_t *item) {
 		memcpy(&newColor, &item->window.foreColor, sizeof(vec4_t));
 	}
 
+	Item_TextColor(item, &newColor); // ~DIMMSKII - Fix value not being colored consistently for things like disableColor
+
 	if (item->text) {
 		Item_Text_Paint(item);
 		DC->drawText(item->textRect.x + item->textRect.w + 8, item->textRect.y, item->textscale, newColor, (value != 0) ? "Yes" : "No", 0, 0, item->textStyle);
@@ -3095,6 +3099,7 @@ void Item_Multi_Paint(itemDef_t *item) {
 		memcpy(&newColor, &item->window.foreColor, sizeof(vec4_t));
 	}
 
+	Item_TextColor(item, &newColor); // ~DIMMSKII - Fix value not being colored consistently for things like disableColor
 	text = Item_Multi_Setting(item);
 
 	if (item->text) {
