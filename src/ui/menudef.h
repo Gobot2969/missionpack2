@@ -141,61 +141,62 @@
 #define CG_PLAYER_ITEM 19
 #define CG_PLAYER_SCORE 20
 
-#define CG_BLUE_FLAGHEAD 21
-#define CG_BLUE_FLAGSTATUS 22
-#define CG_BLUE_FLAGNAME 23
-#define CG_RED_FLAGHEAD 24
-#define CG_RED_FLAGSTATUS 25
-#define CG_RED_FLAGNAME 26
+#define CG_PLAYER_ROUNDWINS 21		// Arena wins
 
-#define CG_BLUE_SCORE 27
-#define CG_RED_SCORE 28
-#define CG_RED_NAME 29
-#define CG_BLUE_NAME 30
-#define CG_HARVESTER_SKULLS 31					// only shows in harvester
-#define CG_ONEFLAG_STATUS 32						// only shows in one flag
-#define CG_PLAYER_LOCATION 33
-#define CG_TEAM_COLOR 34
-#define CG_CTF_POWERUP 35
+#define CG_BLUE_FLAGHEAD 22
+#define CG_BLUE_FLAGSTATUS 23
+#define CG_BLUE_FLAGNAME 24
+#define CG_RED_FLAGHEAD 25
+#define CG_RED_FLAGSTATUS 26
+#define CG_RED_FLAGNAME 27
+
+#define CG_BLUE_SCORE 28
+#define CG_RED_SCORE 29
+#define CG_RED_NAME 30
+#define CG_BLUE_NAME 31
+#define CG_HARVESTER_SKULLS 32					// only shows in harvester
+#define CG_ONEFLAG_STATUS 33						// only shows in one flag
+#define CG_PLAYER_LOCATION 34
+#define CG_TEAM_COLOR 35
+#define CG_CTF_POWERUP 36
                                         
-#define CG_AREA_POWERUP	36
-#define CG_AREA_LAGOMETER	37            // painted with old system
-#define CG_PLAYER_HASFLAG 38            
-#define CG_GAME_TYPE 39                 // not done
+#define CG_AREA_POWERUP	37
+#define CG_AREA_LAGOMETER	38            // painted with old system
+#define CG_PLAYER_HASFLAG 39            
+#define CG_GAME_TYPE 40                 // not done
 
-#define CG_SELECTEDPLAYER_ARMOR 40      
-#define CG_SELECTEDPLAYER_HEALTH 41
-#define CG_PLAYER_STATUS 42
-#define CG_FRAGGED_MSG 43               // painted with old system
-#define CG_PROXMINED_MSG 44             // painted with old system
-#define CG_AREA_FPSINFO 45              // painted with old system
-#define CG_AREA_SYSTEMCHAT 46           // painted with old system
-#define CG_AREA_TEAMCHAT 47             // painted with old system
-#define CG_AREA_CHAT 48                 // painted with old system
-#define CG_GAME_STATUS 49
-#define CG_KILLER 50
-#define CG_PLAYER_ARMOR_ICON2D 51              
-#define CG_PLAYER_AMMO_ICON2D 52
-#define CG_ACCURACY 53
-#define CG_ASSISTS 54
-#define CG_DEFEND 55
-#define CG_EXCELLENT 56
-#define CG_IMPRESSIVE 57
-#define CG_PERFECT 58
-#define CG_GAUNTLET 59
-#define CG_SPECTATORS 60
-#define CG_TEAMINFO 61
-#define CG_VOICE_HEAD 62
-#define CG_VOICE_NAME 63
-#define CG_PLAYER_HASFLAG2D 64            
-#define CG_HARVESTER_SKULLS2D 65					// only shows in harvester
-#define CG_CAPFRAGLIMIT 66	 
-#define CG_1STPLACE 67
-#define CG_2NDPLACE 68
-#define CG_CAPTURES 69
-
-#define CG_PLAYER_ROUNDWINS 70		// Arena wins
+#define CG_SELECTEDPLAYER_ARMOR 41      
+#define CG_SELECTEDPLAYER_HEALTH 42
+#define CG_PLAYER_STATUS 43
+#define CG_FRAGGED_MSG 44               // painted with old system
+#define CG_PROXMINED_MSG 45             // painted with old system
+#define CG_AREA_FPSINFO 46              // painted with old system
+#define CG_AREA_SYSTEMCHAT 47           // painted with old system
+#define CG_AREA_TEAMCHAT 48             // painted with old system
+#define CG_AREA_CHAT 49                 // painted with old system
+#define CG_GAME_STATUS 50
+#define CG_KILLER 51
+#define CG_PLAYER_ARMOR_ICON2D 52              
+#define CG_PLAYER_AMMO_ICON2D 53
+#define CG_ACCURACY 54
+#define CG_ASSISTS 55
+#define CG_DEFEND 56
+#define CG_EXCELLENT 57
+#define CG_IMPRESSIVE 58
+#define CG_PERFECT 59
+#define CG_GAUNTLET 60
+#define CG_SPECTATORS 61
+#define CG_TEAMINFO 62
+#define CG_VOICE_HEAD 63
+#define CG_VOICE_NAME 64
+#define CG_PLAYER_HASFLAG2D 65            
+#define CG_HARVESTER_SKULLS2D 66					// only shows in harvester
+#define CG_CAPFRAGLIMIT 67	 
+#define CG_1STPLACE 68
+#define CG_2NDPLACE 69
+#define CG_CAPTURES 70
 #define CG_MAP_NAME 71
+
 
 
 
@@ -215,53 +216,52 @@
 #define UI_BLUETEAM3 212
 #define UI_BLUETEAM4 213
 #define UI_BLUETEAM5 214
-#define UI_REDTEAM1 215
-#define UI_REDTEAM2 216
-#define UI_REDTEAM3 217
-#define UI_REDTEAM4 218
-#define UI_REDTEAM5 219
-#define UI_NETSOURCE 220
-#define UI_NETMAPPREVIEW 221
-#define UI_NETFILTER 222
-#define UI_TIER 223
-#define UI_OPPONENTMODEL 224
-#define UI_TIERMAP1 225
-#define UI_TIERMAP2 226
-#define UI_TIERMAP3 227
-#define UI_PLAYERLOGO 228
-#define UI_OPPONENTLOGO 229
-#define UI_PLAYERLOGO_METAL 230
-#define UI_OPPONENTLOGO_METAL 231
-#define UI_PLAYERLOGO_NAME 232
-#define UI_OPPONENTLOGO_NAME 233
-#define UI_TIER_MAPNAME 234
-#define UI_TIER_GAMETYPE 235
-#define UI_ALLMAPS_SELECTION 236
-#define UI_OPPONENT_NAME 237
-#define UI_VOTE_KICK 238
-#define UI_BOTNAME 239
-#define UI_BOTSKILL 240
-#define UI_REDBLUE 241
-#define UI_CROSSHAIR 242
-#define UI_SELECTEDPLAYER 243
-#define UI_MAPCINEMATIC 244
-#define UI_NETGAMETYPE 245
-#define UI_NETMAPCINEMATIC 246
-#define UI_SERVERREFRESHDATE 247
-#define UI_SERVERMOTD 248
-#define UI_GLINFO  249
-#define UI_KEYBINDSTATUS 250
-#define UI_CLANCINEMATIC 251
-#define UI_MAP_TIMETOBEAT 252
-#define UI_JOINGAMETYPE 253
-#define UI_PREVIEWCINEMATIC 254
-#define UI_STARTMAPCINEMATIC 255
-#define UI_MAPS_SELECTION 256
-
-#define UI_BLUETEAM6 257
-#define UI_BLUETEAM7 258
-#define UI_REDTEAM6 259
-#define UI_REDTEAM7 260
+#define UI_BLUETEAM6 215
+#define UI_BLUETEAM7 216
+#define UI_REDTEAM1 217
+#define UI_REDTEAM2 218
+#define UI_REDTEAM3 219
+#define UI_REDTEAM4 220
+#define UI_REDTEAM5 221
+#define UI_REDTEAM6 222
+#define UI_REDTEAM7 223
+#define UI_NETSOURCE 224
+#define UI_NETMAPPREVIEW 225
+#define UI_NETFILTER 226
+#define UI_TIER 227
+#define UI_OPPONENTMODEL 228
+#define UI_TIERMAP1 229
+#define UI_TIERMAP2 230
+#define UI_TIERMAP3 231
+#define UI_PLAYERLOGO 232
+#define UI_OPPONENTLOGO 233
+#define UI_PLAYERLOGO_METAL 234
+#define UI_OPPONENTLOGO_METAL 235
+#define UI_PLAYERLOGO_NAME 236
+#define UI_OPPONENTLOGO_NAME 237
+#define UI_TIER_MAPNAME 238
+#define UI_TIER_GAMETYPE 239
+#define UI_ALLMAPS_SELECTION 240
+#define UI_OPPONENT_NAME 241
+#define UI_VOTE_KICK 242
+#define UI_BOTNAME 243
+#define UI_BOTSKILL 244
+#define UI_REDBLUE 245
+#define UI_CROSSHAIR 246
+#define UI_SELECTEDPLAYER 247
+#define UI_MAPCINEMATIC 248
+#define UI_NETGAMETYPE 249
+#define UI_NETMAPCINEMATIC 250
+#define UI_SERVERREFRESHDATE 251
+#define UI_SERVERMOTD 252
+#define UI_GLINFO  253
+#define UI_KEYBINDSTATUS 254
+#define UI_CLANCINEMATIC 255
+#define UI_MAP_TIMETOBEAT 256
+#define UI_JOINGAMETYPE 257
+#define UI_PREVIEWCINEMATIC 258
+#define UI_STARTMAPCINEMATIC 259
+#define UI_MAPS_SELECTION 260
 
 #define VOICECHAT_GETFLAG			"getflag"				// command someone to get the flag
 #define VOICECHAT_OFFENSE			"offense"				// command someone to go on offense

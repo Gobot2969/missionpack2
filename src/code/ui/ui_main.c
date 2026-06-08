@@ -2126,31 +2126,23 @@ static void UI_OwnerDraw(float x, float y, float w, float h, float text_x, float
 		case UI_BLUETEAM3:
 		case UI_BLUETEAM4:
 		case UI_BLUETEAM5:
-      UI_DrawTeamMember(&rect, scale, color, qtrue, ownerDraw - UI_BLUETEAM1 + 1, textStyle);
-      break;
 #ifdef MISSIONPACK2
 		case UI_BLUETEAM6:
-      UI_DrawTeamMember(&rect, scale, color, qtrue, 6, textStyle);
-      break;
 		case UI_BLUETEAM7:
-      UI_DrawTeamMember(&rect, scale, color, qtrue, 7, textStyle);
-      break;
 #endif
+      UI_DrawTeamMember(&rect, scale, color, qtrue, ownerDraw - UI_BLUETEAM1 + 1, textStyle);
+      break;
     case UI_REDTEAM1:
 		case UI_REDTEAM2:
 		case UI_REDTEAM3:
 		case UI_REDTEAM4:
 		case UI_REDTEAM5:
-      UI_DrawTeamMember(&rect, scale, color, qfalse, ownerDraw - UI_REDTEAM1 + 1, textStyle);
-      break;
 #ifdef MISSIONPACK2
 		case UI_REDTEAM6:
-      UI_DrawTeamMember(&rect, scale, color, qfalse, 6, textStyle);
-      break;
 		case UI_REDTEAM7:
-      UI_DrawTeamMember(&rect, scale, color, qfalse, 7, textStyle);
-      break;
 #endif
+      UI_DrawTeamMember(&rect, scale, color, qfalse, ownerDraw - UI_REDTEAM1 + 1, textStyle);
+      break;
 		case UI_NETSOURCE:
       UI_DrawNetSource(&rect, scale, color, textStyle);
 			break;
