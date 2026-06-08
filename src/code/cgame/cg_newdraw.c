@@ -449,7 +449,8 @@ static void CG_DrawSelectedPlayerWeapon( rectDef_t *rect ) {
 
 static void CG_DrawPlayerScore( rectDef_t *rect, float scale, vec4_t color, qhandle_t shader, int textStyle ) {
   char num[16];
-  int value = cg.snap->ps.persistant[PERS_SCORE];
+  //int value = cg.snap->ps.persistant[PERS_SCORE];
+  int value = CG_GetValue(CG_PLAYER_SCORE); // ~DIMMSKII - needed for HUD shows spectatee scores mod
 
 	if (shader) {
 		trap_R_SetColor( color );
@@ -466,7 +467,7 @@ static void CG_DrawPlayerScore( rectDef_t *rect, float scale, vec4_t color, qhan
 #ifdef MISSIONPACK2
 static void CG_DrawPlayerRoundWins( rectDef_t *rect, float scale, vec4_t color, qhandle_t shader, int textStyle ) {
   char num[16];
-  int value = cg.snap->ps.persistant[PERS_ROUNDWINS];
+  int value = CG_GetValue(CG_PLAYER_ROUNDWINS); // ~DIMMSKII - needed for HUD shows spectatee scores mod
 
 	if (shader) {
 		trap_R_SetColor( color );
@@ -933,8 +934,21 @@ float CG_GetValue(int ownerDraw) {
 		}
     break;
   case CG_PLAYER_SCORE:
-	  return cg.snap->ps.persistant[PERS_SCORE];
-    break;
+  	// ~DIMMSKII
+	// HUD shows spectatee scores mod
+	if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR || (cg.snap->ps.pm_flags & PMF_FOLLOW) ) { // Deadspec check TODO: Add proper method to check dead
+		int i;
+		//return cgs.clientinfo[ cg.snap->ps.clientNum ].score;
+		// TODO not efficient. Luckily, only happens when you spec
+		for (i = 0; i < cg.numScores; i++) {
+			if (cg.scores[i].client == cg.snap->ps.clientNum) {
+				return cg.scores[i].score;
+			}
+		}
+	}
+	// END DIMMSKII
+	return cg.snap->ps.persistant[PERS_SCORE];
+	break;
   case CG_PLAYER_HEALTH:
 		return ps->stats[STAT_HEALTH];
     break;
@@ -946,7 +960,17 @@ float CG_GetValue(int ownerDraw) {
     break;
 // ~Dimmskii
 #ifdef MISSIONPACK2
-case CG_PLAYER_ROUNDWINS: 	// Arena wins
+  case CG_PLAYER_ROUNDWINS: 	// Arena wins
+  // HUD shows spectatee scores mod
+  if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR || (cg.snap->ps.pm_flags & PMF_FOLLOW) ) { // Deadspec check TODO: Add proper method to check dead
+	int i;
+	// TODO not efficient. Luckily, only happens when you spec
+	for (i = 0; i < cg.numScores; i++) {
+		if (cg.scores[i].client == cg.snap->ps.clientNum) {
+			return cg.scores[i].roundWins;
+		}
+	}
+  }
 	  return cg.snap->ps.persistant[PERS_ROUNDWINS];
     break;
 #endif
