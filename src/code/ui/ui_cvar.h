@@ -139,6 +139,7 @@ UI_CVAR( ui_serverStatusTimeOut, "ui_serverStatusTimeOut", "7000", CVAR_ARCHIVE 
 #ifdef MISSIONPACK2
 UI_CVAR( ui_winLimit, "ui_winLimit", "10", 0 )
 UI_CVAR( ui_realWinLimit, "winLimit", "10", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART )
+UI_CVAR( ui_missionStr, "ui_missionStr", "exec missions/demo1.cfg", 0 )
 #endif
 
 #undef UI_CVAR
