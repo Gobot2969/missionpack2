@@ -408,7 +408,6 @@ itemDef {
         type ITEM_TYPE_NUMERICFIELD
 	text "Capture Limit:"
 	cvar "capturelimit" 
-	ownerdrawflag  0x00004800 //UI_SHOW_NETANYTEAMGAME | UI_SHOW_NOTARENAGAME
  	rect 260 70 128 12 
 	textalign ITEM_ALIGN_RIGHT
 	textalignx 65
@@ -417,6 +416,8 @@ itemDef {
 	textscale .25        
 	forecolor 1 1 1 1
 	visible 1 
+	cvarTest "ui_actualNetGameType"
+	  showCvar { "7" ; "8" ; "9" ; "10" }
     	}
     itemDef {
       	name normal
@@ -424,7 +425,6 @@ itemDef {
 	type ITEM_TYPE_NUMERICFIELD
 	text "Frag Limit:"
 	cvar "fraglimit"
-	ownerdrawflag 0x00004400 //UI_SHOW_NETANYNONTEAMGAME | UI_SHOW_NOTARENAGAME
       	rect 260 70 128 12 
       	textalign ITEM_ALIGN_RIGHT
       	textalignx 65
@@ -433,6 +433,8 @@ itemDef {
 	textscale .25        
       	forecolor 1 1 1 1
       	visible 1  
+			cvarTest "ui_actualNetGameType"
+	  showCvar { "0" ; "1" ; "4" }
     }
     itemDef {
       	name normal
@@ -440,7 +442,6 @@ itemDef {
 	type ITEM_TYPE_NUMERICFIELD
 	text "Win Limit:"
 	cvar "winlimit"
-	ownerdrawflag UI_SHOW_ARENAGAME
       	rect 260 70 128 12 
       	textalign ITEM_ALIGN_RIGHT
       	textalignx 65
@@ -449,6 +450,8 @@ itemDef {
 	textscale .25        
       	forecolor 1 1 1 1
       	visible 1  
+	cvarTest "ui_actualNetGameType"
+	  showCvar { "3" ; "5" }
     }
 
     itemDef {
@@ -457,7 +460,6 @@ itemDef {
       	type ITEM_TYPE_NUMERICFIELD
 	text "Time Limit:"
 	cvar "timelimit"
-	ownerdrawflag UI_SHOW_NOTARENAGAME
       	rect 260 85 128 12 
       	textalign ITEM_ALIGN_RIGHT
       	textalignx 65
@@ -466,6 +468,8 @@ itemDef {
 	textscale .25        
       	forecolor 1 1 1 1
       	visible 1  
+	cvarTest "ui_actualNetGameType"
+	  showCvar { "0" ; "1" ; "2" ; "4" ; "7" ; "8" ; "9" ; "10" }
     }
 	
 	itemDef {
@@ -474,7 +478,6 @@ itemDef {
       	type ITEM_TYPE_NUMERICFIELD
 	text "Round Time:"
 	cvar "roundtime"
-	ownerdrawflag UI_SHOW_ARENAGAME
       	rect 260 85 128 12 
       	textalign ITEM_ALIGN_RIGHT
       	textalignx 65
@@ -483,6 +486,8 @@ itemDef {
 	textscale .25        
       	forecolor 1 1 1 1
       	visible 1  
+	cvarTest "ui_actualNetGameType"
+	  showCvar { "3" ; "5" }  
     }
 
 
