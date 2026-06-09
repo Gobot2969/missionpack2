@@ -64,7 +64,7 @@ itemDef {
 		group grpControls
 	style WINDOW_STYLE_FILLED
 	backcolor 0 0 0 .25 
- 	rect 17 6 45 24
+ 	rect 13 6 53 24
       	visible 1 
 	decoration  	  
     	}
@@ -206,7 +206,7 @@ itemDef {
 		group grpControls
 	style WINDOW_STYLE_FILLED
 	backcolor 0 0 0 .25 
- 	rect 90 6 45 24
+ 	rect 86 6 53 24
       	visible 1 
 	decoration  	  
     	}
@@ -432,7 +432,7 @@ itemDef {
 		group grpControls
 	style WINDOW_STYLE_FILLED
 	backcolor 0 0 0 .25 
- 	rect 163 6 45 24
+ 	rect 159 6 53 24
       	visible 1 
 	decoration  	  
     	}
@@ -756,7 +756,7 @@ itemDef {
 		group grpControls
 	style WINDOW_STYLE_FILLED
 	backcolor 0 0 0 .25 
- 	rect 236 6 45 24
+ 	rect 232 6 53 24
       	visible 1 
 	decoration  	  
     	}
@@ -917,7 +917,7 @@ itemDef {
 		group grpControls
 	style WINDOW_STYLE_FILLED
 	backcolor 0 0 0 .25 
- 	rect 309 6 47 24
+ 	rect 305 6 55 24
       	visible 1 
 	decoration  	  
     	}
@@ -1170,7 +1170,7 @@ itemDef {
 		group grpControls
 	style WINDOW_STYLE_FILLED
 	backcolor 0 0 0 .25 
- 	rect 382 6 45 24
+ 	rect 378 6 53 24
       	visible 1 
 	decoration  	  
     	}
