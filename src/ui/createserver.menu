@@ -367,7 +367,7 @@ itemDef {
     	}
 		
 	itemDef {
-	name expert
+	name host
 	group grpsettings
       	type ITEM_TYPE_NUMERICFIELD
 	text "Maximum Ping:"
@@ -633,27 +633,12 @@ itemDef {
     	}
 
 	itemDef {
-      	name normal
-	group grpsettings
-      	type ITEM_TYPE_YESNO
-	text "Grappling Hook:"
-	cvar "g_grapple"
-      	rect 260 265 128 12 
-      	textalign ITEM_ALIGN_RIGHT
-      	textalignx 65
-      	textaligny 12
-	textscale .25        
-      	forecolor 1 1 1 1
-      	visible 1  
-    }
-
-    itemDef {
       	name expert
 	group grpsettings
       	type ITEM_TYPE_YESNO
 	text "Even Teams:"
 	cvar "g_teamforcebalance"
-      	rect 260 280 128 12 
+      	rect 260 250 128 12 
       	textalign ITEM_ALIGN_RIGHT
       	textalignx 65
       	textaligny 12
@@ -664,15 +649,13 @@ itemDef {
 		disableCvar { "0" ; "1" ; "2" ; "3" }
     	}
 
-
-
     itemDef {
       	name expert
 	group grpsettings
       	type ITEM_TYPE_YESNO
 	text "Synchronous Client:"
 	cvar "g_synchronousclients"
-      	rect 260 295 128 12 
+      	rect 260 265 128 12 
       	textalign ITEM_ALIGN_RIGHT
       	textalignx 65
       	textaligny 12
@@ -680,6 +663,88 @@ itemDef {
       	forecolor 1 1 1 1
       	visible 1  
     	}
+
+    itemDef {
+      	name expert
+	group grpsettings
+      	type ITEM_TYPE_YESNO
+	text "Unlagged:"
+	cvar "g_unlagged"
+      	rect 260 280 128 12 
+      	textalign ITEM_ALIGN_RIGHT
+      	textalignx 65
+      	textaligny 12
+	textscale .25        
+      	forecolor 1 1 1 1
+      	visible 1  
+    	}
+
+
+
+
+
+	itemDef {
+      	name expert
+	group grpsettings
+      	type ITEM_TYPE_YESNO
+	text "Grappling Hook:"
+	cvar "g_grapple"
+      	rect 260 310 128 12 
+      	textalign ITEM_ALIGN_RIGHT
+      	textalignx 65
+      	textaligny 12
+	textscale .25        
+      	forecolor 1 1 1 1
+      	visible 1  
+    }
+
+	itemDef {
+      	name expert
+		group grpsettings
+		type ITEM_TYPE_YESNO
+		text "Rail Jump:"
+		cvar "g_railJump"
+      	rect 260 325 128 12 
+      	textalign ITEM_ALIGN_RIGHT
+      	textalignx 65
+      	textaligny 12
+		textscale .25        
+      	forecolor 1 1 1 1
+      	visible 1  
+    }
+	
+	itemDef {
+    name expert
+		group grpsettings
+		type ITEM_TYPE_NUMERICFIELD
+		text "Rail Jump Damage:"
+		cvar "g_railJumpDamage"
+      	rect 260 340 128 12 
+      	textalign ITEM_ALIGN_RIGHT
+      	textalignx 65
+      	textaligny 12
+		textscale .25        
+      	forecolor 1 1 1 1
+      	visible 1  
+    }
+
+	itemDef {
+      	name expert
+		group grpsettings
+		type ITEM_TYPE_YESNO
+		text "Nail Bounce:"
+		cvar "g_nailBounce"
+      	rect 260 355 128 12 
+      	textalign ITEM_ALIGN_RIGHT
+      	textalignx 65
+      	textaligny 12
+		textscale .25        
+      	forecolor 1 1 1 1
+      	visible 1  
+    }
+
+
+
 
 
 
