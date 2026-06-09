@@ -13,8 +13,8 @@
 	focusColor 1 .75 0 1
 	onEsc { play "sound/misc/menu3.wav" ; close singleplayer ; open main }
 	onOpen { setitemcolor fadebox backcolor 0 0 0 1 ; 
-	fadeout fadebox ; 
-	uiScript loadArenas_new ;
+	fadeout fadebox ;
+	exec "set ui_missionStr exec missions/demo1.cfg" ; 
 	hide lightning ; 
 	hide accept_alt ; 
 	show accept ;
