@@ -4787,6 +4787,18 @@ qboolean ItemParse_doubleClick( itemDef_t *item, int handle ) {
 	return qtrue;
 }
 
+// ~DIMMSKII
+qboolean ItemParse_font( itemDef_t *item, int handle ) {
+	int i;
+
+	if (!PC_Int_Parse(handle, &i)) {
+		return qfalse;
+	}
+	// TODO: QL Stub. Implement this.
+	return qtrue;
+}
+// End DIMMSKII
+
 qboolean ItemParse_onFocus( itemDef_t *item, int handle ) {
 	if (!PC_Script_Parse(handle, &item->onFocus)) {
 		return qfalse;
@@ -5132,6 +5144,9 @@ keywordHash_t itemParseKeywords[] = {
 	{"hideCvar", ItemParse_hideCvar, NULL},
 	{"cinematic", ItemParse_cinematic, NULL},
 	{"doubleclick", ItemParse_doubleClick, NULL},
+	// ~DIMMSKII
+	{"font", ItemParse_font, NULL},
+	// End DIMMSKII
 	{NULL, NULL, NULL}
 };
 
@@ -5245,6 +5260,17 @@ qboolean MenuParse_fullscreen( itemDef_t *item, int handle ) {
 	}
 	return qtrue;
 }
+
+// ~DIMMSKII
+qboolean MenuParse_widescreen( itemDef_t *item, int handle ) {
+	//menuDef_t *menu = (menuDef_t*)item;
+	//if (!PC_Int_Parse(handle, &menu->widescreen)) {
+	//	return qfalse;
+	//}
+	// TODO: QL Stub. Implement this.
+	return qtrue;
+}
+//END DIMM
 
 qboolean MenuParse_rect( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
@@ -5533,6 +5559,9 @@ keywordHash_t menuParseKeywords[] = {
 	{"fadeClamp", MenuParse_fadeClamp, NULL},
 	{"fadeCycle", MenuParse_fadeCycle, NULL},
 	{"fadeAmount", MenuParse_fadeAmount, NULL},
+	// ~DIMMSKII
+	{"widescreen", MenuParse_widescreen, NULL},
+	// END DIMM
 	{NULL, NULL, NULL}
 };
 
