@@ -4012,6 +4012,7 @@ UI_BuildServerDisplayList
 static void UI_BuildServerDisplayList(qboolean force) {
 	int i, count, clients, maxClients, ping, game, len, visible;
 	char info[MAX_STRING_CHARS];
+	const char *gamedir; // ~DIMMSKII
 //	qboolean startRefresh = qtrue; TTimo: unused
 	static int numinvisible;
 
@@ -4088,7 +4089,14 @@ static void UI_BuildServerDisplayList(qboolean force) {
 			}
 
 			if (uiInfo.joinGameTypes[ui_joinGameType.integer].gtEnum != -1) {
-				game = atoi(Info_ValueForKey(info, "gametype"));
+				//game = atoi(Info_ValueForKey(info, "gametype"));
+				 // ~DIMMSKII
+				gamedir = Info_ValueForKey(info, "game");
+				if (!gamedir[0]) {
+					gamedir = "baseq3";
+				}
+				game = UI_GameTypeSetForGamedir(gamedir)->gameTypes[atoi(Info_ValueForKey(info, "gametype"))];
+				// END DIMMSKII
 				if (game != uiInfo.joinGameTypes[ui_joinGameType.integer].gtEnum) {
 					trap_LAN_MarkServerVisible(ui_netSource.integer, i, qfalse);
 					continue;
@@ -4606,9 +4614,7 @@ static const char *UI_FeederItemText(float feederID, int index, int column, qhan
 	} else if (feederID == FEEDER_SERVERS) {
 		if (index >= 0 && index < uiInfo.serverStatus.numDisplayServers) {
 			int ping, game, punkbuster;
-			// ~DIMMSKII
-			const char *gamedir;
-			// DIMMSKII
+			const char *gamedir; // ~DIMMSKII
 			if (lastColumn != column || lastTime > uiInfo.uiDC.realTime + 5000) {
 				trap_LAN_GetServerInfo(ui_netSource.integer, uiInfo.serverStatus.displayServers[index], info, MAX_STRING_CHARS);
 				lastColumn = column;
