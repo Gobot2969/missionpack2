@@ -57,6 +57,7 @@ joingametypes {
   { "All" -1 }
   { "Free For All" 0 }
   { "Tournament" 1 }
+  { "Race" 2 }
   { "Arena" 3 }
   { "Team Deathmatch" 4 } 
   { "Team Arena" 5 }
