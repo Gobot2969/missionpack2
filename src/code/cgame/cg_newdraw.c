@@ -1037,12 +1037,12 @@ qboolean CG_OwnerDrawVisible(int flags) {
 	// Smort self-contradicting CG_SHOW_NEVER value for things like TA HUD usage of CG_SHOW_SINGLEPLAYER i.e.
 	// menudef.h:
 	// #define CG_SHOW_NEVER         0x00080004      // ~Dimmskii - Never show = CG_SHOW_ANYTEAMGAME | CG_SHOW_ANYNONTEAMGAME
-	// #define CG_SHOW_SINGLEPLAYER   CG_SHOW_NEVER1 // ~Dimmskii - Never show
-	// #define CG_SHOW_DOMINATION     CG_SHOW_NEVER1 // ~Dimmskii - QL Compat - Never show
-	if (flags == CG_SHOW_NEVER) {
+	// #define CG_SHOW_SINGLEPLAYER   CG_SHOW_NEVER // ~Dimmskii - Never show
+	// #define CG_SHOW_DOMINATION     CG_SHOW_NEVER // ~Dimmskii - QL Compat - Never show
+	// This checks if BOTH bits are set, ignoring any other active flags
+	if ((flags & CG_SHOW_NEVER) == CG_SHOW_NEVER) {
 		return qfalse;
 	}
-
 	// END DIMMSKII
 
 	if (flags & CG_SHOW_TEAMINFO) {
