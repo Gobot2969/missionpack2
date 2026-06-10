@@ -89,6 +89,82 @@ static const char *teamArenaGameNames[] = {
 static int const numTeamArenaGameNames = sizeof(teamArenaGameNames) / sizeof(const char*);
 
 
+// ~DIMMSKII
+static const int gameTypes_baseq3[] = {
+	GT_FFA,
+	GT_TOURNAMENT,
+	GT_FFA,				// GT_SINGLE_PLAYER
+	GT_TEAM,
+	GT_CTF,
+};
+
+static const int gameTypes_missionpack[] = {
+	GT_FFA,
+	GT_TOURNAMENT,
+	GT_FFA,				// GT_SINGLE_PLAYER
+	GT_ARENA,
+	GT_TEAM,
+	GT_CTF,
+	GT_1FCTF,
+	GT_OBELISK,
+	GT_HARVESTER,
+	-1, 			// GT_TEAM_TOURNAMENT
+};
+
+static const int gameTypes_cpma[] = {
+	GT_FFA,
+	GT_TOURNAMENT,
+	GT_FFA,				// ?
+	GT_TEAM,
+	GT_CTF,
+	GT_TEAMARENA,
+	GT_FREEZETAG,
+};
+
+static const int gameTypes_q3urt43[] = {
+	GT_FFA,
+	GT_ARENA,			// LMS
+	GT_FFA,				// ?
+	GT_TEAM,
+	GT_TEAMARENA,
+	-1,					// FTL
+	-1,					// CNH
+	GT_CTF,
+	-1,					// BM
+	-1,					// JUMP
+	GT_FREEZETAG,
+	-1,					// GUN
+};
+
+static const int gameTypes_unfreeze[] = {
+	-1,
+	-1,
+	-1,	
+	GT_FREEZETAG,
+	-1,
+	-1,
+	-1,
+};
+
+typedef struct {
+	const char  *gamedir;
+	const int   *gameTypes;
+	int          numGameTypes;
+} gameTypeSet_t;
+
+static const gameTypeSet_t gameTypeSets[] = {
+	{ "baseq3",      gameTypes_baseq3,      ARRAY_LEN(gameTypes_baseq3) },
+	{ "missionpack", gameTypes_missionpack,  ARRAY_LEN(gameTypes_missionpack) },
+	{ "cpma", gameTypes_cpma,  ARRAY_LEN(gameTypes_cpma) },
+	{ "q3urt43", gameTypes_q3urt43,  ARRAY_LEN(gameTypes_q3urt43) },
+	{ "unfreeze", gameTypes_unfreeze,  ARRAY_LEN(gameTypes_unfreeze) },
+};
+
+static const int numGameTypeSets = ARRAY_LEN(gameTypeSets);
+
+// END DIMMSKII
+
+
 static const int numServerFilters = sizeof(serverFilters) / sizeof(serverFilter_t);
 
 static const char *sortKeys[] = {
@@ -3700,6 +3776,34 @@ static void UI_RunMenuScript(char **args) {
 static void UI_GetTeamColor(vec4_t *color) {
 }
 
+
+// ~DIMMSKII
+static const char *UI_GameTypeName(int gt) {
+	int i;
+
+	for (i = 0; i < uiInfo.numGameTypes; i++) {
+		if (uiInfo.gameTypes[i].gtEnum == gt) {
+			return uiInfo.gameTypes[i].gameType;
+		}
+	}
+
+	return "Unknown";
+}
+
+static const gameTypeSet_t *UI_GameTypeSetForGamedir(const char *gamedir) {
+	int i;
+
+	for (i = 0; i < numGameTypeSets; i++) {
+		if (Q_stricmp(gamedir, gameTypeSets[i].gamedir) == 0) {
+			return &gameTypeSets[i];
+		}
+	}
+
+	return &gameTypeSets[0];
+}
+// END DIMMSKII
+
+
 /*
 ==================
 UI_MapCountByGameType
@@ -4502,6 +4606,9 @@ static const char *UI_FeederItemText(float feederID, int index, int column, qhan
 	} else if (feederID == FEEDER_SERVERS) {
 		if (index >= 0 && index < uiInfo.serverStatus.numDisplayServers) {
 			int ping, game, punkbuster;
+			// ~DIMMSKII
+			const char *gamedir;
+			// DIMMSKII
 			if (lastColumn != column || lastTime > uiInfo.uiDC.realTime + 5000) {
 				trap_LAN_GetServerInfo(ui_netSource.integer, uiInfo.serverStatus.displayServers[index], info, MAX_STRING_CHARS);
 				lastColumn = column;
@@ -4533,12 +4640,20 @@ static const char *UI_FeederItemText(float feederID, int index, int column, qhan
 					Com_sprintf( clientBuff, sizeof(clientBuff), "%s (%s)", Info_ValueForKey(info, "clients"), Info_ValueForKey(info, "sv_maxclients"));
 					return clientBuff;
 				case SORT_GAME : 
-					game = atoi(Info_ValueForKey(info, "gametype"));
-					if (game >= 0 && game < numTeamArenaGameTypes) {
-						return teamArenaGameTypes[game];
-					} else {
-						return "Unknown";
+					//game = atoi(Info_ValueForKey(info, "gametype"));
+					//if (game >= 0 && game < numTeamArenaGameTypes) {
+					//	return teamArenaGameTypes[game];
+					//} else {
+					//	return "Unknown";
+					//}
+					// ~DIMMSKII
+					gamedir = Info_ValueForKey(info, "game");
+					if (!gamedir[0]) {
+						gamedir = "baseq3";
 					}
+					
+					return UI_GameTypeName(UI_GameTypeSetForGamedir(gamedir)->gameTypes[atoi(Info_ValueForKey(info, "gametype"))]);
+					// END DIMMSKII
 				case SORT_PING : 
 					if (ping <= 0) {
 						return "...";
