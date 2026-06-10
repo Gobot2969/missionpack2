@@ -20,10 +20,10 @@
 #define ITEM_ALIGN_CENTER 1               // center alignment
 #define ITEM_ALIGN_RIGHT 2                // right alignment
 
-//#define	WIDESCREEN_STRETCH 0              // TODO: QL Stub - Implement this
-//#define	WIDESCREEN_LEFT 1                 // TODO: QL Stub - Implement this
-//#define	WIDESCREEN_CENTER 2               // TODO: QL Stub - Implement this
-//#define	WIDESCREEN_RIGHT 3                // TODO: QL Stub - Implement this
+#define	WIDESCREEN_STRETCH 0              // TODO: QL Stub - Implement this
+#define	WIDESCREEN_LEFT 1                 // TODO: QL Stub - Implement this
+#define	WIDESCREEN_CENTER 2               // TODO: QL Stub - Implement this
+#define	WIDESCREEN_RIGHT 3                // TODO: QL Stub - Implement this
 
 #define	FONT_DEFAULT 0                    // TODO: QL Stub - Implement this
 #define	FONT_SANS 1                       // TODO: QL Stub - Implement this
@@ -92,8 +92,8 @@
 #define CG_SHOW_CTF                       0x00000020
 #define CG_SHOW_OBELISK                   0x00000040
 #define CG_SHOW_HEALTHCRITICAL            0x00000080
+// Gap from single player
 #define CG_SHOW_TOURNAMENT                0x00000200
-#define CG_SHOW_DUEL                      0x00000200  // ~DIMMSKII - QL-TA compat hack
 #define CG_SHOW_DURINGINCOMINGVOICE       0x00000400
 #define CG_SHOW_IF_PLAYER_HAS_FLAG				0x00000800
 #define CG_SHOW_LANPLAYONLY								0x00001000
@@ -104,57 +104,69 @@
 #define CG_SHOW_OTHERTEAMHASFLAG          0x00020000
 #define CG_SHOW_YOURTEAMHASENEMYFLAG      0x00040000
 #define CG_SHOW_ANYNONTEAMGAME            0x00080000
-#define CG_SHOW_ANYARENAGAME            0x00100000
-#define CG_SHOW_ANYNONARENAGAME            0x00200000
-#define CG_SHOW_TEAM_ARENA                     0x00400000  // TODO: QL Stub - Implement this
-#define CG_SHOW_CLAN_ARENA                     0x00400000  // ~Dimmskii - QL Compat
-//#define CG_SHOW_                0x01000000  // new free
-#define CG_SHOW_IF_NOT_WARMUP             0x02000000  // TODO: QL Stub - Implement this
-#define CG_SHOW_IF_WARMUP                 0x04000000  // TODO: QL Stub - Implement this
-#define CG_SHOW_IF_BLUE_IS_FIRST_PLACE    0x08000000  // TODO: QL Stub - Implement this
-#define CG_SHOW_2DONLY										0x10000000
-#define CG_SHOW_INTERMISSION              0x20000000  // TODO: QL Stub - Implement this
-#define CG_SHOW_NOTINTERMISSION           0x40000000  // TODO: QL Stub - Implement this
-#define CG_SHOW_IF_MSG_PRESENT            0x80000000  // TODO: QL Stub - Implement this
+#define CG_SHOW_ANYARENAGAME              0x00100000  // UA
+#define CG_SHOW_ANYNONARENAGAME           0x00200000  // UA
 
-#define CG_SHOW_SINGLEPLAYER              0x00000000 // ~Dimmskii - Never show
-#define CG_SHOW_DOMINATION                0x00000000  // ~Dimmskii - QL Compat - Never show
+#define CG_SHOW_TEAM_ARENA   		0x00100004		 // CG_SHOW_ANYTEAMGAME | CG_SHOW_ANYARENAGAME
+#define CG_SHOW_FFA_ARENA    	 	0x00180000		 // CG_SHOW_ANYNONTEAMGAME | CG_SHOW_ANYARENAGAME
+#define CG_SHOW_NONTEAM_NONARENA	0x00280000		 // CG_SHOW_ANYNONTEAMGAME | CG_SHOW_ANYNONARENAGAME --  FIXME: Think of better name. We can change it later up to a reasonable point. It's a UA-specific feature. 
+
+#define CG_SHOW_INTERMISSION              0x00400000  // TODO: QL Stub - Implement this
+#define CG_SHOW_NOTINTERMISSION           0x00800000  // TODO: QL Stub - Implement this
+
+#define CG_SHOW_IF_NOT_WARMUP             0x01000000  // TODO: QL Stub - Implement this
+#define CG_SHOW_IF_WARMUP                 0x02000000  // TODO: QL Stub - Implement this
+
+#define CG_SHOW_2DONLY					  0x10000000
+
+#define CG_SHOW_NEVER                    0x00080004 // ~Dimmskii - Never show = CG_SHOW_ANYTEAMGAME | CG_SHOW_ANYNONTEAMGAME
 
 
-#define CG_SHOW_IF_NOTICE_PRESENT         0x00000000  // TODO: QL Stub - Implement this
-#define CG_SHOW_IF_CHAT_VISIBLE           0x00000000  // TODO: QL Stub - Implement this
-#define CG_SHOW_IF_PLYR_IS_FIRST_PLACE    0x00000000  // TODO: QL Stub - Implement this
-#define CG_SHOW_IF_PLYR_IS_NOT_FIRST_PLACE 0x00000000 // TODO: QL Stub - Implement this
-#define CG_SHOW_IF_RED_IS_FIRST_PLACE     0x00000000  // TODO: QL Stub - Implement this
-#define CG_SHOW_IF_PLYR_IS_ON_RED         0x00000000  // TODO: QL Stub - Implement this
-#define CG_SHOW_IF_PLYR_IS_ON_BLUE        0x00000000  // TODO: QL Stub - Implement this
-#define CG_SHOW_PLAYERS_REMAINING         0x00000000  // TODO: QL Stub - Implement this
+#define CG_SHOW_DUEL              CG_SHOW_TOURNAMENT  // ~DIMMSKII - QL-TA compat hack
+#define CG_SHOW_CLAN_ARENA        CG_SHOW_TEAM_ARENA  // ~Dimmskii - QL Compat
 
-//ownerdrawflag2
-#define	CG_SHOW_IF_PLYR1					0x00000001  // TODO: QL Stub - Implement this
-#define	CG_SHOW_IF_PLYR2					0x00000002  // TODO: QL Stub - Implement this
-#define	CG_SHOW_IF_G_FIRED					0x00000004  // TODO: QL Stub - Implement this
-#define	CG_SHOW_IF_MG_FIRED					0x00000008  // TODO: QL Stub - Implement this
-#define	CG_SHOW_IF_SG_FIRED					0x00000010  // TODO: QL Stub - Implement this
-#define	CG_SHOW_IF_GL_FIRED					0x00000020  // TODO: QL Stub - Implement this
-#define	CG_SHOW_IF_RL_FIRED					0x00000040  // TODO: QL Stub - Implement this
-#define	CG_SHOW_IF_LG_FIRED					0x00000080  // TODO: QL Stub - Implement this
-#define	CG_SHOW_IF_RG_FIRED					0x00000100  // TODO: QL Stub - Implement this
-#define	CG_SHOW_IF_PG_FIRED					0x00000200  // TODO: QL Stub - Implement this
-#define	CG_SHOW_IF_BFG_FIRED				0x00000400  // TODO: QL Stub - Implement this
-#define	CG_SHOW_IF_CG_FIRED					0x00000800  // TODO: QL Stub - Implement this
-#define	CG_SHOW_IF_NG_FIRED					0x00001000  // TODO: QL Stub - Implement this
-#define	CG_SHOW_IF_PL_FIRED					0x00002000  // TODO: QL Stub - Implement this
-#define	CG_SHOW_IF_HMG_FIRED				0x00004000  // TODO: QL Stub - Implement this
-#define CG_SHOW_IF_PLYR_IS_ON_RED_OR_SPEC   0x00008000  // TODO: QL Stub - Implement this
-#define CG_SHOW_IF_PLYR_IS_ON_BLUE_OR_SPEC	0x00010000  // TODO: QL Stub - Implement this
-#define CG_SHOW_IF_PLYR_IS_ON_RED_NO_SPEC   0x00020000  // TODO: QL Stub - Implement this
-#define CG_SHOW_IF_PLYR_IS_ON_BLUE_NO_SPEC  0x00040000  // TODO: QL Stub - Implement this
-#define CG_SHOW_IF_LOADOUT_ENABLED			0x00080000  // TODO: QL Stub - Implement this
-#define CG_SHOW_IF_LOADOUT_DISABLED			0x00100000  // TODO: QL Stub - Implement this
-#define CG_SHOW_IF_1ST_PLYR_FOLLOWED		0x00200000  // TODO: QL Stub - Implement this
-#define CG_SHOW_IF_2ND_PLYR_FOLLOWED		0x00400000  // TODO: QL Stub - Implement this
 
+#define CG_SHOW_SINGLEPLAYER          CG_SHOW_NEVER  // ~Dimmskii - Never show
+#define CG_SHOW_DOMINATION            CG_SHOW_NEVER  // ~Dimmskii - QL Compat - Never show
+
+#define CG_SHOW_IF_BLUE_IS_FIRST_PLACE     CG_SHOW_NEVER  // TODO: QL Stub - MAKE ROOM FOR and) Implement this
+#define CG_SHOW_IF_MSG_PRESENT             CG_SHOW_NEVER  // TODO: QL Stub - MAKE ROOM FOR and) Implement this
+#define CG_SHOW_IF_NOTICE_PRESENT          CG_SHOW_NEVER  // TODO: QL Stub - MAKE ROOM FOR and) Implement this
+#define CG_SHOW_IF_CHAT_VISIBLE            CG_SHOW_NEVER  // TODO: QL Stub - MAKE ROOM FOR and) Implement this
+#define CG_SHOW_IF_PLYR_IS_FIRST_PLACE     CG_SHOW_NEVER  // TODO: QL Stub - MAKE ROOM FOR and) Implement this
+#define CG_SHOW_IF_PLYR_IS_NOT_FIRST_PLACE CG_SHOW_NEVER  // TODO: QL Stub - MAKE ROOM FOR and) Implement this
+#define CG_SHOW_IF_RED_IS_FIRST_PLACE      CG_SHOW_NEVER  // TODO: QL Stub - MAKE ROOM FOR and) Implement this
+#define CG_SHOW_IF_PLYR_IS_ON_RED          CG_SHOW_NEVER  // TODO: QL Stub - MAKE ROOM FOR and) Implement this
+#define CG_SHOW_IF_PLYR_IS_ON_BLUE         CG_SHOW_NEVER  // TODO: QL Stub - MAKE ROOM FOR and) Implement this
+#define CG_SHOW_PLAYERS_REMAINING          CG_SHOW_NEVER  // TODO: QL Stub - MAKE ROOM FOR and) Implement this
+
+// ownerdrawflag2 -- currently, if put into ownerdrawflag, it will do nothing -- TODO: Should this be read as separate token? Need menu file examples of these.
+#define	CG_SHOW_IF_PLYR1					CG_SHOW_NEVER //0x00000001  // TODO: QL Stub - Implement this
+#define	CG_SHOW_IF_PLYR2					CG_SHOW_NEVER //0x00000002  // TODO: QL Stub - Implement this
+#define	CG_SHOW_IF_G_FIRED					CG_SHOW_NEVER //0x00000004  // TODO: QL Stub - Implement this
+#define	CG_SHOW_IF_MG_FIRED					CG_SHOW_NEVER //0x00000008  // TODO: QL Stub - Implement this
+#define	CG_SHOW_IF_SG_FIRED					CG_SHOW_NEVER //0x00000010  // TODO: QL Stub - Implement this
+#define	CG_SHOW_IF_GL_FIRED					CG_SHOW_NEVER //0x00000020  // TODO: QL Stub - Implement this
+#define	CG_SHOW_IF_RL_FIRED					CG_SHOW_NEVER //0x00000040  // TODO: QL Stub - Implement this
+#define	CG_SHOW_IF_LG_FIRED					CG_SHOW_NEVER //0x00000080  // TODO: QL Stub - Implement this
+#define	CG_SHOW_IF_RG_FIRED					CG_SHOW_NEVER //0x00000100  // TODO: QL Stub - Implement this
+#define	CG_SHOW_IF_PG_FIRED					CG_SHOW_NEVER //0x00000200  // TODO: QL Stub - Implement this
+#define	CG_SHOW_IF_BFG_FIRED				CG_SHOW_NEVER //0x00000400  // TODO: QL Stub - Implement this
+#define	CG_SHOW_IF_CG_FIRED					CG_SHOW_NEVER //0x00000800  // TODO: QL Stub - Implement this
+#define	CG_SHOW_IF_NG_FIRED					CG_SHOW_NEVER //0x00001000  // TODO: QL Stub - Implement this
+#define	CG_SHOW_IF_PL_FIRED					CG_SHOW_NEVER //0x00002000  // TODO: QL Stub - Implement this
+#define	CG_SHOW_IF_HMG_FIRED				CG_SHOW_NEVER //0x00004000  // TODO: QL Stub - Implement this
+#define CG_SHOW_IF_PLYR_IS_ON_RED_OR_SPEC   CG_SHOW_NEVER //0x00008000  // TODO: QL Stub - Implement this
+#define CG_SHOW_IF_PLYR_IS_ON_BLUE_OR_SPEC	CG_SHOW_NEVER //0x00010000  // TODO: QL Stub - Implement this
+#define CG_SHOW_IF_PLYR_IS_ON_RED_NO_SPEC   CG_SHOW_NEVER //0x00020000  // TODO: QL Stub - Implement this
+#define CG_SHOW_IF_PLYR_IS_ON_BLUE_NO_SPEC  CG_SHOW_NEVER //0x00040000  // TODO: QL Stub - Implement this
+#define CG_SHOW_IF_LOADOUT_ENABLED			CG_SHOW_NEVER //0x00080000  // TODO: QL Stub - Implement this
+#define CG_SHOW_IF_LOADOUT_DISABLED			CG_SHOW_NEVER //0x00100000  // TODO: QL Stub - Implement this
+#define CG_SHOW_IF_1ST_PLYR_FOLLOWED		CG_SHOW_NEVER //0x00200000  // TODO: QL Stub - Implement this
+#define CG_SHOW_IF_2ND_PLYR_FOLLOWED		CG_SHOW_NEVER //0x00400000  // TODO: QL Stub - Implement this
+
+
+// ui ownerdrawflag
 #define UI_SHOW_LEADER				            0x00000001
 #define UI_SHOW_NOTLEADER			            0x00000002
 #define UI_SHOW_FAVORITESERVERS						0x00000004

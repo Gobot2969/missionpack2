@@ -1033,6 +1033,18 @@ qboolean CG_YourTeamHasFlag() {
 // 
 qboolean CG_OwnerDrawVisible(int flags) {
 
+	// ~DIMMSKII
+	// Smort self-contradicting CG_SHOW_NEVER value for things like TA HUD usage of CG_SHOW_SINGLEPLAYER i.e.
+	// menudef.h:
+	// #define CG_SHOW_NEVER         0x00080004      // ~Dimmskii - Never show = CG_SHOW_ANYTEAMGAME | CG_SHOW_ANYNONTEAMGAME
+	// #define CG_SHOW_SINGLEPLAYER   CG_SHOW_NEVER1 // ~Dimmskii - Never show
+	// #define CG_SHOW_DOMINATION     CG_SHOW_NEVER1 // ~Dimmskii - QL Compat - Never show
+	if (flags == CG_SHOW_NEVER) {
+		return qfalse;
+	}
+
+	// END DIMMSKII
+
 	if (flags & CG_SHOW_TEAMINFO) {
 		return (cg_currentSelectedPlayer.integer == numSortedTeamPlayers);
 	}
@@ -1059,7 +1071,6 @@ qboolean CG_OwnerDrawVisible(int flags) {
 	}
 
 // ~Dimmskii
-#ifdef MISSIONPACK2
 	if (flags & CG_SHOW_ANYARENAGAME) {
 		if( cgs.gametype != GT_ARENA && cgs.gametype != GT_TEAMARENA ) {
 			return qfalse;
@@ -1071,7 +1082,6 @@ qboolean CG_OwnerDrawVisible(int flags) {
 			return qfalse;
 		}
 	}
-#endif
 // END ~Dimmskii
 
 	if (flags & CG_SHOW_ANYTEAMGAME) {
