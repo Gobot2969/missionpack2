@@ -42,6 +42,7 @@ static const char *netSources[] = {
 };
 static const int numNetSources = sizeof(netSources) / sizeof(const char*);
 
+/*
 static const serverFilter_t serverFilters[] = {
 	{"All", "" },
 	{"Quake 3 Arena", "" },
@@ -53,7 +54,6 @@ static const serverFilter_t serverFilters[] = {
 	{"OSP", "osp" },
 };
 
-/*
 static const char *teamArenaGameTypes[] = {
 	"FFA",
 	"TOURNAMENT",
@@ -209,7 +209,7 @@ static const int numGameTypeLists = ARRAY_LEN(gameTypeLists);
 // END DIMMSKII
 
 
-static const int numServerFilters = sizeof(serverFilters) / sizeof(serverFilter_t);
+//static const int numServerFilters = sizeof(serverFilters) / sizeof(serverFilter_t);
 
 static const char *sortKeys[] = {
 	"Server Name",
@@ -3926,6 +3926,13 @@ static void UI_GetTeamColor(vec4_t *color) {
 
 
 // ~DIMMSKII
+/*
+==================
+UI_GameTypeName
+
+Safely gets gametype name from valid or invalid GT_ enum
+==================
+*/
 static const char *UI_GameTypeName(int gt) {
 	int i;
 
@@ -3938,6 +3945,13 @@ static const char *UI_GameTypeName(int gt) {
 	return "Unknown";
 }
 
+/*
+==================
+UI_GameTypeListForGamedir
+
+Returns gameTypeList_t with corresponding gamedir name
+==================
+*/
 static const gameTypeList_t *UI_GameTypeListForGamedir(const char *gamedir) {
 	int i;
 
@@ -3950,15 +3964,30 @@ static const gameTypeList_t *UI_GameTypeListForGamedir(const char *gamedir) {
 	return &gameTypeLists[0];
 }
 
+/*
+==================
+UI_GameTypeNameForGamedir
+
+Combined version which still outputs nice name of mod if actual gametype is not found or not mapped (-1)
+==================
+*/
 static const char *UI_GameTypeNameForGamedir(const char *gamedir, int gt) {
-	int i;
+	int i, j;
 
 	for (i = 0; i < numGameTypeLists; i++) {
 		if (Q_stricmp(gamedir, gameTypeLists[i].gamedir) == 0) {
 			if (gameTypeLists[i].numGameTypes <= gt) {
-				return gameTypeLists[i].name;		// No gamemode translation. Just show the nice name, since we have it
+				return gameTypeLists[i].name;		// No gametype translation. Just show the nice name, since we have it
 			}
-			return UI_GameTypeName(gameTypeLists[i].gameTypes[gt]);
+
+			// Baked-in version of UI_GameTypeName
+			for (j = 0; j < uiInfo.numGameTypes; j++) {
+				if (uiInfo.gameTypes[j].gtEnum == gameTypeLists[i].gameTypes[gt]) {
+					return uiInfo.gameTypes[j].gameType;
+				}
+			}
+
+			return gameTypeLists[i].name; // Just show nice name instead of 'Unknown', since we still have it
 		}
 	}
 	
