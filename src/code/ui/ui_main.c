@@ -3874,7 +3874,7 @@ static const char *UI_GameTypeNameForGamedir(const char *gamedir, int gt) {
 	for (i = 0; i < numGameTypeLists; i++) {
 		if (Q_stricmp(gamedir, gameTypeLists[i].gamedir) == 0) {
 			if (gameTypeLists[i].numGameTypes <= gt) {
-				return gamedir;		// No gamemode translation. Just show the mod folder name
+				return gameTypeLists[i].name;		// No gamemode translation. Just show the nice name, since we have it
 			}
 			return UI_GameTypeName(gameTypeLists[i].gameTypes[gt]);
 		}
@@ -5311,6 +5311,17 @@ static void UI_ParseGameInfo(const char *teamFile) {
 				break;
 			}
 		}
+
+		// ~Dimmskii
+		if (Q_stricmp(token, "hostgametypes") == 0) {
+
+			if (GameType_Parse(&p, qtrue)) {
+				continue;
+			} else {
+				break;
+			}
+		}
+		// End Dimmskii
 
 		if (Q_stricmp(token, "joingametypes") == 0) {
 
