@@ -87,12 +87,12 @@ UI_CVAR( ui_blueteam2, "ui_blueteam2", "2", CVAR_ARCHIVE )
 UI_CVAR( ui_blueteam3, "ui_blueteam3", "8", CVAR_ARCHIVE )
 UI_CVAR( ui_blueteam4, "ui_blueteam4", "0", CVAR_ARCHIVE )
 UI_CVAR( ui_blueteam5, "ui_blueteam5", "0", CVAR_ARCHIVE )
-#ifdef MISSIONPACK2
+// ~Dimmskii
 UI_CVAR( ui_redteam6, "ui_redteam6", "0", CVAR_ARCHIVE )
 UI_CVAR( ui_redteam7, "ui_redteam7", "0", CVAR_ARCHIVE )
 UI_CVAR( ui_blueteam6, "ui_blueteam6", "0", CVAR_ARCHIVE )
 UI_CVAR( ui_blueteam7, "ui_blueteam7", "0", CVAR_ARCHIVE )
-#endif
+// END Dimmskii
 UI_CVAR( ui_netSource, "ui_netSource", "0", CVAR_ARCHIVE )
 UI_CVAR( ui_menuFiles, "ui_menuFiles", "ui/menus.txt", CVAR_ARCHIVE )
 UI_CVAR( ui_currentTier, "ui_currentTier", "0", CVAR_ARCHIVE )
@@ -127,19 +127,19 @@ UI_CVAR( ui_captureLimit, "ui_captureLimit", "5", 0 )
 UI_CVAR( ui_smallFont, "ui_smallFont", "0.25", CVAR_ARCHIVE )
 UI_CVAR( ui_bigFont, "ui_bigFont", "0.4", CVAR_ARCHIVE )
 UI_CVAR( ui_findPlayer, "ui_findPlayer", "Sarge", CVAR_ARCHIVE )
-#ifndef MISSIONPACK2
-UI_CVAR( ui_Q3Model, "ui_q3model", "0", CVAR_ARCHIVE )
-#endif
+//UI_CVAR( ui_Q3Model, "ui_q3model", "0", CVAR_ARCHIVE ) // ~Dimmskii - Missionpack 2 only has normal models + pm/bright skins
 UI_CVAR( ui_hudFiles, "cg_hudFiles", "ui/hud.txt", CVAR_ARCHIVE )
 UI_CVAR( ui_recordSPDemo, "ui_recordSPDemo", "0", CVAR_ARCHIVE )
 UI_CVAR( ui_teamArenaFirstRun, "ui_teamArenaFirstRun", "0", CVAR_ARCHIVE )
 UI_CVAR( ui_realWarmUp, "g_warmup", "20", CVAR_ARCHIVE )
 UI_CVAR( ui_realCaptureLimit, "capturelimit", "8", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART )
 UI_CVAR( ui_serverStatusTimeOut, "ui_serverStatusTimeOut", "7000", CVAR_ARCHIVE )
-#ifdef MISSIONPACK2
+// ~Dimmskii
 UI_CVAR( ui_winLimit, "ui_winLimit", "10", 0 )
 UI_CVAR( ui_realWinLimit, "winLimit", "10", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART )
 UI_CVAR( ui_missionStr, "ui_missionStr", "exec missions/demo1.cfg", 0 )
-#endif
+
+UI_CVAR( ui_serverFilterType, "ui_serverFilterType", "-1", 0 )
+// END Dimmskii
 
 #undef UI_CVAR

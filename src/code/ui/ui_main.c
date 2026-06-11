@@ -53,6 +53,7 @@ static const serverFilter_t serverFilters[] = {
 	{"OSP", "osp" },
 };
 
+/*
 static const char *teamArenaGameTypes[] = {
 	"FFA",
 	"TOURNAMENT",
@@ -87,9 +88,27 @@ static const char *teamArenaGameNames[] = {
 };
 
 static int const numTeamArenaGameNames = sizeof(teamArenaGameNames) / sizeof(const char*);
-
+*/
 
 // ~DIMMSKII
+
+// TODO: Parse all of these arrays somehow as "browsergametypes" from gameinfo.txt or some other more mod-friendly location.
+// Why can't users customize their server browsers just like they do with the HUD? Gametypes and mod dirs evolve.
+
+static const int gameTypes_missionpack2[] = { // So we can filter to our own gamedir
+	GT_FFA,
+	GT_TOURNAMENT,
+	GT_SINGLE_PLAYER,
+	GT_ARENA,
+	GT_TEAM,
+	GT_TEAMARENA,
+	GT_FREEZETAG,
+	GT_CTF,	
+	GT_1FCTF,
+	GT_OBELISK,	
+	GT_HARVESTER,
+};
+
 static const int gameTypes_baseq3[] = {
 	GT_FFA,
 	GT_TOURNAMENT,
@@ -111,7 +130,28 @@ static const int gameTypes_missionpack[] = {
 	-1, 			// GT_TEAM_TOURNAMENT
 };
 
-static const int gameTypes_cpma[] = {
+static const int gameTypes_arena[] = { // RA3
+	-1,
+	-1,
+	-1,
+	-1,
+	-1,
+	-1,
+	-1,
+	-1,
+	-1,
+};
+
+static const int gameTypes_osp[] = { // OSP
+	GT_FFA,
+	GT_TOURNAMENT,
+	GT_FFA,			// GT_SINGLE_PLAYER
+	GT_TEAM,
+	GT_CTF,
+	GT_TEAMARENA,
+};
+
+static const int gameTypes_cpma[] = { // Challenge Pro Mode Arena
 	GT_FFA,
 	GT_TOURNAMENT,
 	GT_FFA,				// ?
@@ -121,7 +161,7 @@ static const int gameTypes_cpma[] = {
 	GT_FREEZETAG,
 };
 
-static const int gameTypes_q3urt43[] = {
+static const int gameTypes_q3ut4[] = { // UrbanTerror 4
 	GT_FFA,
 	GT_ARENA,			// LMS
 	GT_FFA,				// ?
@@ -136,7 +176,7 @@ static const int gameTypes_q3urt43[] = {
 	-1,					// GUN
 };
 
-static const int gameTypes_unfreeze[] = {
+static const int gameTypes_unfreeze[] = { // Unfreeze
 	-1,
 	-1,
 	-1,	
@@ -148,19 +188,23 @@ static const int gameTypes_unfreeze[] = {
 
 typedef struct {
 	const char  *gamedir;
+	const char	*name;
 	const int   *gameTypes;
 	int          numGameTypes;
-} gameTypeSet_t;
+} gameTypeList_t;
 
-static const gameTypeSet_t gameTypeSets[] = {
-	{ "baseq3",      gameTypes_baseq3,      ARRAY_LEN(gameTypes_baseq3) },
-	{ "missionpack", gameTypes_missionpack,  ARRAY_LEN(gameTypes_missionpack) },
-	{ "cpma", gameTypes_cpma,  ARRAY_LEN(gameTypes_cpma) },
-	{ "q3urt43", gameTypes_q3urt43,  ARRAY_LEN(gameTypes_q3urt43) },
-	{ "unfreeze", gameTypes_unfreeze,  ARRAY_LEN(gameTypes_unfreeze) },
+static const gameTypeList_t gameTypeLists[] = {
+	{ "missionpack2",	"Ultimate Arena",	   	gameTypes_missionpack2,		ARRAY_LEN(gameTypes_missionpack2) },
+	{ "baseq3",			"Quake III Arena",	   	gameTypes_baseq3,      		ARRAY_LEN(gameTypes_baseq3) },
+	{ "missionpack",	"Team Arena",			gameTypes_missionpack,  	ARRAY_LEN(gameTypes_missionpack) },
+	{ "arena",			"Rocket Arena 3", 		gameTypes_arena,  			ARRAY_LEN(gameTypes_arena) },
+	{ "osp",			"OSP", 					gameTypes_osp,  			ARRAY_LEN(gameTypes_osp) },
+	{ "cpma",			"CPMA", 				gameTypes_cpma,  			ARRAY_LEN(gameTypes_cpma) },
+	{ "q3ut4",			"Urban Terror 4", 		gameTypes_q3ut4,  			ARRAY_LEN(gameTypes_q3ut4) },
+	{ "unfreeze",		"Unfreeze", 			gameTypes_unfreeze,  		ARRAY_LEN(gameTypes_unfreeze) },
 };
 
-static const int numGameTypeSets = ARRAY_LEN(gameTypeSets);
+static const int numGameTypeLists = ARRAY_LEN(gameTypeLists);
 
 // END DIMMSKII
 
@@ -1453,7 +1497,8 @@ static void UI_DrawNetFilter(rectDef_t *rect, float scale, vec4_t color, int tex
 	/*if (ui_serverFilterType.integer < 0 || ui_serverFilterType.integer > numServerFilters) {
 		ui_serverFilterType.integer = 0;
 	}*/
-  Text_Paint(rect->x, rect->y, scale, color, va("Filter: %s", serverFilters[0/*ui_serverFilterType.integer*/].description), 0, 0, textStyle);
+  //Text_Paint(rect->x, rect->y, scale, color, va("Filter: %s", serverFilters[0/*ui_serverFilterType.integer*/].description), 0, 0, textStyle);
+  Text_Paint(rect->x, rect->y, scale, color, va("Filter: %s", gameTypeLists[ui_serverFilterType.integer].name), 0, 0, textStyle); // ~dimmskii
 }
 
 
@@ -1866,7 +1911,19 @@ static int UI_OwnerDrawWidth(int ownerDraw, float scale) {
 			/*if (ui_serverFilterType.integer < 0 || ui_serverFilterType.integer > numServerFilters) {
 				ui_serverFilterType.integer = 0;
 			}*/
-			s = va("Filter: %s", serverFilters[0/*ui_serverFilterType.integer*/].description );
+			//s = va("Filter: %s", serverFilters[0/*ui_serverFilterType.integer*/].description );
+
+			// ~Dimmskii
+			if (ui_serverFilterType.integer < -1 || ui_serverFilterType.integer > numGameTypeLists) {
+				ui_serverFilterType.integer = -1;
+			}
+			if (ui_serverFilterType.integer < 0) {
+				s = va("Filter: %s", "All" ); // ~Dimmskii
+			} else {
+				s = va("Filter: %s", gameTypeLists[ui_serverFilterType.integer].name ); // ~dimmskii
+			}
+			// End Dimmskii
+
 			break;
 		case UI_TIER:
 			break;
@@ -2715,9 +2772,9 @@ static qboolean UI_NetFilter_HandleKey(int flags, float *special, int key) {
   if (key == K_MOUSE1 || key == K_MOUSE2 || key == K_ENTER || key == K_KP_ENTER) {
 
 		if (key == K_MOUSE2) {
-			//ui_serverFilterType.integer--;
+			ui_serverFilterType.integer--;
 		} else {
-			//ui_serverFilterType.integer++;
+			ui_serverFilterType.integer++;
 		}
 
    /* if (ui_serverFilterType.integer >= numServerFilters) {
@@ -2725,6 +2782,15 @@ static qboolean UI_NetFilter_HandleKey(int flags, float *special, int key) {
     } else if (ui_serverFilterType.integer < 0) {
       ui_serverFilterType.integer = numServerFilters - 1;
 		}*/
+
+
+	// ~Dimmskii - Use new browser gametype lists
+    if (ui_serverFilterType.integer >= numGameTypeLists) {
+      ui_serverFilterType.integer = -1;
+    } else if (ui_serverFilterType.integer < -1) {
+      ui_serverFilterType.integer = numGameTypeLists - 1;
+		}
+
 		UI_BuildServerDisplayList(qtrue);
     return qtrue;
   }
@@ -3790,16 +3856,31 @@ static const char *UI_GameTypeName(int gt) {
 	return "Unknown";
 }
 
-static const gameTypeSet_t *UI_GameTypeSetForGamedir(const char *gamedir) {
+static const gameTypeList_t *UI_GameTypeListForGamedir(const char *gamedir) {
 	int i;
 
-	for (i = 0; i < numGameTypeSets; i++) {
-		if (Q_stricmp(gamedir, gameTypeSets[i].gamedir) == 0) {
-			return &gameTypeSets[i];
+	for (i = 0; i < numGameTypeLists; i++) {
+		if (Q_stricmp(gamedir, gameTypeLists[i].gamedir) == 0) {
+			return &gameTypeLists[i];
 		}
 	}
 
-	return &gameTypeSets[0];
+	return &gameTypeLists[0];
+}
+
+static const char *UI_GameTypeNameForGamedir(const char *gamedir, int gt) {
+	int i;
+
+	for (i = 0; i < numGameTypeLists; i++) {
+		if (Q_stricmp(gamedir, gameTypeLists[i].gamedir) == 0) {
+			if (gameTypeLists[i].numGameTypes <= gt) {
+				return gamedir;		// No gamemode translation. Just show the mod folder name
+			}
+			return UI_GameTypeName(gameTypeLists[i].gameTypes[gt]);
+		}
+	}
+	
+	return gamedir;		// No gamemode translation. Just show the mod folder name
 }
 // END DIMMSKII
 
@@ -4088,15 +4169,16 @@ static void UI_BuildServerDisplayList(qboolean force) {
 				}
 			}
 
+			// ~Dimmskii
+			gamedir = Info_ValueForKey(info, "game");
+			if (!gamedir[0]) {
+				gamedir = "baseq3";
+			}
+			// End Dimmskii
+
 			if (uiInfo.joinGameTypes[ui_joinGameType.integer].gtEnum != -1) {
 				//game = atoi(Info_ValueForKey(info, "gametype"));
-				 // ~DIMMSKII
-				gamedir = Info_ValueForKey(info, "game");
-				if (!gamedir[0]) {
-					gamedir = "baseq3";
-				}
-				game = UI_GameTypeSetForGamedir(gamedir)->gameTypes[atoi(Info_ValueForKey(info, "gametype"))];
-				// END DIMMSKII
+				game = UI_GameTypeListForGamedir(gamedir)->gameTypes[atoi(Info_ValueForKey(info, "gametype"))]; // ~DIMMSKII
 				if (game != uiInfo.joinGameTypes[ui_joinGameType.integer].gtEnum) {
 					trap_LAN_MarkServerVisible(ui_netSource.integer, i, qfalse);
 					continue;
@@ -4109,6 +4191,16 @@ static void UI_BuildServerDisplayList(qboolean force) {
 					continue;
 				}
 			}*/
+
+			// ~Dimmskii
+			if (ui_serverFilterType.integer > -1) {
+				if (Q_stricmp(gamedir, gameTypeLists[ui_serverFilterType.integer].gamedir) != 0) {
+					trap_LAN_MarkServerVisible(ui_netSource.integer, i, qfalse);
+					continue;
+				}
+			}
+			// End dimmskii
+
 			// make sure we never add a favorite server twice
 			if (ui_netSource.integer == AS_FAVORITES) {
 				UI_RemoveServerFromDisplayList(i);
@@ -4658,7 +4750,9 @@ static const char *UI_FeederItemText(float feederID, int index, int column, qhan
 						gamedir = "baseq3";
 					}
 					
-					return UI_GameTypeName(UI_GameTypeSetForGamedir(gamedir)->gameTypes[atoi(Info_ValueForKey(info, "gametype"))]);
+					return UI_GameTypeNameForGamedir( gamedir, atoi(Info_ValueForKey(info, "gametype")) );
+					//return UI_GameTypeName(UI_GameTypeListForGamedir(gamedir)->gameTypes[atoi(Info_ValueForKey(info, "gametype"))]);
+					//return gamedir;
 					// END DIMMSKII
 				case SORT_PING : 
 					if (ping <= 0) {
