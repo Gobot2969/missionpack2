@@ -170,21 +170,6 @@ itemDef {
       		forecolor 1 1 1 1
       		visible 1 
     		}
-itemDef {
-      		name hud
-		group grpOptions
-      		type ITEM_TYPE_MULTI
-		text "Friend Markers:"
-		cvar "cg_drawFriend"
-		cvarStrList { "Off", "0", "Classic Markers", "1", "Always Shown With Names", "2"  }
-		rect 99 155 256 20
-      		textalign ITEM_ALIGN_RIGHT
-      		textalignx 128
-      		textaligny 20
-		textscale .3       
-      		forecolor 1 1 1 1
-      		visible 1
-		}
 
 
 
@@ -385,6 +370,21 @@ itemDef {
       		forecolor 1 1 1 1
       		visible 0 
     		}
+itemDef {
+      		name display
+		group grpOptions
+      		type ITEM_TYPE_MULTI
+		text "Friend Markers:"
+		cvar "cg_drawFriend"
+		cvarStrList { "Off", "0", "Classic Markers", "1", "Always Shown With Names", "2"  }
+		rect 99 235 256 20
+      		textalign ITEM_ALIGN_RIGHT
+      		textalignx 128
+      		textaligny 20
+		textscale .3       
+      		forecolor 1 1 1 1
+      		visible 0
+		}
 
 
 
