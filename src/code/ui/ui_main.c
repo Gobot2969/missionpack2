@@ -1270,18 +1270,17 @@ static void UI_DrawSkill(rectDef_t *rect, float scale, vec4_t color, int textSty
 
 
 static void UI_DrawTeamName(rectDef_t *rect, float scale, vec4_t color, qboolean blue, int textStyle) {
-#ifdef MISSIONPACK2
-	Text_Paint(rect->x, rect->y, scale, color, va("%s", (blue) ? "Blue" : "Red"),0, 0, textStyle);
-#else
+	Text_Paint(rect->x, rect->y, scale, color, va("%s", (blue) ? "Blue" : "Red"),0, 0, textStyle); // ~DIMMSKII
+/*
   int i;
   i = UI_TeamIndexFromName(UI_Cvar_VariableString((blue) ? "ui_blueTeam" : "ui_redTeam"));
   if (i >= 0 && i < uiInfo.teamCount) {
     Text_Paint(rect->x, rect->y, scale, color, va("%s: %s", (blue) ? "Blue" : "Red", uiInfo.teamList[i].teamName),0, 0, textStyle);
   }
-#endif
+*/
 }
 
-#ifdef MISSIONPACK2
+// ~DIMMSKII
 static void UI_DrawTeamMember(rectDef_t *rect, float scale, vec4_t color, qboolean blue, int num, int textStyle) {
 	// 0 - None
 	// 1 - Human
@@ -1301,7 +1300,9 @@ static void UI_DrawTeamMember(rectDef_t *rect, float scale, vec4_t color, qboole
 	}
   Text_Paint(rect->x, rect->y, scale, color, text, 0, 0, textStyle);
 }
-#else
+// END DIMMSKII
+
+/*
 static void UI_DrawTeamMember(rectDef_t *rect, float scale, vec4_t color, qboolean blue, int num, int textStyle) {
 	// 0 - None
 	// 1 - Human
@@ -1330,7 +1331,7 @@ static void UI_DrawTeamMember(rectDef_t *rect, float scale, vec4_t color, qboole
 	}
   Text_Paint(rect->x, rect->y, scale, color, text, 0, 0, textStyle);
 }
-#endif
+*/
 
 static void UI_DrawEffects(rectDef_t *rect, float scale, vec4_t color) {
 	vec4_t colors;
@@ -1671,6 +1672,8 @@ static void UI_DrawOpponent(rectDef_t *rect) {
 
 }
 
+// ~Dimmskii TODO: get rid of all ui_opponentName and ui_teamName usage. For TA compat, maybe render non-SP team names and logos.
+
 static void UI_NextOpponent() {
   int i = UI_TeamIndexFromName(UI_Cvar_VariableString("ui_opponentName"));
   int j = UI_TeamIndexFromName(UI_Cvar_VariableString("ui_teamName"));
@@ -1818,7 +1821,7 @@ static int UI_OwnerDrawWidth(int ownerDraw, float scale) {
 				}
 			  s = skillLevels[i-1];
       break;
-#ifndef MISSIONPACK2
+/*
     case UI_BLUETEAMNAME:
 			  i = UI_TeamIndexFromName(UI_Cvar_VariableString("ui_blueTeam"));
 			  if (i >= 0 && i < uiInfo.teamCount) {
@@ -1831,8 +1834,9 @@ static int UI_OwnerDrawWidth(int ownerDraw, float scale) {
 			    s = va("%s: %s", "Red", uiInfo.teamList[i].teamName);
 			  }
       break;
-#endif
-#ifdef MISSIONPACK2
+*/
+
+// ~DIMMSKII
     case UI_BLUETEAM1:
 		case UI_BLUETEAM2:
 		case UI_BLUETEAM3:
@@ -1875,7 +1879,9 @@ static int UI_OwnerDrawWidth(int ownerDraw, float scale) {
 			}
 			s = va("%i. %s", ownerDraw-UI_REDTEAM1 + 1, text);
       break;
-#else
+// END DIMMSKII
+
+/*
     case UI_BLUETEAM1:
 		case UI_BLUETEAM2:
 		case UI_BLUETEAM3:
@@ -1914,7 +1920,7 @@ static int UI_OwnerDrawWidth(int ownerDraw, float scale) {
 			}
 			s = va("%i. %s", ownerDraw-UI_REDTEAM1 + 1, text);
       break;
-#endif
+*/
 		case UI_NETSOURCE:
 			if (ui_netSource.integer < 0 || ui_netSource.integer > uiInfo.numJoinGameTypes) {
 				ui_netSource.integer = 0;
@@ -1973,12 +1979,13 @@ static void UI_DrawBotName(rectDef_t *rect, float scale, vec4_t color, int textS
 	int value = uiInfo.botIndex;
 	int game = trap_Cvar_VariableValue("g_gametype");
 	const char *text = "";
-#ifdef MISSIONPACK2
+// ~DIMMSKII
 	if (value >= UI_GetNumBots()) {
 		value = 0;
 	}
 	text = UI_GetBotNameByNumber(value);
-#else
+// END DIMMSKII
+/*
 	if (game >= GT_TEAM) {
 		if (value >= uiInfo.characterCount) {
 			value = 0;
@@ -1990,7 +1997,7 @@ static void UI_DrawBotName(rectDef_t *rect, float scale, vec4_t color, int textS
 		}
 		text = UI_GetBotNameByNumber(value);
 	}
-#endif
+*/
   Text_Paint(rect->x, rect->y, scale, color, text, 0, 0, textStyle);
 }
 
@@ -2276,10 +2283,8 @@ static void UI_OwnerDraw(float x, float y, float w, float h, float text_x, float
 		case UI_BLUETEAM3:
 		case UI_BLUETEAM4:
 		case UI_BLUETEAM5:
-#ifdef MISSIONPACK2
-		case UI_BLUETEAM6:
-		case UI_BLUETEAM7:
-#endif
+		case UI_BLUETEAM6:	// ~Dimmskii
+		case UI_BLUETEAM7:	// ~Dimmskii
       UI_DrawTeamMember(&rect, scale, color, qtrue, ownerDraw - UI_BLUETEAM1 + 1, textStyle);
       break;
     case UI_REDTEAM1:
@@ -2287,10 +2292,8 @@ static void UI_OwnerDraw(float x, float y, float w, float h, float text_x, float
 		case UI_REDTEAM3:
 		case UI_REDTEAM4:
 		case UI_REDTEAM5:
-#ifdef MISSIONPACK2
-		case UI_REDTEAM6:
-		case UI_REDTEAM7:
-#endif
+		case UI_REDTEAM6:	// ~Dimmskii
+		case UI_REDTEAM7:	// ~Dimmskii
       UI_DrawTeamMember(&rect, scale, color, qfalse, ownerDraw - UI_REDTEAM1 + 1, textStyle);
       break;
 		case UI_NETSOURCE:
@@ -2783,13 +2786,14 @@ static qboolean UI_TeamMember_HandleKey(int flags, float *special, int key, qboo
 			value++;
 		}
 
-#ifdef MISSIONPACK2
+// ~Dimmskii
 		if (value >= UI_GetNumBots() + 2) {
 			value = 0;
 		} else if (value < 0) {
 			value = UI_GetNumBots() + 2 - 1;
 		}
-#else
+// END Dimmskii
+/*
 		//if (ui_actualNetGameType.integer >= GT_TEAM) {
 		if (ui_gameType.integer >= GT_TEAM) { // ~Dimmskii
 			if (value >= uiInfo.characterCount + 2) {
@@ -2804,7 +2808,7 @@ static qboolean UI_TeamMember_HandleKey(int flags, float *special, int key, qboo
 				value = UI_GetNumBots() + 2 - 1;
 			}
 		}
-#endif
+*/
 
 		trap_Cvar_Set(cvar, va("%i", value));
     return qtrue;
@@ -2893,13 +2897,14 @@ static qboolean UI_BotName_HandleKey(int flags, float *special, int key) {
 			value++;
 		}
 
-#ifdef MISSIONPACK2
+// ~DIMMSKII
 		if (value >= UI_GetNumBots() + 2) {
 			value = 0;
 		} else if (value < 0) {
 			value = UI_GetNumBots() + 2 - 1;
 		}
-#else
+// END DIMMSKII
+/*
 		if (game >= GT_TEAM) {
 			if (value >= uiInfo.characterCount + 2) {
 				value = 0;
@@ -2913,7 +2918,7 @@ static qboolean UI_BotName_HandleKey(int flags, float *special, int key) {
 				value = UI_GetNumBots() + 2 - 1;
 			}
 		}
-#endif
+*/
 		uiInfo.botIndex = value;
     return qtrue;
   }
@@ -3353,8 +3358,10 @@ static void UI_StartSkirmish(qboolean next) {
 	trap_Cvar_Set("g_warmup", "15");
 	trap_Cvar_Set("sv_pure", "0");
 	trap_Cvar_Set("g_friendlyFire", "0");
-	trap_Cvar_Set("g_redTeam", UI_Cvar_VariableString("ui_teamName"));
-	trap_Cvar_Set("g_blueTeam", UI_Cvar_VariableString("ui_opponentName"));
+//	trap_Cvar_Set("g_redTeam", UI_Cvar_VariableString("ui_teamName"));
+//	trap_Cvar_Set("g_blueTeam", UI_Cvar_VariableString("ui_opponentName"));
+	trap_Cvar_Set("g_redTeam", UI_Cvar_VariableString("ui_redTeam")); // ~Dimmskii
+	trap_Cvar_Set("g_blueTeam", UI_Cvar_VariableString("ui_blueTeam")); // ~Dimmskii
 
 	if (trap_Cvar_VariableValue("ui_recordSPDemo")) {
 		Com_sprintf(buff, MAX_STRING_CHARS, "%s_%i", uiInfo.mapList[ui_currentMap.integer].mapLoadName, g);
@@ -3522,10 +3529,11 @@ static void UI_RunMenuScript(char **args) {
 			trap_Cvar_SetValue( "dedicated", Com_Clamp( 0, 2, ui_dedicated.integer ) );
 			//trap_Cvar_SetValue( "g_gametype", Com_Clamp( 0, 11, uiInfo.gameTypes[ui_netGameType.integer].gtEnum ) );
 			trap_Cvar_SetValue( "g_gametype", Com_Clamp( 0, 11, uiInfo.gameTypes[ui_gameType.integer].gtEnum ) ); // ~Dimmskii
-#ifndef MISSIONPACK2
-			trap_Cvar_Set("g_redTeam", UI_Cvar_VariableString("ui_teamName"));
-			trap_Cvar_Set("g_blueTeam", UI_Cvar_VariableString("ui_opponentName"));
-#endif
+			//trap_Cvar_Set("g_redTeam", UI_Cvar_VariableString("ui_teamName"));
+			//trap_Cvar_Set("g_blueTeam", UI_Cvar_VariableString("ui_opponentName"));
+			trap_Cvar_Set("g_redTeam", UI_Cvar_VariableString("ui_redTeam")); // ~Dimmskii
+			trap_Cvar_Set("g_blueTeam", UI_Cvar_VariableString("ui_blueTeam")); // ~Dimmskii
+
 			trap_Cmd_ExecuteText( EXEC_APPEND, va( "wait ; wait ; map %s\n", uiInfo.mapList[ui_currentNetMap.integer].mapLoadName ) );
 			skill = trap_Cvar_VariableValue( "g_spSkill" );
 			// set max clients based on spots
@@ -3550,7 +3558,7 @@ static void UI_RunMenuScript(char **args) {
 			}
 
 			trap_Cvar_Set("sv_maxClients", va("%d",clients));
-#ifdef MISSIONPACK2
+// ~DIMMSKII
 			for (i = 0; i < PLAYERS_PER_TEAM; i++) {
 				int bot = trap_Cvar_VariableValue( va("ui_blueteam%i", i+1));
 				if (bot > 1) {
@@ -3563,7 +3571,8 @@ static void UI_RunMenuScript(char **args) {
 					trap_Cmd_ExecuteText( EXEC_APPEND, buff );
 				}
 			}
-#else
+// END DIMMSKII
+/*
 			for (i = 0; i < PLAYERS_PER_TEAM; i++) {
 				int bot = trap_Cvar_VariableValue( va("ui_blueteam%i", i+1));
 				if (bot > 1) {
@@ -3584,7 +3593,7 @@ static void UI_RunMenuScript(char **args) {
 					trap_Cmd_ExecuteText( EXEC_APPEND, buff );
 				}
 			}
-#endif
+*/
 		} else if (Q_stricmp(name, "updateSPMenu") == 0) {
 			UI_SetCapFragLimits(qtrue);
 			UI_MapCountByGameType(qtrue);
@@ -3783,15 +3792,14 @@ static void UI_RunMenuScript(char **args) {
 				trap_Cmd_ExecuteText( EXEC_APPEND, va("callteamvote leader %s\n",uiInfo.teamNames[uiInfo.teamIndex]) );
 			}
 		} else if (Q_stricmp(name, "addBot") == 0) {
-#ifdef MISSIONPACK2
-			trap_Cmd_ExecuteText( EXEC_APPEND, va("addbot %s %i %s\n", UI_GetBotNameByNumber(uiInfo.botIndex), uiInfo.skillIndex+1, (uiInfo.redBlue == 0) ? "Red" : "Blue") );
-#else
+			trap_Cmd_ExecuteText( EXEC_APPEND, va("addbot %s %i %s\n", UI_GetBotNameByNumber(uiInfo.botIndex), uiInfo.skillIndex+1, (uiInfo.redBlue == 0) ? "Red" : "Blue") ); // ~Dimmskii
+/*
 			if (trap_Cvar_VariableValue("g_gametype") >= GT_TEAM) {
 				trap_Cmd_ExecuteText( EXEC_APPEND, va("addbot %s %i %s\n", uiInfo.characterList[uiInfo.botIndex].name, uiInfo.skillIndex+1, (uiInfo.redBlue == 0) ? "Red" : "Blue") );
 			} else {
 				trap_Cmd_ExecuteText( EXEC_APPEND, va("addbot %s %i %s\n", UI_GetBotNameByNumber(uiInfo.botIndex), uiInfo.skillIndex+1, (uiInfo.redBlue == 0) ? "Red" : "Blue") );
 			}
-#endif
+*/
 		} else if (Q_stricmp(name, "addFavorite") == 0) {
 			if (ui_netSource.integer != AS_FAVORITES) {
 				char name[MAX_NAME_LENGTH];
