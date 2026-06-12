@@ -754,7 +754,7 @@ itemDef {
 
 
 // BOT LIST FOR TEAM GAMES
-
+/*
 itemDef {
       name gametypefield
       style 0	
@@ -771,6 +771,27 @@ itemDef {
 	  cvarTest "ui_actualNetGameType"
 	  hideCvar { "0" ; "1" ; "2" ; "3" }
     }
+*/
+
+itemDef {
+	name gametypefield
+	type ITEM_TYPE_EDITFIELD
+	text ""
+	cvar "ui_blueTeam"
+	maxChars 32
+	maxPaintChars 10
+	rect 450 46 128 28 
+      textalign ITEM_ALIGN_LEFT		
+      textalignx 0     
+      textaligny 26    
+	 textscale .333     
+      forecolor 0 0 1 1
+      border 0
+      bordercolor 0 0 0 0
+      visible 1  
+	  cvarTest "ui_actualNetGameType"
+	  hideCvar { "0" ; "1" ; "2" ; "3" }
+}
 
 
 
@@ -924,6 +945,7 @@ itemDef {
 
 
 
+/*
 itemDef {
       name gametypefield
       style 0	
@@ -940,6 +962,26 @@ itemDef {
 	  cvarTest "ui_actualNetGameType"
 	  hideCvar { "0" ; "1" ; "2" ; "3" }
     }
+*/
+itemDef {
+	name gametypefield
+	type ITEM_TYPE_EDITFIELD
+	text ""
+	cvar "ui_redTeam"
+	maxChars 32
+	maxPaintChars 10
+	      rect 450 230 128 28 
+      textalign ITEM_ALIGN_LEFT		
+      textalignx 0     
+      textaligny 26    
+	  textscale .333
+      forecolor 1 0 0 1
+      border 0
+      bordercolor 0 0 0 0
+       visible 1 
+	  cvarTest "ui_actualNetGameType"
+	  hideCvar { "0" ; "1" ; "2" ; "3" }
+}
 
 
 itemDef {
