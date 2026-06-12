@@ -2965,7 +2965,8 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 
 #define CG_TEAMMATE_POI_ICON_SIZE  8.0f
 #define CG_TEAMMATE_POI_ICON_SIZE_MAX  12.0f
-#define CG_TEAMMATE_POI_TEXT_MARGIN  6.0f
+#define CG_TEAMMATE_POI_HIDE_NAMES 0.35f;		// Float. Percentage of screen width as margin to hide player name 
+#define CG_TEAMMATE_POI_TEXT_MARGIN  2.0f
 #define CG_TEAMMATE_POI_WORLD_Z_OFFSET  48.0f	// TODO: we have usable defines somewhere like view height
 
 /*
@@ -3038,13 +3039,39 @@ static qboolean CG_ShouldDrawTeammatePOIs( void ) {
 
 /*
 =============
+CG_ShouldDrawPOINames
+
+Returns true if should draw POI details
+=============
+*/
+static qboolean CG_ShouldDrawPOINames(float sx, float sy) {
+	float hideMarginX/*, hideMarginY*/;
+
+	if (cg_teammateNames.integer < 1) {
+		return qfalse;
+	} else if (cg_teammateNames.integer > 1) {
+		return qtrue;
+	}
+
+	// Don't draw the verbose stuff unless closer to middle of screen
+	hideMarginX = (cgs.screenXmax - cgs.screenXmin) * CG_TEAMMATE_POI_HIDE_NAMES;
+	//hideMarginY = (cgs.screenYmax - cgs.screenYmin) * CG_TEAMMATE_POI_HIDE_NAMES;
+	if (sx < cgs.screenXmin + hideMarginX || sx > cgs.screenXmax - hideMarginX /*|| sy < cgs.screenYmin + hideMarginY || sy > cgs.screenYmax - hideMarginY */) {
+		return qfalse;
+	}
+
+	return qtrue;
+}
+
+/*
+=============
 CG_DrawTeammatePOI
 
 Draws a single teammate POI marker at world position.
 =============
 */
 static void CG_DrawTeammatePOI( const char *name, int health, int armor, vec3_t worldPos ) {
-	float sx, sy, dist, maxdist, w, hw, wmax, maxDist;
+	float sx, sy, dist, maxdist, w, hw, maxDist, wlabel, hlabel;
 	vec3_t delta;
 	vec4_t	color;
 
@@ -3052,7 +3079,7 @@ static void CG_DrawTeammatePOI( const char *name, int health, int armor, vec3_t 
 		return;
 	}
 
-	maxDist = cg_drawFriend_dist.value;
+	maxDist = cg_teammatePOIsDist.value;
 
 	// Return if the alpha value will end up as zero regardless
 	if (dist > maxDist) {
@@ -3061,22 +3088,37 @@ static void CG_DrawTeammatePOI( const char *name, int health, int armor, vec3_t 
 	
 	//VectorSubtract(worldPos, cg.refdef.vieworg, delta);
 	//dist = VectorLength(delta);
-	w = cg_drawFriend_size.value * 640.0f / dist;
-	wmax = cg_drawFriend_sizeMax.value;
-	if (w > wmax) {
-		w = wmax;
+	w = cg_teammatePOIsIconSize.value * 640.0f / dist;
+	if (w > cg_teammatePOIsIconMaxSize.value) {
+		w = cg_teammatePOIsIconMaxSize.value;
 	}
 	hw = w/2.0f;
 
+	// Draw the marker pic
 	CG_DrawPic( sx - hw, sy - hw, w, w, cgs.media.friendShader );
 
-	color[0] = 1.0f;
-	color[1] = (float)health/100.0f;
-	color[2] = (float)health/100.0f;
-	color[3] = 1.0f - dist / maxDist;
-	CG_DrawString( sx, sy - hw - (TINYCHAR_HEIGHT/2) - CG_TEAMMATE_POI_TEXT_MARGIN, name, color,
-		TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0,
-		DS_CENTER | DS_SHADOW | DS_PROPORTIONAL );
+	// Draw POI details (if needed)
+	if (CG_ShouldDrawPOINames(sx,sy)) {
+		wlabel = TINYCHAR_WIDTH * (float)strlen(name); 
+		hlabel = CG_TEAMMATE_POI_TEXT_MARGIN*2.0f + TINYCHAR_HEIGHT;
+		
+		// Draw background
+		color[0] = 0.0f;
+		color[1] = 0.0f;
+		color[2] = 0.0f;
+		color[3] = (1.0f - dist / maxDist) * cg_teammateNamesBgAlpha.value;
+		CG_FillRect( sx-(wlabel/2.0f), sy-hw-hlabel, wlabel, hlabel, color );
+		
+		// Draw name str
+		color[0] = 1.0f;
+		color[1] = (float)health/100.0f;
+		color[2] = (float)health/100.0f;
+		color[3] = 1.0f - dist / maxDist;
+		CG_DrawString( sx, sy - hw - TINYCHAR_HEIGHT - CG_TEAMMATE_POI_TEXT_MARGIN, name, color,
+			TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0,
+			DS_CENTER | DS_SHADOW | DS_PROPORTIONAL );
+	
+	}
 }
 
 /*
@@ -3218,6 +3260,34 @@ static void CG_DrawTeammatePOIs( void ) {
 
         CG_DrawTeammatePOI( ci->name, ci->health, ci->armor, pos );
     }
+}
+
+/*
+=============
+CG_ShouldDrawItemPOIs
+
+Returns whether or not to draw item POIs.
+=============
+*/
+static qboolean CG_ShouldDrawItemPOIs( void ) {
+	team_t	myTeam;
+	
+	// Must be on a valid team
+	myTeam = (team_t)cg.snap->ps.persistant[PERS_TEAM];
+	if ( myTeam != TEAM_RED && myTeam != TEAM_BLUE ) {
+		return qfalse;
+	}
+
+	// Don't show if player is dead
+	if ( cg.predictedPlayerState.stats[STAT_HEALTH] <= 0 ) {
+		return qfalse;
+	}
+
+	if ( cg_itemPOIs.integer < 1 ) { //
+		return qfalse;
+	}
+
+	return qtrue;
 }
 
 static void LerpPosition( const vec3_t from, const vec3_t to, float f, vec3_t out ) {

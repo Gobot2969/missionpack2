@@ -1133,6 +1133,10 @@ static void CG_ServerCommand( void ) {
         CG_ParseTeamPositions();
         return;
     }
+	if ( !strcmp( cmd, "ipos" ) ) { // Server sends if g_itemVisibility is 1
+        CG_ParseItemPositions();
+        return;
+    }
 	// END DIMMSKII
 
 	if ( !strcmp( cmd, "map_restart" ) ) {
@@ -1223,6 +1227,28 @@ static void CG_ParseTeamPositions( void ) {
         cg_teammatePositions[client].origin[2] = atoi( CG_Argv( i * 4 + 5 ) );
         cg_teammatePositions[client].serverTime = cg.snap->serverTime;
         cg_teammatePositions[client].valid = qtrue;
+    }
+}
+
+/*
+====================
+CG_ParseItemPositions
+
+Parses item origins message when the server allows full item visibility.
+====================
+*/
+static void CG_ParseItemPositions( void ) {
+    int     i, count, client;
+
+    count = atoi( CG_Argv( 1 ) );
+
+    for ( i = 0; i < count && i < MAX_ITEMPOS; i++ ) {
+        client = atoi( CG_Argv( i * 4 + 2 ) );
+
+        cg_itemPositions[client].origin[0] = atoi( CG_Argv( i * 4 + 3 ) );
+        cg_itemPositions[client].origin[1] = atoi( CG_Argv( i * 4 + 4 ) );
+        cg_itemPositions[client].origin[2] = atoi( CG_Argv( i * 4 + 5 ) );
+        cg_itemPositions[client].valid = qtrue;
     }
 }
 // END DIMMSKII

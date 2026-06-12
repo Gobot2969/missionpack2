@@ -89,6 +89,7 @@ itemInfo_t			cg_items[MAX_ITEMS];
 
 // ~DIMMSKII
 teammatePos_t cg_teammatePositions[MAX_CLIENTS];
+itemPos_t cg_itemPositions[MAX_ITEMPOS];
 // END DIMMSKII
 
 #define DECLARE_CG_CVAR

@@ -1178,6 +1178,11 @@ typedef struct {
     int         prevServerTime;
     qboolean    valid;
 } teammatePos_t;
+
+typedef struct {
+    vec3_t      origin;
+    qboolean    valid;
+} itemPos_t;
 // END DIMMSKII
 
 //==============================================================================
@@ -1192,6 +1197,7 @@ extern	int			cg_playback_follow;
 
 // ~DIMMSKII
 extern teammatePos_t cg_teammatePositions[MAX_CLIENTS];
+extern itemPos_t cg_itemPositions[MAX_ITEMPOS];
 // END DIMMSKII
 
 #define EXTERN_CG_CVAR

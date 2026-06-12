@@ -580,8 +580,9 @@ typedef enum {
 #define TEAM_LOCATION_UPDATE_TIME		500	// ~Dimmskii
 
 // ~DIMMSKII
-// Time between team position updates (when g_teamVisibility is enabled)
-#define TEAM_POSITION_UPDATE_TIME		250
+#define MAX_ITEMPOS 32		// Maximum item positions for mega-powerup POIs and their timers
+#define TEAM_POSITION_UPDATE_TIME		250		// Time between team position updates (when g_teamVisibility is enabled)
+#define ITEM_POI_UPDATE_TIME			500		// Time between item POI msgs
 // END DIMMSKII
 
 // How many players on the overlay
