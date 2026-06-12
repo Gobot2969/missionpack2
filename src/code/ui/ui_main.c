@@ -227,9 +227,11 @@ static char* netnames[] = {
 	NULL
 };
 
+/*
 #ifndef MISSIONPACK // bk001206
 static char quake3worldMessage[] = "Visit www.quake3world.com - News, Community, Events, Files";
 #endif
+*/
 
 static int gamecodetoui[] = {4,2,3,0,5,1,6};
 
@@ -1114,9 +1116,11 @@ void UI_Load() {
 }
 
 static const char *handicapValues[] = {"None","95","90","85","80","75","70","65","60","55","50","45","40","35","30","25","20","15","10","5",NULL};
+/*
 #ifndef MISSIONPACK // bk001206
 static int numHandicaps = sizeof(handicapValues) / sizeof(const char*);
 #endif
+*/
 
 static void UI_DrawHandicap(rectDef_t *rect, float scale, vec4_t color, int textStyle) {
   int i, h;
@@ -1423,9 +1427,7 @@ static void UI_DrawMapCinematic(rectDef_t *rect, float scale, vec4_t color, qboo
 
 
 static qboolean updateModel = qtrue;
-#ifndef MISSIONPACK2
-static qboolean q3Model = qtrue;
-#endif
+//static qboolean q3Model = qtrue;
 
 static void UI_DrawPlayerModel(rectDef_t *rect) {
   static playerInfo_t info;
@@ -1434,7 +1436,7 @@ static void UI_DrawPlayerModel(rectDef_t *rect) {
 	char head[256];
 	vec3_t	viewangles;
 	vec3_t	moveangles;
-#ifndef MISSIONPACK2
+/*
 	  if (trap_Cvar_VariableValue("ui_Q3Model")) {
 	  strcpy(model, UI_Cvar_VariableString("model"));
 		strcpy(head, UI_Cvar_VariableString("headmodel"));
@@ -1453,12 +1455,13 @@ static void UI_DrawPlayerModel(rectDef_t *rect) {
 			updateModel = qtrue;
 		}
 	}
-#else
+*/
+// ~Dimmskii
 	strcpy(model, UI_Cvar_VariableString("model"));
 	strcpy(head, UI_Cvar_VariableString("headmodel"));
 	team[0] = '\0';
 	updateModel = qtrue;
-#endif
+// End Dimmskii
   if (updateModel) {
   	memset( &info, 0, sizeof(playerInfo_t) );
   	viewangles[YAW]   = 180 - 10;
@@ -1579,12 +1582,14 @@ static void UI_DrawTierGameType(rectDef_t *rect, float scale, vec4_t color, int 
 }
 
 
+/*
 #ifndef MISSIONPACK // bk001206
 static const char *UI_OpponentLeaderName() {
   int i = UI_TeamIndexFromName(UI_Cvar_VariableString("ui_opponentName"));
 	return uiInfo.teamList[i].teamMembers[0];
 }
 #endif
+*/
 
 static const char *UI_AIFromName(const char *name) {
 	int j;
@@ -1596,6 +1601,7 @@ static const char *UI_AIFromName(const char *name) {
 	return "James";
 }
 
+/*
 #ifndef MISSIONPACK // bk001206
 static const int UI_AIIndex(const char *name) {
 	int j;
@@ -1640,6 +1646,7 @@ static const char *UI_OpponentLeaderModel() {
 	return "James";
 }
 #endif
+*/
 
 
 static qboolean updateOpponentModel = qtrue;
@@ -3030,14 +3037,15 @@ static qboolean UI_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, 
     case UI_SKILL:
       return UI_Skill_HandleKey(flags, special, key);
       break;
-#ifndef MISSIONPACK2
+/*
+	// ~Dimmskii - We no longer cycle TA clans because they don't exist here
     case UI_BLUETEAMNAME:
       return UI_TeamName_HandleKey(flags, special, key, qtrue);
       break;
     case UI_REDTEAMNAME:
       return UI_TeamName_HandleKey(flags, special, key, qfalse);
       break;
-#endif
+*/
     case UI_BLUETEAM1:
 		case UI_BLUETEAM2:
 		case UI_BLUETEAM3:
@@ -4961,7 +4969,7 @@ static qhandle_t UI_FeederItemImage(float feederID, int index) {
 static void UI_FeederSelection(float feederID, int index) {
 	static char info[MAX_STRING_CHARS];
   if (feederID == FEEDER_HEADS) {
-#ifndef MISSIONPACK2
+/*
 	int actual;
 	UI_SelectedHead(index, &actual);
 	index = actual;
@@ -4970,13 +4978,14 @@ static void UI_FeederSelection(float feederID, int index) {
 		trap_Cvar_Set( "team_headmodel", va("*%s", uiInfo.characterList[index].name)); 
 		updateModel = qtrue;
     }
-#else
+*/
+// ~Dimmskii
 	if (index >= 0 && index < uiInfo.q3HeadCount) {
       trap_Cvar_Set( "model", uiInfo.q3HeadNames[index]);
       trap_Cvar_Set( "headmodel", uiInfo.q3HeadNames[index]);
 			updateModel = qtrue;
 	}
-#endif
+// End Dimmskii
   } else if (feederID == FEEDER_Q3HEADS) {
     if (index >= 0 && index < uiInfo.q3HeadCount) {
       trap_Cvar_Set( "model", uiInfo.q3HeadNames[index]);
@@ -5473,12 +5482,14 @@ static void UI_Pause(qboolean b) {
 	}
 }
 
+/*
 #ifndef MISSIONPACK // bk001206
 static int UI_OwnerDraw_Width(int ownerDraw) {
   // bk001205 - LCC missing return value
   return 0;
 }
 #endif
+*/
 
 static int UI_PlayCinematic(const char *name, float x, float y, float w, float h) {
   return trap_CIN_PlayCinematic(name, x, y, w, h, (CIN_loop | CIN_silent));
