@@ -2965,7 +2965,8 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 
 #define CG_TEAMMATE_POI_ICON_SIZE  8.0f
 #define CG_TEAMMATE_POI_ICON_SIZE_MAX  12.0f
-#define CG_TEAMMATE_POI_WORLD_Z_OFFSET  48.0f
+#define CG_TEAMMATE_POI_TEXT_MARGIN  6.0f
+#define CG_TEAMMATE_POI_WORLD_Z_OFFSET  48.0f	// TODO: we have usable defines somewhere like view height
 
 /*
 =============
@@ -3061,12 +3062,11 @@ static void CG_DrawTeammatePOI( const char *name, int health, int armor, vec3_t 
 	//VectorSubtract(worldPos, cg.refdef.vieworg, delta);
 	//dist = VectorLength(delta);
 	w = cg_drawFriend_size.value * 640.0f / dist;
-	hw = w/2.0f;
 	wmax = cg_drawFriend_sizeMax.value;
 	if (w > wmax) {
 		w = wmax;
 	}
-
+	hw = w/2.0f;
 
 	CG_DrawPic( sx - hw, sy - hw, w, w, cgs.media.friendShader );
 
@@ -3074,7 +3074,7 @@ static void CG_DrawTeammatePOI( const char *name, int health, int armor, vec3_t 
 	color[1] = (float)health/100.0f;
 	color[2] = (float)health/100.0f;
 	color[3] = 1.0f - dist / maxDist;
-	CG_DrawString( sx, sy - 14, name, color,
+	CG_DrawString( sx, sy - hw - (TINYCHAR_HEIGHT/2) - CG_TEAMMATE_POI_TEXT_MARGIN, name, color,
 		TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0,
 		DS_CENTER | DS_SHADOW | DS_PROPORTIONAL );
 }
