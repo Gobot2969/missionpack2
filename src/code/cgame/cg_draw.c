@@ -3099,7 +3099,7 @@ static void CG_DrawTeammatePOI( const char *name, int health, int armor, vec3_t 
 
 	// Draw POI details (if needed)
 	if (CG_ShouldDrawPOINames(sx,sy)) {
-		wlabel = TINYCHAR_WIDTH * (float)strlen(name); 
+		wlabel = TINYCHAR_WIDTH * (float)CG_DrawStrlen(name);
 		hlabel = CG_TEAMMATE_POI_TEXT_MARGIN*2.0f + TINYCHAR_HEIGHT;
 		
 		// Draw background
@@ -3116,7 +3116,7 @@ static void CG_DrawTeammatePOI( const char *name, int health, int armor, vec3_t 
 		color[3] = 1.0f - dist / maxDist;
 		CG_DrawString( sx, sy - hw - TINYCHAR_HEIGHT - CG_TEAMMATE_POI_TEXT_MARGIN, name, color,
 			TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0,
-			DS_CENTER | DS_SHADOW | DS_PROPORTIONAL );
+			DS_CENTER | DS_SHADOW | DS_PROPORTIONAL | DS_FORCE_COLOR );
 	
 	}
 }

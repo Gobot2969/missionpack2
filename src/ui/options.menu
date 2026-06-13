@@ -9,6 +9,7 @@ menuDef {
     	fullscreen 0
 	rect 186 0 443 426
     	focusColor 1 .75 0 1
+		disableColor .5 .5 .5 1
     	style 1
     	border 1
 	onOpen { setitemcolor fadebox backcolor 0 0 0 1 ; 
@@ -376,7 +377,7 @@ itemDef {
       		type ITEM_TYPE_MULTI
 		text "Friend Markers:"
 		cvar "cg_drawFriend"
-		cvarStrList { "Off", "0", "Classic Markers", "1", "Always Shown With Names", "2"  }
+		cvarStrList { "Off", "0", "Classic Markers", "1", "QL Style", "2"  }
 		rect 99 235 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
@@ -384,6 +385,24 @@ itemDef {
 		textscale .3       
       		forecolor 1 1 1 1
       		visible 0
+		}
+
+itemDef {
+      		name display
+		group grpOptions
+      		type ITEM_TYPE_MULTI
+		text "Friend Names:"
+		cvar "cg_teammateNames"
+		cvarStrList { "None", "0", "Targeted", "1", "Always", "2"  }
+		rect 99 255 256 20
+      		textalign ITEM_ALIGN_RIGHT
+      		textalignx 128
+      		textaligny 20
+		textscale .3       
+      		forecolor 1 1 1 1
+      		visible 0
+		cvarTest "cg_drawFriend"
+		disableCvar { "0" ; "1" }
 		}
 
 
