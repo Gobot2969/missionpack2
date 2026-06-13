@@ -2659,35 +2659,35 @@ static qboolean UI_NetGameType_HandleKey(int flags, float *special, int key) {
 
 // ~Dimmskii
 static qboolean UI_GameType_HandleKey(int flags, float *special, int key, qboolean resetMap) {
-	int i, joinTypeIndex;
+	int i, hostTypeIndex;
   if (key == K_MOUSE1 || key == K_MOUSE2 || key == K_ENTER || key == K_KP_ENTER) {
 
-		// Iterate through joingametypes array instead:
-		joinTypeIndex = -1;
+		// Iterate through hostgametypes array instead:
+		hostTypeIndex = -1;
 
-		for (i = 0; i < uiInfo.numJoinGameTypes; i++) {
-			if (ui_gameType.integer == uiInfo.joinGameTypes[i].gtEnum) {
-				joinTypeIndex = i;
+		for (i = 0; i < uiInfo.numHostGameTypes; i++) {
+			if (ui_gameType.integer == uiInfo.hostGameTypes[i].gtEnum) {
+				hostTypeIndex = i;
 				break;
 			}
 		}
 
-		if (joinTypeIndex == -1) {
-			joinTypeIndex = 0;
+		if (hostTypeIndex == -1) {
+			hostTypeIndex = 0;
 		}
 		
 		if (key == K_MOUSE2) {
-			joinTypeIndex--;
+			hostTypeIndex--;
 		} else {
-			joinTypeIndex++;
+			hostTypeIndex++;
 		}
-		if (joinTypeIndex < 1) {
-			joinTypeIndex = uiInfo.numJoinGameTypes - 1;
-		} else if (joinTypeIndex >= uiInfo.numJoinGameTypes) {
-			joinTypeIndex = 1;
+		if (hostTypeIndex < 0) {
+			hostTypeIndex = uiInfo.numHostGameTypes - 1;
+		} else if (hostTypeIndex >= uiInfo.numHostGameTypes) {
+			hostTypeIndex = 0;
 		}
 
-		ui_gameType.integer = uiInfo.joinGameTypes[joinTypeIndex].gtEnum; // Set to gtEnum of incremented join type instead 
+		ui_gameType.integer = uiInfo.hostGameTypes[hostTypeIndex].gtEnum; // Set to gtEnum of incremented host type instead 
 
 
 		// Additionally, the original check now on ui_gameType itself for out of bounds
@@ -5284,7 +5284,8 @@ static void UI_ParseTeamInfo(const char *teamFile) {
 }
 
 
-static qboolean GameType_Parse(char **p, qboolean join) {
+//static qboolean GameType_Parse(char **p, qboolean join) {
+static qboolean GameType_Parse(char **p, qboolean join, qboolean host) { // ~Dimmskii
 	char *token;
 
 	token = COM_ParseExt(p, qtrue);
@@ -5293,6 +5294,11 @@ static qboolean GameType_Parse(char **p, qboolean join) {
 		return qfalse;
 	}
 
+	// ~Dimmskii
+	if (host) {
+		uiInfo.numHostGameTypes = 0;
+	} else
+	// End Dimmskii
 	if (join) {
 		uiInfo.numJoinGameTypes = 0;
 	} else {
@@ -5311,6 +5317,13 @@ static qboolean GameType_Parse(char **p, qboolean join) {
 		}
 
 		if (token[0] == '{') {
+			// ~Dimmskii
+			if (host) {
+				if (!String_Parse(p, &uiInfo.hostGameTypes[uiInfo.numHostGameTypes].gameType) || !Int_Parse(p, &uiInfo.hostGameTypes[uiInfo.numHostGameTypes].gtEnum)) {
+					return qfalse;
+				}
+			} else
+			// End Dimmskii
 			// two tokens per line, character name and sex
 			if (join) {
 				if (!String_Parse(p, &uiInfo.joinGameTypes[uiInfo.numJoinGameTypes].gameType) || !Int_Parse(p, &uiInfo.joinGameTypes[uiInfo.numJoinGameTypes].gtEnum)) {
@@ -5322,6 +5335,15 @@ static qboolean GameType_Parse(char **p, qboolean join) {
 				}
 			}
     
+			// ~Dimmskii
+			if (host) {
+				if (uiInfo.numHostGameTypes < MAX_GAMETYPES) {
+					uiInfo.numHostGameTypes++;
+				} else {
+					Com_Printf("Too many host game types, last one replace!\n");
+				}	
+			} else
+			// End Dimmskii
 			if (join) {
 				if (uiInfo.numJoinGameTypes < MAX_GAMETYPES) {
 					uiInfo.numJoinGameTypes++;
@@ -5434,7 +5456,8 @@ static void UI_ParseGameInfo(const char *teamFile) {
 
 		if (Q_stricmp(token, "gametypes") == 0) {
 
-			if (GameType_Parse(&p, qfalse)) {
+			//if (GameType_Parse(&p, qfalse)) {
+			if (GameType_Parse(&p, qfalse, qfalse)) {
 				continue;
 			} else {
 				break;
@@ -5444,7 +5467,8 @@ static void UI_ParseGameInfo(const char *teamFile) {
 		// ~Dimmskii
 		if (Q_stricmp(token, "hostgametypes") == 0) {
 
-			if (GameType_Parse(&p, qtrue)) {
+			//if (GameType_Parse(&p, qtrue)) {
+			if (GameType_Parse(&p, qfalse, qtrue)) {
 				continue;
 			} else {
 				break;
@@ -5454,7 +5478,8 @@ static void UI_ParseGameInfo(const char *teamFile) {
 
 		if (Q_stricmp(token, "joingametypes") == 0) {
 
-			if (GameType_Parse(&p, qtrue)) {
+			//if (GameType_Parse(&p, qtrue)) {
+			if (GameType_Parse(&p, qtrue, qfalse)) {
 				continue;
 			} else {
 				break;

@@ -667,6 +667,9 @@ typedef struct {
 	int numJoinGameTypes;
 	gameTypeInfo joinGameTypes[MAX_GAMETYPES];
 
+	int numHostGameTypes; // ~Dimmskii
+	gameTypeInfo hostGameTypes[MAX_GAMETYPES]; // ~Dimmskii
+
 	int redBlue;
 	int playerCount;
 	int myTeamCount;
