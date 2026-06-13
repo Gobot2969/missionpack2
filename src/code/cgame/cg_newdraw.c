@@ -1794,6 +1794,32 @@ void CG_OwnerDraw(float x, float y, float w, float h, float text_x, float text_y
   case CG_MAP_NAME:
 	CG_DrawMapName(&rect, scale, color, shader, textStyle);
 		break;
+
+// ~Dimmskii - QL ENUMS
+  case CG_TEAM_COLORIZED:
+    CG_DrawTeamColorized(&rect, shader);
+    break;
+  case CG_ARMORTIERED_COLORIZED:
+ 	CG_DrawArmorTieredColorized();
+    break;
+
+  case CG_PLAYER_ARMOR_BAR_100:
+ 	CG_DrawPlayerHealthBar(&rect, shader, qtrue, qfalse);
+    break;
+
+  case CG_PLAYER_ARMOR_BAR_200:
+ 	CG_DrawPlayerHealthBar(&rect, shader, qtrue, qtrue);
+    break;
+
+  case CG_PLAYER_HEALTH_BAR_100:
+ 	CG_DrawPlayerHealthBar(&rect, shader, qfalse, qfalse);
+    break;
+
+  case CG_PLAYER_HEALTH_BAR_200:
+ 	CG_DrawPlayerHealthBar(&rect, shader, qfalse, qtrue);
+    break;
+// End Dimmskii
+
   default:
     break;
   }
@@ -1965,4 +1991,32 @@ void CG_GetTeamColor(vec4_t *color) {
     (*color)[3] = 0.25f;
 	}
 }
+
+// ~Dimmskii
+
+// ql def CG_TEAM_COLORIZED
+void CG_DrawTeamColorized(rectDef_t *rect, qhandle_t shader) {
+	//if (shader) {
+		vec4_t color = {0,0,0,0}; // New color
+		CG_GetTeamColor( &color );
+		trap_R_SetColor( color );
+		CG_DrawPic(rect->x, rect->y, rect->w, rect->h, shader);
+		trap_R_SetColor( NULL );
+	//}
+}
+
+// ql def CG_ARMORTIERED_COLORIZED
+void CG_DrawArmorTieredColorized(void) {
+
+}
+
+// ql def CG_PLAYER_ARMOR_BAR_100
+// ql def CG_PLAYER_ARMOR_BAR_200
+// ql def CG_PLAYER_HEALTH_BAR_100
+// ql def CG_PLAYER_HEALTH_BAR_200
+void CG_DrawPlayerHealthBar(rectDef_t *rect, qhandle_t shader, qboolean armor, qboolean b200) {
+	CG_DrawTeamColorized(rect, shader);
+}
+
+// End Dimmskii
 

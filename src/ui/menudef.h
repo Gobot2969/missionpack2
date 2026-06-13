@@ -309,11 +309,11 @@
 #define CG_VOTETIMER 101                          // TODO: QL Stub - Implement this
 #define CG_SPEC_MESSAGES 102                      // TODO: QL Stub - Implement this
 #define CG_PLAYERMODEL 103                        // TODO: QL Stub - Implement this
-#define CG_PLAYER_ARMOR_BAR_100 104               // TODO: QL Stub - Implement this
-#define CG_PLAYER_ARMOR_BAR_200 105               // TODO: QL Stub - Implement this
-#define CG_ARMORTIERED_COLORIZED 106              // TODO: QL Stub - Implement this
-#define CG_PLAYER_HEALTH_BAR_100 107              // TODO: QL Stub - Implement this
-#define CG_PLAYER_HEALTH_BAR_200 108              // TODO: QL Stub - Implement this
+#define CG_PLAYER_ARMOR_BAR_100 104               // ~Dimmskii - QL Implemented!
+#define CG_PLAYER_ARMOR_BAR_200 105               // ~Dimmskii - QL Implemented!
+#define CG_ARMORTIERED_COLORIZED 106              // ~Dimmskii - QL Implemented!
+#define CG_PLAYER_HEALTH_BAR_100 107              // ~Dimmskii - QL Implemented!
+#define CG_PLAYER_HEALTH_BAR_200 108              // ~Dimmskii - QL Implemented!
 #define CG_RACE_STATUS 109                        // TODO: QL Stub - Implement this
 #define CG_RACE_TIMES 110                         // TODO: QL Stub - Implement this
 #define CG_PLAYER_HASKEY 111                      // TODO: QL Stub - Implement this
@@ -341,7 +341,7 @@
 #define CG_SPEEDOMETER 133                        // TODO: QL Stub - Implement this
 #define CG_WP_VERTICAL 134                        // TODO: QL Stub - Implement this
 #define CG_ACC_VERTICAL 135                       // TODO: QL Stub - Implement this
-#define CG_TEAM_COLORIZED 136                     // TODO: QL Stub - Implement this
+#define CG_TEAM_COLORIZED 136                     // ~Dimmskii - QL Implemented!
 #define CG_TEAM_PLYR_COUNT 137                    // TODO: QL Stub - Implement this
 #define CG_ENEMY_PLYR_COUNT 138                   // TODO: QL Stub - Implement this
 #define CG_1STPLACE_PLYR_MODEL_ACTIVE 139         // TODO: QL Stub - Implement this
