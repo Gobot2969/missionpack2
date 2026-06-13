@@ -133,9 +133,11 @@ CG_CVAR( cg_fovAdjust, "cg_fovAdjust", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_followKiller, "cg_followKiller", "0", CVAR_ARCHIVE )
 
 //  ~DIMMSKII
+// All POIs
+CG_CVAR( cg_poiTextBgAlpha, "cg_poiTextBgAlpha", "0.3", CVAR_ARCHIVE )
+
 // Teammate POIs
 CG_CVAR( cg_teammateNames, "cg_teammateNames", "1", CVAR_ARCHIVE ) // 0=Off 1=Targeted 2=Always. No effect unless cg_drawFriend is 2
-CG_CVAR( cg_teammateNamesBgAlpha, "cg_teammateNamesBgAlpha", "0.5", CVAR_ARCHIVE ) // No effect unless cg_drawFriend is 2
 CG_CVAR( cg_teammatePOIsIconSize, "cg_teammatePOIsIconSize", "8", CVAR_ARCHIVE ) // No effect unless cg_drawFriend is 2
 CG_CVAR( cg_teammatePOIsIconMaxSize, "cg_teammatePOIsIconMaxSize", "12", CVAR_ARCHIVE ) // No effect unless cg_drawFriend is 2
 CG_CVAR( cg_teammatePOIsDist, "cg_teammatePOIsDist", "4000", CVAR_ARCHIVE ) // No effect unless cg_drawFriend is 2

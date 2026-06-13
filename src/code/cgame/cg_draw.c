@@ -3106,7 +3106,7 @@ static void CG_DrawTeammatePOI( const char *name, int health, int armor, vec3_t 
 		color[0] = 0.0f;
 		color[1] = 0.0f;
 		color[2] = 0.0f;
-		color[3] = (1.0f - dist / maxDist) * cg_teammateNamesBgAlpha.value;
+		color[3] = (1.0f - dist / maxDist) * cg_poiTextBgAlpha.value;
 		CG_FillRect( sx-(wlabel/2.0f), sy-hw-hlabel, wlabel, hlabel, color );
 		
 		// Draw name str
