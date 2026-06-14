@@ -1238,17 +1238,18 @@ Parses item origins message when the server allows full item visibility.
 ====================
 */
 static void CG_ParseItemPositions( void ) {
-    int     i, count, client;
+    int     i, count, id;
 
     count = atoi( CG_Argv( 1 ) );
 
     for ( i = 0; i < count && i < MAX_ITEMPOS; i++ ) {
-        client = atoi( CG_Argv( i * 4 + 2 ) );
-
-        cg_itemPositions[client].origin[0] = atoi( CG_Argv( i * 4 + 3 ) );
-        cg_itemPositions[client].origin[1] = atoi( CG_Argv( i * 4 + 4 ) );
-        cg_itemPositions[client].origin[2] = atoi( CG_Argv( i * 4 + 5 ) );
-        cg_itemPositions[client].valid = qtrue;
+        id = atoi( CG_Argv( i * 5 + 2 ) );
+		cg_itemPositions[id].type = atoi( CG_Argv( i * 5 + 3 ) );
+		cg_itemPositions[id].timer = atoi( CG_Argv( i * 5 + 4 ) );
+        cg_itemPositions[id].origin[0] = atoi( CG_Argv( i * 5 + 5 ) );
+        cg_itemPositions[id].origin[1] = atoi( CG_Argv( i * 5 + 6 ) );
+        cg_itemPositions[id].origin[2] = atoi( CG_Argv( i * 5 + 7 ) );
+        cg_itemPositions[id].valid = qtrue;
     }
 }
 // END DIMMSKII

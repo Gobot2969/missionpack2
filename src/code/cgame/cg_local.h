@@ -1180,6 +1180,8 @@ typedef struct {
 } teammatePos_t;
 
 typedef struct {
+	int      type;
+	int      timer;
     vec3_t      origin;
     qboolean    valid;
 } itemPos_t;
