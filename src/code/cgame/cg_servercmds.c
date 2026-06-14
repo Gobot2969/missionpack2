@@ -1243,12 +1243,12 @@ static void CG_ParseItemPositions( void ) {
     count = atoi( CG_Argv( 1 ) );
 
     for ( i = 0; i < count; i++ ) {
-        id = atoi( CG_Argv( i * 5 + 2 ) );
-		cg_itemPositions[id].type = atoi( CG_Argv( i * 5 + 3 ) );
-		cg_itemPositions[id].timer = atoi( CG_Argv( i * 5 + 4 ) );
-        cg_itemPositions[id].origin[0] = atoi( CG_Argv( i * 5 + 5 ) );
-        cg_itemPositions[id].origin[1] = atoi( CG_Argv( i * 5 + 6 ) );
-        cg_itemPositions[id].origin[2] = atoi( CG_Argv( i * 5 + 7 ) );
+        id = atoi( CG_Argv( i * 6 + 2 ) );
+		cg_itemPositions[id].type = atoi( CG_Argv( i * 6 + 3 ) );
+		cg_itemPositions[id].timer = atoi( CG_Argv( i * 6 + 4 ) );
+        cg_itemPositions[id].origin[0] = atoi( CG_Argv( i * 6 + 5 ) );
+        cg_itemPositions[id].origin[1] = atoi( CG_Argv( i * 6 + 6 ) );
+        cg_itemPositions[id].origin[2] = atoi( CG_Argv( i * 6 + 7 ) );
         cg_itemPositions[id].valid = qtrue;
     }
 }
