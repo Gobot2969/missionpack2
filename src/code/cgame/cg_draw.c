@@ -3041,21 +3041,54 @@ static qboolean CG_ShouldDrawTeammatePOIs( void ) {
 	return qtrue;
 }
 
+
+
 /*
 =============
-CG_ShouldDrawPOINames
+CG_IsTargetedPOI
 
-Returns true if should draw POI details
+Returns true if the worldPos vector falls within the specified arc angle 
+and distance threshold relative to the player's view.
 =============
 */
-static qboolean CG_ShouldDrawPOINames(float sx, float sy) {
-	float hideMarginX/*, hideMarginY*/;
+static qboolean CG_IsTargetedPOI( vec3_t worldPos, float arcDegThreshold /*, float maxDistance*/ ) {
+	vec3_t	toTarget;
+	float	distance;
+	float	dot;
+	float	cosThreshold;
 
-	if (cg_teammateNames.integer < 1) {
-		return qfalse;
-	} else if (cg_teammateNames.integer > 1) {
+	// 1. Calculate the vector from the player's eyes to the target
+	VectorSubtract( worldPos, cg.refdef.vieworg, toTarget );
+
+	// 2. Normalize the vector to get the direction, and get the distance
+	distance = VectorNormalize( toTarget );
+
+	// 3: Reject if the target is further away than your maximum threshold
+	//if ( maxDistance > 0 && distance > maxDistance ) {
+	//	return qfalse;
+	//}
+
+	// 4. Calculate dot product between forward view axis and direction to target
+	// cg.refdef.viewaxis[0] is the normalized forward vector
+	dot = DotProduct( cg.refdef.viewaxis[0], toTarget );
+
+	// 5. Convert arc degree threshold to a cosine value
+	// We divide by 2 because the total cone arc spans both left and right of the crosshair
+	cosThreshold = cos( DEG2RAD( arcDegThreshold * 0.5f ) );
+
+	// 6. If the dot product is higher than the cosine threshold, it's inside the cone
+	if ( dot >= cosThreshold ) {
 		return qtrue;
 	}
+
+	return qfalse;
+}
+
+/*
+The cheap version kept for reference
+*/
+static qboolean CG_IsTargetedPOI_2D( float sx, float sy) {
+	float hideMarginX/*, hideMarginY*/;
 
 	// Don't draw the verbose stuff unless closer to middle of screen
 	hideMarginX = (cgs.screenXmax - cgs.screenXmin) * CG_TEAMMATE_POI_HIDE_NAMES;
@@ -3067,14 +3100,16 @@ static qboolean CG_ShouldDrawPOINames(float sx, float sy) {
 	return qtrue;
 }
 
+
 /*
 =============
 CG_DrawPOI
 
-Draws a single teammate POI marker at world position.
+General combined function for usage by CG_DrawTeammatePOI and CG_DrawItemPOI.
+Does the actual POI drawing.
 =============
 */
-static void CG_DrawPOI( const char *text, float barVal, vec3_t worldPos, qhandle_t pic ) {
+static void CG_DrawPOI( const char *text, vec4_t textColor, float barVal, vec3_t worldPos, qhandle_t pic ) {
 	float sx, sy, dist, maxdist, w, hw, maxDist, wlabel, hlabel;
 	vec3_t delta;
 	vec4_t	color;
@@ -3102,7 +3137,7 @@ static void CG_DrawPOI( const char *text, float barVal, vec3_t worldPos, qhandle
 	CG_DrawPic( sx - hw, sy - hw, w, w, pic );
 
 	// Draw POI details (if needed)
-	if (CG_ShouldDrawPOINames(sx,sy)) {
+	if (text) {
 		wlabel = TINYCHAR_WIDTH * (float)CG_DrawStrlen(text);
 		hlabel = CG_TEAMMATE_POI_TEXT_MARGIN*2.0f + TINYCHAR_HEIGHT;
 		
@@ -3114,15 +3149,34 @@ static void CG_DrawPOI( const char *text, float barVal, vec3_t worldPos, qhandle
 		CG_FillRect( sx-(wlabel/2.0f), sy-hw-hlabel, wlabel, hlabel, color );
 		
 		// Draw str
-		color[0] = 1.0f;
-		color[1] = barVal;
-		color[2] = barVal;
-		color[3] = 1.0f - dist / maxDist;
+		color[0] = textColor[0];
+		color[1] = textColor[1];
+		color[2] = textColor[2];
+		color[3] = textColor[3] * (1.0f - dist / maxDist);
 		CG_DrawString( sx, sy - hw - TINYCHAR_HEIGHT - CG_TEAMMATE_POI_TEXT_MARGIN, text, color,
 			TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0,
 			DS_CENTER | DS_SHADOW | DS_PROPORTIONAL | DS_FORCE_COLOR );
 	
 	}
+}
+
+/*
+=============
+CG_DrawTeammatePOI
+
+Draws a single teammate POI marker at world position.
+=============
+*/
+CG_DrawTeammatePOI( const char *name, int health, int armor, vec3_t worldPos ) {
+	vec4_t	nameColor;
+	float arcDegs = (cg.refdef.fov_x + cg.refdef.fov_y) * 0.2f; // Average of both axes' FOVs times some fraction you don't want to see it. Works while zoomed as well.
+	
+	// nameColor based on HP. FIXME: do it better
+	nameColor[0] = 1.0f;
+	nameColor[1] = nameColor[2] = (float)health/100.0f;
+	nameColor[3] = 1.0f;
+
+	CG_DrawPOI( ( (cg_teammateNames.integer > 1) || (CG_IsTargetedPOI(worldPos, arcDegs )&&cg_teammateNames.integer>0) ) ? name : NULL, nameColor, (float)health/100.0f, worldPos, cgs.media.friendShader );
 }
 
 /*
@@ -3141,9 +3195,9 @@ static void CG_DrawTeammatePOIs( void ) {
 	int			health, armor;
 	trace_t		tr;
 
-	if ( !CG_ShouldDrawTeammatePOIs() ) {
-		return;
-	}
+	//if ( !CG_ShouldDrawTeammatePOIs() ) {
+	//	return;
+	//}
 
 	localTeam = cg.snap->ps.persistant[PERS_TEAM];
 
@@ -3207,7 +3261,7 @@ static void CG_DrawTeammatePOIs( void ) {
 			pos[2] += CG_TEAMMATE_POI_WORLD_Z_OFFSET; // Add offset AFTER trace
 
 			// Draw the marker
-			CG_DrawPOI( ci->name, (float)health/100.0f, pos, cgs.media.friendShader );
+			CG_DrawTeammatePOI( ci->name, health, armor, pos );
 		}
 		return;
 	}
@@ -3234,7 +3288,7 @@ static void CG_DrawTeammatePOIs( void ) {
              !( cent->currentState.eFlags & EF_DEAD ) ) {
             VectorCopy( cent->lerpOrigin, pos );
             pos[2] += CG_TEAMMATE_POI_WORLD_Z_OFFSET;
-			CG_DrawPOI( ci->name, (float)ci->health/100.0f, pos, cgs.media.friendShader );
+			CG_DrawTeammatePOI( ci->name, ci->health, ci->armor, pos );
             continue;
         }
 
@@ -3262,7 +3316,7 @@ static void CG_DrawTeammatePOIs( void ) {
 
         pos[2] += CG_TEAMMATE_POI_WORLD_Z_OFFSET;
 
-		CG_DrawPOI( ci->name, (float)ci->health/100.0f, pos, cgs.media.friendShader );
+		CG_DrawTeammatePOI( ci->name, ci->health, ci->armor, pos );
     }
 }
 
@@ -3275,7 +3329,7 @@ Returns whether or not to draw item POIs.
 */
 static qboolean CG_ShouldDrawItemPOIs( void ) {
 
-	if ( cg_itemPOIs.integer < 1 ) { //
+	if ( cg_itemPOIs.integer < 1 ) {
 		return qfalse;
 	}
 
@@ -3292,7 +3346,7 @@ TODO: Sample multi pointi for the trace if g_itemVisibility is 0
 */
 static void CG_DrawItemPOIs( void ) {
 	int			i;
-	itemPos_t	*itemPos;
+	itemPos_t	*ip;
 	centity_t	*cent;
 	vec3_t		pos;
 
@@ -3303,15 +3357,11 @@ static void CG_DrawItemPOIs( void ) {
 	if ( cgs.g_itemVisibility ) {
 		// Iterate through all entities (up to MAX_GENTITIES)
 		for ( i = 0; i < MAX_GENTITIES; i++ ) {
-			itemPos = &cg_itemPositions[i]; 
-			if ( !itemPos->valid ) {
+			ip = &cg_itemPositions[i]; 
+			if ( !ip->valid ) {
 				continue;
 			}
-			//cent = &cg_entities[i];
-			//if ( !cent->currentValid ) {
-			//	continue;
-			//}
-			CG_DrawPOI( "itemPOI", 100.0f, itemPos->origin, cgs.media.friendShader );
+			CG_DrawPOI( "itemPOI", colorWhite, 100.0f, ip->origin, cgs.media.friendShader );
 		}
 		return;
 	}

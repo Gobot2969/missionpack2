@@ -149,6 +149,7 @@ void CG_ParseServerinfo( void ) {
 	cgs.winlimit = atoi( Info_ValueForKey( info, "winlimit" ) );
 #endif
 	cgs.g_teamVisibility = atoi( Info_ValueForKey( info, "g_teamVisibility" ) );
+	cgs.g_itemVisibility = atoi( Info_ValueForKey( info, "g_itemVisibility" ) );
 // END ~Dimmskii
 	cgs.timelimit = atoi( Info_ValueForKey( info, "timelimit" ) );
 	cgs.maxclients = atoi( Info_ValueForKey( info, "sv_maxclients" ) );
