@@ -36,6 +36,7 @@ G_CVAR( g_roundtime, "roundtime", "300", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_N
 #endif
 
 G_CVAR( g_teamVisibility, "g_teamVisibility", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )
+G_CVAR( g_itemVisibility, "g_itemVisibility", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )
 // END DIMMSKII
 
 G_CVAR( g_synchronousClients, "g_synchronousClients", "0", CVAR_SYSTEMINFO, 0, qfalse, qfalse )

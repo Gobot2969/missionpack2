@@ -373,6 +373,7 @@ typedef struct {
 
 	// ~DIMMSKII
 	int         lastTeamPositionTime;
+	int         lastItemPositionTime;
 	// END DIMMSKII
 
 	qboolean	newSession;				// don't use any old session data, because

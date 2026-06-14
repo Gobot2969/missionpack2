@@ -1242,7 +1242,7 @@ static void CG_ParseItemPositions( void ) {
 
     count = atoi( CG_Argv( 1 ) );
 
-    for ( i = 0; i < count && i < MAX_ITEMPOS; i++ ) {
+    for ( i = 0; i < count; i++ ) {
         id = atoi( CG_Argv( i * 5 + 2 ) );
 		cg_itemPositions[id].type = atoi( CG_Argv( i * 5 + 3 ) );
 		cg_itemPositions[id].timer = atoi( CG_Argv( i * 5 + 4 ) );

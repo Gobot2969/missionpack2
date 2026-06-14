@@ -1077,6 +1077,7 @@ typedef struct {
 	int				winlimit;
 #endif
 	int				g_teamVisibility;
+	int				g_itemVisibility;
 // END ~Dimmskii
 	int				timelimit;
 	int				maxclients;
@@ -1180,10 +1181,10 @@ typedef struct {
 } teammatePos_t;
 
 typedef struct {
-	int      type;
-	int      timer;
-    vec3_t      origin;
-    qboolean    valid;
+	itemPosType_t 	type;
+	int 			timer;
+    vec3_t 			origin;
+    qboolean 		valid;
 } itemPos_t;
 // END DIMMSKII
 
@@ -1199,7 +1200,7 @@ extern	int			cg_playback_follow;
 
 // ~DIMMSKII
 extern teammatePos_t cg_teammatePositions[MAX_CLIENTS];
-extern itemPos_t cg_itemPositions[MAX_ITEMPOS];
+extern itemPos_t cg_itemPositions[MAX_GENTITIES];
 // END DIMMSKII
 
 #define EXTERN_CG_CVAR

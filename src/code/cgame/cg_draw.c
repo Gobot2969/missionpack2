@@ -2679,6 +2679,10 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 			CG_DrawReward();
 		}
     
+		// ~DIMMSKII
+		CG_DrawItemPOIs();
+		// END DIMMSKII
+		
 		if ( cgs.gametype >= GT_TEAM ) {
 			// ~DIMMSKII
 			CG_DrawTeammatePOIs();
@@ -3065,12 +3069,12 @@ static qboolean CG_ShouldDrawPOINames(float sx, float sy) {
 
 /*
 =============
-CG_DrawTeammatePOI
+CG_DrawPOI
 
 Draws a single teammate POI marker at world position.
 =============
 */
-static void CG_DrawTeammatePOI( const char *name, int health, int armor, vec3_t worldPos ) {
+static void CG_DrawPOI( const char *text, float barVal, vec3_t worldPos, qhandle_t pic ) {
 	float sx, sy, dist, maxdist, w, hw, maxDist, wlabel, hlabel;
 	vec3_t delta;
 	vec4_t	color;
@@ -3095,11 +3099,11 @@ static void CG_DrawTeammatePOI( const char *name, int health, int armor, vec3_t 
 	hw = w/2.0f;
 
 	// Draw the marker pic
-	CG_DrawPic( sx - hw, sy - hw, w, w, cgs.media.friendShader );
+	CG_DrawPic( sx - hw, sy - hw, w, w, pic );
 
 	// Draw POI details (if needed)
 	if (CG_ShouldDrawPOINames(sx,sy)) {
-		wlabel = TINYCHAR_WIDTH * (float)CG_DrawStrlen(name);
+		wlabel = TINYCHAR_WIDTH * (float)CG_DrawStrlen(text);
 		hlabel = CG_TEAMMATE_POI_TEXT_MARGIN*2.0f + TINYCHAR_HEIGHT;
 		
 		// Draw background
@@ -3109,12 +3113,12 @@ static void CG_DrawTeammatePOI( const char *name, int health, int armor, vec3_t 
 		color[3] = (1.0f - dist / maxDist) * cg_poiTextBgAlpha.value;
 		CG_FillRect( sx-(wlabel/2.0f), sy-hw-hlabel, wlabel, hlabel, color );
 		
-		// Draw name str
+		// Draw str
 		color[0] = 1.0f;
-		color[1] = (float)health/100.0f;
-		color[2] = (float)health/100.0f;
+		color[1] = barVal;
+		color[2] = barVal;
 		color[3] = 1.0f - dist / maxDist;
-		CG_DrawString( sx, sy - hw - TINYCHAR_HEIGHT - CG_TEAMMATE_POI_TEXT_MARGIN, name, color,
+		CG_DrawString( sx, sy - hw - TINYCHAR_HEIGHT - CG_TEAMMATE_POI_TEXT_MARGIN, text, color,
 			TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0,
 			DS_CENTER | DS_SHADOW | DS_PROPORTIONAL | DS_FORCE_COLOR );
 	
@@ -3203,7 +3207,7 @@ static void CG_DrawTeammatePOIs( void ) {
 			pos[2] += CG_TEAMMATE_POI_WORLD_Z_OFFSET; // Add offset AFTER trace
 
 			// Draw the marker
-			CG_DrawTeammatePOI( ci->name, health, armor, pos );
+			CG_DrawPOI( ci->name, (float)health/100.0f, pos, cgs.media.friendShader );
 		}
 		return;
 	}
@@ -3230,7 +3234,7 @@ static void CG_DrawTeammatePOIs( void ) {
              !( cent->currentState.eFlags & EF_DEAD ) ) {
             VectorCopy( cent->lerpOrigin, pos );
             pos[2] += CG_TEAMMATE_POI_WORLD_Z_OFFSET;
-            CG_DrawTeammatePOI( ci->name, ci->health, ci->armor, pos );
+			CG_DrawPOI( ci->name, (float)ci->health/100.0f, pos, cgs.media.friendShader );
             continue;
         }
 
@@ -3258,7 +3262,7 @@ static void CG_DrawTeammatePOIs( void ) {
 
         pos[2] += CG_TEAMMATE_POI_WORLD_Z_OFFSET;
 
-        CG_DrawTeammatePOI( ci->name, ci->health, ci->armor, pos );
+		CG_DrawPOI( ci->name, (float)ci->health/100.0f, pos, cgs.media.friendShader );
     }
 }
 
@@ -3270,24 +3274,47 @@ Returns whether or not to draw item POIs.
 =============
 */
 static qboolean CG_ShouldDrawItemPOIs( void ) {
-	team_t	myTeam;
-	
-	// Must be on a valid team
-	myTeam = (team_t)cg.snap->ps.persistant[PERS_TEAM];
-	if ( myTeam != TEAM_RED && myTeam != TEAM_BLUE ) {
-		return qfalse;
-	}
-
-	// Don't show if player is dead
-	if ( cg.predictedPlayerState.stats[STAT_HEALTH] <= 0 ) {
-		return qfalse;
-	}
 
 	if ( cg_itemPOIs.integer < 1 ) { //
 		return qfalse;
 	}
 
 	return qtrue;
+}
+
+/*
+=============
+CG_DrawItemPOIs
+
+Draws teammate location POIs that are visible through walls.
+TODO: Sample multi pointi for the trace if g_itemVisibility is 0
+=============
+*/
+static void CG_DrawItemPOIs( void ) {
+	int			i;
+	itemPos_t	*itemPos;
+	centity_t	*cent;
+	vec3_t		pos;
+
+	if ( !CG_ShouldDrawItemPOIs() ) {
+		return;
+	}
+
+	if ( cgs.g_itemVisibility ) {
+		// Iterate through all entities (up to MAX_GENTITIES)
+		for ( i = 0; i < MAX_GENTITIES; i++ ) {
+			itemPos = &cg_itemPositions[i]; 
+			if ( !itemPos->valid ) {
+				continue;
+			}
+			//cent = &cg_entities[i];
+			//if ( !cent->currentValid ) {
+			//	continue;
+			//}
+			CG_DrawPOI( "itemPOI", 100.0f, itemPos->origin, cgs.media.friendShader );
+		}
+		return;
+	}
 }
 
 static void LerpPosition( const vec3_t from, const vec3_t to, float f, vec3_t out ) {
