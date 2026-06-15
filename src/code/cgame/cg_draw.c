@@ -3240,7 +3240,7 @@ static void CG_DrawTeammatePOIs( void ) {
                   CONTENTS_SOLID );     // only test against solid world geometry
 
 			// Check the trace result and skip occulted
-			if ( tr.fraction < 1.0f && tr.entityNum != cent->currentState.number ) {\
+			if ( tr.fraction < 1.0f && tr.entityNum != cent->currentState.number ) {
 				continue;
 			}
 
@@ -3390,6 +3390,33 @@ CG_DrawItemPOI( itemPos_t *ip ) {
 			// Set picColor to black because it's taken
 			color[0] = color[1] = color[2] = 0.0f;
 		} else {
+			trace_t		tr;
+//			centity_t *cent; // TODO: Add int entNum to the itemPos_t structure because we might want the cent eventually. Reverse iteration up to GENTITY_MAX lookup would be too slow for paint methods. We already have it in the message. Just store it upon receiving. ~Dimmskii
+
+			// Perform the trace from the viewer's eye to the origin of the pickup if it's not picked up
+        	CG_Trace( &tr,
+                  cg.refdef.vieworg,    // start: camera/eye position
+                  NULL,                 // mins (NULL for a ray, not a box)
+                  NULL,                 // maxs (NULL for a ray)
+                  ip->origin,       	// end: item's position
+                  cg.snap->ps.clientNum, // skip the local player entity
+                  CONTENTS_SOLID );     // only test against solid world geometry
+			
+			// Check the trace result and don't draw a POI at all if the trace reaches the existing pickup
+			if ( tr.fraction >= 1.0f ) {
+				return;
+			}
+
+/*
+			*cent = &cg_entities[ ip->entNum ];
+
+			if ( cent->currentValid && !(cent->currentState.eFlags & EF_NODRAW) ) {
+				// The item is physically spawned on the map and visible. 
+				// We don't need a POI icon right now.
+				return;
+			}
+*/
+
 			text = "";
 		}
 
