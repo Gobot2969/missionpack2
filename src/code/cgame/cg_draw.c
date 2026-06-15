@@ -3124,9 +3124,7 @@ static void CG_DrawPOI( const char *text, vec4_t textColor, float barVal, vec3_t
 		color[1] = picColor[1];
 		color[2] = picColor[2];
 		color[3] = picColor[3] * (1.0f - dist / maxDist);
-		trap_R_SetColor( color );
-		CG_DrawPic( sx - hw, sy - hw, w, w, pic );
-		trap_R_SetColor( NULL );
+		CG_DrawPicColor( sx - hw, sy - hw, w, w, pic, color );
 	}
 
 	// Draw POI details (if needed)
@@ -3337,12 +3335,14 @@ Draws a single item or objective POI
 */
 CG_DrawItemPOI( itemPos_t *ip ) {
 	qhandle_t pic;
+	vec4_t color;
+
+	memcpy(&color[0], &colorWhite[0], sizeof(vec4_t));
 
 	if (ip->type < ITEMPOS_POWERUP_MAX) {
 		// POWERUPS POIS
 
 		char	*text;
-
 		switch (ip->type) {
 			case ITEMPOS_ARMOR_BODY:
 				pic = CG_GetPickupIconByClassname("item_armor_body");
@@ -3377,17 +3377,26 @@ CG_DrawItemPOI( itemPos_t *ip ) {
 		}
 
 		if (ip->timer > 0) {
-			char num[16];
-			Com_sprintf (num, sizeof(num), "%i", ip->timer);
-			text = num;
+			// Convert total milliseconds to total seconds
+			int totalSeconds = ip->timer / 1000;
+
+			// Calculate individual minute and second components
+			int minutes = totalSeconds / 60;
+			int seconds = totalSeconds % 60;
+
+			// Set the text
+			text = va( "%02i:%02i", minutes, seconds );
+
+			// Set picColor to black because it's taken
+			color[0] = color[1] = color[2] = 0.0f;
 		} else {
 			text = "";
 		}
 
-		CG_DrawPOI( ( (cg_teammateNames.integer > 1) || (CG_IsTargetedPOI(ip->origin)&&cg_teammateNames.integer>0) ) ? text : NULL, colorWhite, 1.0f, ip->origin, pic, 24, 24, colorWhite );
+		CG_DrawPOI( ( (cg_teammateNames.integer > 1) || (CG_IsTargetedPOI(ip->origin)&&cg_teammateNames.integer>0) ) ? text : NULL, colorWhite, 1.0f, ip->origin, pic, 24, 24, color );
 	} else {
 		// OBJECTIVE POIS
-		CG_DrawPOI( ( (cg_teammateNames.integer > 1) || (CG_IsTargetedPOI(ip->origin)&&cg_teammateNames.integer>0) ) ? "Objective" : NULL, colorWhite, 1.0f, ip->origin, cgs.media.waterBubbleShader, 24, 24, colorWhite );
+		CG_DrawPOI( ( (cg_teammateNames.integer > 1) || (CG_IsTargetedPOI(ip->origin)&&cg_teammateNames.integer>0) ) ? "Objective" : NULL, colorWhite, 1.0f, ip->origin, cgs.media.waterBubbleShader, 24, 24, color );
 	}
 }
 
@@ -3463,6 +3472,21 @@ static qhandle_t CG_GetPickupIconByClassname( const char *classname ) {
 
 	// Return 0 (no shader) if the classname wasn't found in bg_misc.c
 	return 0;
+}
+
+/*
+=============
+CG_DrawPicColor
+
+Coordinates are 640*480 virtual values
+TODO: move this to like cg_drawtools or something
+=============
+*/
+static void CG_DrawPicColor( float x, float y, float width, float height, qhandle_t hShader, vec4_t color ) {
+	CG_AdjustFrom640( &x, &y, &width, &height );
+	trap_R_SetColor( color );
+	trap_R_DrawStretchPic( x, y, width, height, 0, 0, 1, 1, hShader );
+	trap_R_SetColor( NULL );
 }
 
 // ~END DIMMSKII
