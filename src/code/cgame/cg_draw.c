@@ -2969,7 +2969,7 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 
 #define CG_TEAMMATE_POI_ICON_SIZE  8.0f
 #define CG_TEAMMATE_POI_ICON_SIZE_MAX  12.0f
-#define CG_TEAMMATE_POI_HIDE_NAMES 0.35f;		// Float. Percentage of screen width as margin to hide player name 
+#define CG_TEAMMATE_POI_TEXT_FOV_FRAC 0.4f		// Float. Percentage of screen fov outside which to hide POI texts
 #define CG_TEAMMATE_POI_TEXT_MARGIN  2.0f
 #define CG_TEAMMATE_POI_WORLD_Z_OFFSET  48.0f	// TODO: we have usable defines somewhere like view height
 
@@ -3051,11 +3051,9 @@ Returns true if the worldPos vector falls within the specified arc angle
 and distance threshold relative to the player's view.
 =============
 */
-static qboolean CG_IsTargetedPOI( vec3_t worldPos, float arcDegThreshold /*, float maxDistance*/ ) {
+static qboolean CG_IsTargetedPOI( vec3_t worldPos/*, float maxDistance*/ ) {
 	vec3_t	toTarget;
-	float	distance;
-	float	dot;
-	float	cosThreshold;
+	float	distance, dot, cosThreshold, arcDegThreshold;
 
 	// 1. Calculate the vector from the player's eyes to the target
 	VectorSubtract( worldPos, cg.refdef.vieworg, toTarget );
@@ -3072,7 +3070,10 @@ static qboolean CG_IsTargetedPOI( vec3_t worldPos, float arcDegThreshold /*, flo
 	// cg.refdef.viewaxis[0] is the normalized forward vector
 	dot = DotProduct( cg.refdef.viewaxis[0], toTarget );
 
-	// 5. Convert arc degree threshold to a cosine value
+	// 5. Calculate arc deg value
+	arcDegThreshold = (cg.refdef.fov_x + cg.refdef.fov_y) * 0.5f * CG_TEAMMATE_POI_TEXT_FOV_FRAC; // Average of both axes' FOVs times some fraction you don't want to see it. Works while zoomed as well.
+
+	// 6. Convert arc degree threshold to a cosine value
 	// We divide by 2 because the total cone arc spans both left and right of the crosshair
 	cosThreshold = cos( DEG2RAD( arcDegThreshold * 0.5f ) );
 
@@ -3084,22 +3085,6 @@ static qboolean CG_IsTargetedPOI( vec3_t worldPos, float arcDegThreshold /*, flo
 	return qfalse;
 }
 
-/*
-The cheap version kept for reference
-*/
-static qboolean CG_IsTargetedPOI_2D( float sx, float sy) {
-	float hideMarginX/*, hideMarginY*/;
-
-	// Don't draw the verbose stuff unless closer to middle of screen
-	hideMarginX = (cgs.screenXmax - cgs.screenXmin) * CG_TEAMMATE_POI_HIDE_NAMES;
-	//hideMarginY = (cgs.screenYmax - cgs.screenYmin) * CG_TEAMMATE_POI_HIDE_NAMES;
-	if (sx < cgs.screenXmin + hideMarginX || sx > cgs.screenXmax - hideMarginX /*|| sy < cgs.screenYmin + hideMarginY || sy > cgs.screenYmax - hideMarginY */) {
-		return qfalse;
-	}
-
-	return qtrue;
-}
-
 
 /*
 =============
@@ -3109,7 +3094,7 @@ General combined function for usage by CG_DrawTeammatePOI and CG_DrawItemPOI.
 Does the actual POI drawing.
 =============
 */
-static void CG_DrawPOI( const char *text, vec4_t textColor, float barVal, vec3_t worldPos, qhandle_t pic ) {
+static void CG_DrawPOI( const char *text, vec4_t textColor, float barVal, vec3_t worldPos, qhandle_t pic, float picSize, float picSizeMax, vec4_t picColor) {
 	float sx, sy, dist, maxdist, w, hw, maxDist, wlabel, hlabel;
 	vec3_t delta;
 	vec4_t	color;
@@ -3127,14 +3112,22 @@ static void CG_DrawPOI( const char *text, vec4_t textColor, float barVal, vec3_t
 	
 	//VectorSubtract(worldPos, cg.refdef.vieworg, delta);
 	//dist = VectorLength(delta);
-	w = cg_teammatePOIsIconSize.value * 640.0f / dist;
-	if (w > cg_teammatePOIsIconMaxSize.value) {
-		w = cg_teammatePOIsIconMaxSize.value;
+	w = picSize * 640.0f / dist;
+	if (w > picSizeMax) {
+		w = picSizeMax;
 	}
 	hw = w/2.0f;
 
 	// Draw the marker pic
-	CG_DrawPic( sx - hw, sy - hw, w, w, pic );
+	if (pic) {
+		color[0] = picColor[0];
+		color[1] = picColor[1];
+		color[2] = picColor[2];
+		color[3] = picColor[3] * (1.0f - dist / maxDist);
+		trap_R_SetColor( color );
+		CG_DrawPic( sx - hw, sy - hw, w, w, pic );
+		trap_R_SetColor( NULL );
+	}
 
 	// Draw POI details (if needed)
 	if (text) {
@@ -3169,14 +3162,13 @@ Draws a single teammate POI marker at world position.
 */
 CG_DrawTeammatePOI( const char *name, int health, int armor, vec3_t worldPos ) {
 	vec4_t	nameColor;
-	float arcDegs = (cg.refdef.fov_x + cg.refdef.fov_y) * 0.2f; // Average of both axes' FOVs times some fraction you don't want to see it. Works while zoomed as well.
 	
 	// nameColor based on HP. FIXME: do it better
 	nameColor[0] = 1.0f;
 	nameColor[1] = nameColor[2] = (float)health/100.0f;
 	nameColor[3] = 1.0f;
 
-	CG_DrawPOI( ( (cg_teammateNames.integer > 1) || (CG_IsTargetedPOI(worldPos, arcDegs )&&cg_teammateNames.integer>0) ) ? name : NULL, nameColor, (float)health/100.0f, worldPos, cgs.media.friendShader );
+	CG_DrawPOI( ( (cg_teammateNames.integer > 1) || (CG_IsTargetedPOI(worldPos)&&cg_teammateNames.integer>0) ) ? name : NULL, nameColor, (float)health/100.0f, worldPos, cgs.media.friendShader, cg_teammatePOIsIconSize.value, cg_teammatePOIsIconMaxSize.value, colorWhite );
 }
 
 /*
@@ -3338,10 +3330,72 @@ static qboolean CG_ShouldDrawItemPOIs( void ) {
 
 /*
 =============
+CG_DrawItemPOI
+
+Draws a single item or objective POI
+=============
+*/
+CG_DrawItemPOI( itemPos_t *ip ) {
+	qhandle_t pic;
+
+	if (ip->type < ITEMPOS_POWERUP_MAX) {
+		// POWERUPS POIS
+
+		char	*text;
+
+		switch (ip->type) {
+			case ITEMPOS_ARMOR_BODY:
+				pic = CG_GetPickupIconByClassname("item_armor_body");
+				break;
+			case ITEMPOS_HEALTH_MEGA:
+				pic = CG_GetPickupIconByClassname("item_health_mega");
+				break;
+			case ITEMPOS_TELEPORTER:
+				pic = CG_GetPickupIconByClassname("holdable_teleporter");
+				break;
+			case ITEMPOS_MEDKIT:
+				pic = CG_GetPickupIconByClassname("holdable_medkit");
+				break;
+			case ITEMPOS_QUAD:
+				pic = CG_GetPickupIconByClassname("item_quad");
+				break;
+			case ITEMPOS_BATTLESUIT:
+				pic = CG_GetPickupIconByClassname("item_enviro");
+				break;
+			case ITEMPOS_HASTE:
+				pic = CG_GetPickupIconByClassname("item_haste");
+				break;
+			case ITEMPOS_INVIS:
+				pic = CG_GetPickupIconByClassname("item_invis");
+				break;
+			case ITEMPOS_REGEN:
+				pic = CG_GetPickupIconByClassname("item_regen");
+				break;
+			case ITEMPOS_FLIGHT:
+				pic = CG_GetPickupIconByClassname("item_flight");
+				break;
+		}
+
+		if (ip->timer > 0) {
+			char num[16];
+			Com_sprintf (num, sizeof(num), "%i", ip->timer);
+			text = num;
+		} else {
+			text = "";
+		}
+
+		CG_DrawPOI( ( (cg_teammateNames.integer > 1) || (CG_IsTargetedPOI(ip->origin)&&cg_teammateNames.integer>0) ) ? text : NULL, colorWhite, 1.0f, ip->origin, pic, 24, 24, colorWhite );
+	} else {
+		// OBJECTIVE POIS
+		CG_DrawPOI( ( (cg_teammateNames.integer > 1) || (CG_IsTargetedPOI(ip->origin)&&cg_teammateNames.integer>0) ) ? "Objective" : NULL, colorWhite, 1.0f, ip->origin, cgs.media.waterBubbleShader, 24, 24, colorWhite );
+	}
+}
+
+/*
+=============
 CG_DrawItemPOIs
 
-Draws teammate location POIs that are visible through walls.
-TODO: Sample multi pointi for the trace if g_itemVisibility is 0
+Draws item and objective POIs that are visible through walls.
 =============
 */
 static void CG_DrawItemPOIs( void ) {
@@ -3361,16 +3415,54 @@ static void CG_DrawItemPOIs( void ) {
 			if ( !ip->valid ) {
 				continue;
 			}
-			CG_DrawPOI( "itemPOI", colorWhite, 100.0f, ip->origin, cgs.media.friendShader );
+			CG_DrawItemPOI( ip );
 		}
 		return;
 	}
 }
 
+/*
+=============
+LerpPosition
+
+Interpolation util method.
+=============
+*/
 static void LerpPosition( const vec3_t from, const vec3_t to, float f, vec3_t out ) {
     out[0] = from[0] + f * ( to[0] - from[0] );
     out[1] = from[1] + f * ( to[1] - from[1] );
     out[2] = from[2] + f * ( to[2] - from[2] );
+}
+
+/*
+=============
+CG_GetPickupIconByClassname
+
+Returns the 2D icon qhandle_t matching a specific classname string.
+=============
+*/
+static qhandle_t CG_GetPickupIconByClassname( const char *classname ) {
+	int i;
+
+	// 1. Safety check for null or empty strings
+	if ( !classname || !classname[0] ) {
+		return 0;
+	}
+
+	// 2. Loop through all registered items starting at index 1
+	// Index 0 in bg_itemlist is always the null item descriptor
+	for ( i = 1; i < bg_numItems; i++ ) {
+		
+		// 3. Compare the item's classname with your target string (case-insensitive)
+		if ( Q_stricmp( bg_itemlist[i].classname, classname ) == 0 ) {
+			
+			// 4. Return the pre-cached client asset handle if found
+			return cg_items[i].icon;
+		}
+	}
+
+	// Return 0 (no shader) if the classname wasn't found in bg_misc.c
+	return 0;
 }
 
 // ~END DIMMSKII

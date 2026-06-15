@@ -2491,72 +2491,6 @@ static int ItemPos_GetType(gentity_t *ent) {
     return -1;  // unknown item type
 }
 
-static void ItemPositionMessage(gentity_t *ent) {
-    char        entry[64];
-    char        string[MAX_STRING_CHARS - 12];
-    int         stringlength;
-    int         i, j, cnt;
-    gentity_t   *item;
-    int         itemType;
-
-    string[0] = '\0';
-    stringlength = 0;
-    cnt = 0;
-
-    // Iterate through all entities looking for items matching tracked types
-    for (i = 0; i < level.num_entities; i++) {
-        item = &g_entities[i];
-
-        if (!item->inuse)
-            continue;
-
-        // Get the item type (returns -1 if not a tracked item)
-        itemType = ItemPos_GetType(item);
-        if (itemType < 0)
-            continue;
-
-        // Optional: filter by team or visibility settings
-        // if (!g_itemVisibility.integer)
-        //     continue;
-
-        // Format: id type timer x y z
-        j = BG_sprintf(entry, " %i %i %i %i %i %i",
-            i,                          // entity index as persistent ID
-            itemType,                   // item type constant
-            item->nextthink - level.time,  // time remaining (if applicable)
-            (int)item->r.currentOrigin[0],
-            (int)item->r.currentOrigin[1],
-            (int)item->r.currentOrigin[2]);
-
-        if (stringlength + j >= sizeof(string))
-            break;
-
-        strcpy(string + stringlength, entry);
-        stringlength += j;
-        cnt++;
-    }
-
-    trap_SendServerCommand(ent - g_entities, va("ipos %i%s", cnt, string));
-}
-
-// mega powerup and team objectives position relay
-/*
-static void CheckItemPositions( void ) {
-    if (g_itemVisibility.integer) {
-        if (level.time - level.lastItemPositionTime > ITEM_POSITION_UPDATE_TIME) {
-			gentity_t *ent;
-            level.lastItemPositionTime = level.time;
-            for (i = 0; i < level.maxclients; i++) {
-                ent = g_entities + i;
-                if (ent->client->pers.connected != CON_CONNECTED)
-                    continue;
-                // Send to all clients or just team members
-                ItemPositionMessage(ent);
-            }
-        }
-    }
-}
-*/
 void CheckItemPositions( void ) {
     int i, cnt;
     char entry[64], string[MAX_STRING_CHARS - 12];
@@ -2582,6 +2516,11 @@ void CheckItemPositions( void ) {
         
         if ( !item->inuse || !item->classname )
             continue;
+
+		// Filter out dropped items
+        if ( item->flags & FL_DROPPED_ITEM ) {
+            continue;
+		}
         
         itemType = ItemPos_GetType( item );
         if ( itemType < 0 )
