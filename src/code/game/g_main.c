@@ -2405,12 +2405,17 @@ static void G_RunFrame( int levelTime ) {
 	if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
 		// see if Clan arena is
 		Arena_CheckRules();
+	} else {
+// TODO: Factory-ize the following code when gt enum Arena/CA alone will no longer prevent items from spawning.
+		// update the marker messages
+		CheckItemPositions();
 	}
-#endif
+#else
 
 	// update the marker messages
 	CheckItemPositions();
 	
+#endif
 	// End Dimmskii
 
 	// see if it is time to end the level
