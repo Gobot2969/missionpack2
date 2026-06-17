@@ -824,3 +824,156 @@ gfx/2d/cursor
         map gfx/2d/cursor.tga
     }
 }
+
+
+//
+// POIs - Items
+//
+
+pois/items/redarmor
+{
+	nopicmip
+	{
+		map icons/iconr_red.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen vertex
+	}
+}
+
+pois/items/mega
+{
+	nopicmip
+	{
+		icons/iconh_mega.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen vertex
+	}
+}
+
+
+pois/items/teleporter
+{
+	nopicmip
+	{
+		map icons/teleporter.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen vertex
+	}
+}
+
+
+pois/items/medkit
+{
+	nopicmip
+	{
+		map icons/medkit.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen vertex
+	}
+}
+
+
+pois/items/quad
+{
+	nopicmip
+	{
+		map icons/quad.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen vertex
+	}
+}
+
+
+pois/items/envirosuit
+{
+	nopicmip
+	{
+		map icons/envirosuit.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen vertex
+	}
+}
+
+
+pois/items/haste
+{
+	nopicmip
+	{
+		map icons/haste.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen vertex
+	}
+}
+
+
+pois/items/invis
+{
+	nopicmip
+	{
+		map icons/invis.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen vertex
+	}
+}
+
+
+pois/items/regen
+{
+	nopicmip
+	{
+		map icons/regen.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen vertex
+	}
+}
+
+
+pois/items/flight
+{
+	nopicmip
+	{
+		map icons/flight.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen vertex
+	}
+}
+
+
+pois/items/kamikaze
+{
+	nopicmip
+	{
+		map icons/kamikaze.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen vertex
+	}
+}
+
+
+pois/items/portal
+{
+	nopicmip
+	{
+		map icons/portal.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen vertex
+	}
+}
+
+
+pois/items/invuln
+{
+	nopicmip
+	{
+		map icons/invulnerability.tga
+		blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
+		rgbGen vertex
+	}
+}
+
+
+
+
+
+
+

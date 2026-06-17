@@ -2462,9 +2462,9 @@ static const itemPositionType_t itemPositionTypes[] = {
     // Holdable items
     { "holdable_teleporter",    ITEMPOS_TELEPORTER },
     { "holdable_medkit",        ITEMPOS_MEDKIT },
-	// { "holdable_kamikaze",      ITEMPOS_KAMIKAZE },
-    // { "holdable_portal",        ITEMPOS_PORTAL },
-    // { "holdable_invulnerability", ITEMPOS_INVULNERABILITY },
+    { "holdable_kamikaze",      ITEMPOS_KAMIKAZE },
+    { "holdable_portal",        ITEMPOS_PORTAL },
+    { "holdable_invulnerability", ITEMPOS_INVULNERABILITY },
     
     // Powerup items (instant)
     { "item_quad",              ITEMPOS_QUAD },

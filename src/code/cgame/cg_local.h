@@ -870,9 +870,13 @@ typedef struct {
 	qhandle_t	medalAssist;
 	qhandle_t	medalCapture;
 	qhandle_t	medalVictory;
+
+// ~Dimmskii
 #ifdef MISSIONPACK2
 	qhandle_t	medalArena;
 #endif
+	qhandle_t	poiPics[ITEMPOS_POWERUP_MAX];
+// End Dimmskii
 
 	// sounds
 	sfxHandle_t	quadSound;

@@ -3097,7 +3097,7 @@ Does the actual POI drawing.
 static void CG_DrawPOI( const char *text, vec4_t textColor, float barVal, vec3_t worldPos, qhandle_t pic, float picSize, float picSizeMax, vec4_t picColor) {
 	float sx, sy, dist, maxdist, w, hw, maxDist, wlabel, hlabel;
 	vec3_t delta;
-	vec4_t	color;
+	vec4_t	drawColor;
 
 	if ( !CG_WorldToScreen( worldPos, &sx, &sy, &dist ) ) {
 		return;
@@ -3120,11 +3120,11 @@ static void CG_DrawPOI( const char *text, vec4_t textColor, float barVal, vec3_t
 
 	// Draw the marker pic
 	if (pic) {
-		color[0] = picColor[0];
-		color[1] = picColor[1];
-		color[2] = picColor[2];
-		color[3] = picColor[3] * (1.0f - dist / maxDist);
-		CG_DrawPicColor( sx - hw, sy - hw, w, w, pic, color );
+		drawColor[0] = picColor[0];
+		drawColor[1] = picColor[1];
+		drawColor[2] = picColor[2];
+		drawColor[3] = picColor[3] * (1.0f - dist / maxDist);
+		CG_DrawPicColor( sx - hw, sy - hw, w, w, pic, drawColor );
 	}
 
 	// Draw POI details (if needed)
@@ -3133,18 +3133,18 @@ static void CG_DrawPOI( const char *text, vec4_t textColor, float barVal, vec3_t
 		hlabel = CG_TEAMMATE_POI_TEXT_MARGIN*2.0f + TINYCHAR_HEIGHT;
 		
 		// Draw background
-		color[0] = 0.0f;
-		color[1] = 0.0f;
-		color[2] = 0.0f;
-		color[3] = (1.0f - dist / maxDist) * cg_poiTextBgAlpha.value;
-		CG_FillRect( sx-(wlabel/2.0f), sy-hw-hlabel, wlabel, hlabel, color );
+		drawColor[0] = 0.0f;
+		drawColor[1] = 0.0f;
+		drawColor[2] = 0.0f;
+		drawColor[3] = (1.0f - dist / maxDist) * cg_poiTextBgAlpha.value;
+		CG_FillRect( sx-(wlabel/2.0f), sy-hw-hlabel, wlabel, hlabel, drawColor );
 		
 		// Draw str
-		color[0] = textColor[0];
-		color[1] = textColor[1];
-		color[2] = textColor[2];
-		color[3] = textColor[3] * (1.0f - dist / maxDist);
-		CG_DrawString( sx, sy - hw - TINYCHAR_HEIGHT - CG_TEAMMATE_POI_TEXT_MARGIN, text, color,
+		drawColor[0] = textColor[0];
+		drawColor[1] = textColor[1];
+		drawColor[2] = textColor[2];
+		drawColor[3] = textColor[3] * (1.0f - dist / maxDist);
+		CG_DrawString( sx, sy - hw - TINYCHAR_HEIGHT - CG_TEAMMATE_POI_TEXT_MARGIN, text, drawColor,
 			TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0,
 			DS_CENTER | DS_SHADOW | DS_PROPORTIONAL | DS_FORCE_COLOR );
 	
@@ -3337,13 +3337,11 @@ CG_DrawItemPOI( itemPos_t *ip ) {
 	qhandle_t pic;
 	vec4_t color;
 
-	memcpy(&color[0], &colorWhite[0], sizeof(vec4_t));
-
 	if (ip->type < ITEMPOS_POWERUP_MAX) {
 		// POWERUPS POIS
 
 		char	*text;
-		switch (ip->type) {
+/*		switch (ip->type) {
 			case ITEMPOS_ARMOR_BODY:
 				pic = CG_GetPickupIconByClassname("item_armor_body");
 				break;
@@ -3374,7 +3372,8 @@ CG_DrawItemPOI( itemPos_t *ip ) {
 			case ITEMPOS_FLIGHT:
 				pic = CG_GetPickupIconByClassname("item_flight");
 				break;
-		}
+		}*/
+		pic = cgs.media.poiPics[ip->type];
 
 		if (ip->timer > 0) {
 			// Convert total milliseconds to total seconds
@@ -3384,11 +3383,12 @@ CG_DrawItemPOI( itemPos_t *ip ) {
 			int minutes = totalSeconds / 60;
 			int seconds = totalSeconds % 60;
 
-			// Set the text
+			// Set the text to timer
 			text = va( "%02i:%02i", minutes, seconds );
 
-			// Set picColor to black because it's taken
-			color[0] = color[1] = color[2] = 0.0f;
+			// Set picColor to dark grey because it's taken
+			color[0] = color[1] = color[2] = 0.0f;  // R,G,B to zero
+			color[3] = 0.8f;  // Slightly less alpha to start with
 		} else {
 			trace_t		tr;
 //			centity_t *cent; // TODO: Add int entNum to the itemPos_t structure because we might want the cent eventually. Reverse iteration up to GENTITY_MAX lookup would be too slow for paint methods. We already have it in the message. Just store it upon receiving. ~Dimmskii
@@ -3417,12 +3417,17 @@ CG_DrawItemPOI( itemPos_t *ip ) {
 			}
 */
 
+			// No timer text because powerup is available
 			text = "";
+
+			// Set color to white because the powerup is available
+			memcpy(&color[0], &colorWhite[0], sizeof(vec4_t));
 		}
 
 		CG_DrawPOI( ( (cg_teammateNames.integer > 1) || (CG_IsTargetedPOI(ip->origin)&&cg_teammateNames.integer>0) ) ? text : NULL, colorWhite, 1.0f, ip->origin, pic, 24, 24, color );
 	} else {
 		// OBJECTIVE POIS
+		
 		CG_DrawPOI( ( (cg_teammateNames.integer > 1) || (CG_IsTargetedPOI(ip->origin)&&cg_teammateNames.integer>0) ) ? "Objective" : NULL, colorWhite, 1.0f, ip->origin, cgs.media.waterBubbleShader, 24, 24, color );
 	}
 }
