@@ -22,7 +22,7 @@ General config improvements upon vanilla Q3/TA:
 
 ---
 
-## 2. Team/Item Markers
+## 2. Team/Item Markers and Timers
 
 These variables control the global behavior and rendering constraints for all overhead Point of Interest indicators:
 
@@ -30,8 +30,8 @@ These variables control the global behavior and rendering constraints for all ov
 | --- | --- | --- |
 | `cg_drawFriend` | `1` | `0`=Vanilla off behavior `1`=Vanilla indicators `2`=QL-styled always visibile 'POIs' |
 | --- | --- | --- |
-| `cg_poiTextBgAlpha` | `0.3` | Adjusts the background transparency of text elements attached to POI indicators. |
-| `cg_poiMaxDist` | `4000` | Sets the maximum distance in game units at which POIs remain visible on the screen. |
+| `cg_poiTextBgAlpha` | `0.3` | Adjusts the background transparency of text elements attached to POI indicators. This includes the timer text above item POIs. |
+| `cg_poiMaxDist` | `4000` | Sets the maximum distance in game units at which POIs remain visible on the screen. A linear alpha fade is applied between zero distance and max. |
 | --- | --- | --- |
 | `cg_teammatePOIs` | `1` | Quake Live compatibility flag. Read-only tracker automatically driven by the engine state (`cg_drawFriend > 1`). |
 | `cg_teammateNames` | `1` | Controls visibility behavior for player names:<br>• `0`: Off<br>• `1`: Targeted (only when looking toward them)<br>• `2`: Always on.<br>*Requires `cg_drawFriend 2`.* |
