@@ -30,6 +30,7 @@ These variables adjust general server settings.
 | Variable | Default | Description |
 | --- | --- | --- |
 | `g_unlagged` | `1` | Enables unlagged code. `0` = Off `1` = On 
+| `g_instagib` | `0` | Enables instagib in any gamemode. `0` = Off `1` = On 
 | `g_teamVisibility` | `1` | Whether or not server allows teammates to see eachothers' positions globally. `0` = Vanilla behavior; don't send any new messages; players with cg_drawFriend < 2 will raycast to hide known within PVS. `1` = Send 'tpos' message in team games, allowing allies to see eachother. |
 | `g_itemVisibility` | `1` | Whether or not server allows players in match to receive item positions, respawn timers, etc. `0` = Vanilla behavior; don't send any new messages; nobody is allowed to see item positions and timers. `1` = Send 'ipos' message with item locations and stats, such as respawn times. |
 | `g_allSpec` | `0` | Whether or not dead players in round-based gamemodes can spectate everybody. `0` = Default team-only dead spectators. `1` = Dead players can spectate everybody, including enemies. |
@@ -79,6 +80,8 @@ For variables containing a wildcard symbol (*X*), swap the token out for one of 
 | `g_grappleSpeed` | `1600` | Grapple deploy speed in U/s |
 | `g_grapplePull` | `800` | Grapple pull speed in U/s. |
 | `g_grappleDamage` | `2` | Grapple damage amount (`0` to disable damage). |
+| `g_railJump` | `0` | Enables rail jump (`1` = On, `0` = Off). |
+| `g_railJumpDamage` | `100` | Damage if for rail jump (if enabled) |
 
 ---
 
