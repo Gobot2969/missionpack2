@@ -27,6 +27,7 @@ General config improvements upon vanilla Q3/TA:
 These variables control the global behavior and rendering constraints for all overhead Point of Interest indicators:
 
 | Variable | Default | Description |
+| --- | --- | --- |
 | `cg_drawFriend` | `1` | `0`=Vanilla off behavior `1`=Vanilla indicators `2`=QL-styled always visibile 'POIs' |
 | --- | --- | --- |
 | `cg_poiTextBgAlpha` | `0.3` | Adjusts the background transparency of text elements attached to POI indicators. |
