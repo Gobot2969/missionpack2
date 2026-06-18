@@ -841,6 +841,11 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 	CG_PredictPlayerState();
 
 	// decide on third person view
+	
+	// ~Dimmskii
+	// QL cg compat cvar to reflect whether or not cg_drawFriend is set to 2 -- the equivalent of setting cg_teammatePOIs to 1 in QL
+	trap_Cvar_Set("cg_teammatePOIs", va("%i", cg_drawFriend.integer > 1 ? 1 : 0));
+
 	#ifdef MISSIONPACK2
 	// dead arena players following someone should not force third person
 	if ( ( cgs.gametype == GT_ARENA || cgs.gametype == GT_TEAMARENA )
@@ -849,6 +854,8 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 		cg.renderingThirdPerson = cg_thirdPerson.integer;
 	} else
 	#endif
+	// END Dimmskii
+
 	cg.renderingThirdPerson = cg_thirdPerson.integer || (cg.snap->ps.stats[STAT_HEALTH] <= 0);
 
 	CG_TrackClientTeamChange();

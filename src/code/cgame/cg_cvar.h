@@ -141,6 +141,7 @@ CG_CVAR( cg_teammateNames, "cg_teammateNames", "1", CVAR_ARCHIVE ) // 0=Off 1=Ta
 CG_CVAR( cg_teammatePOIsIconSize, "cg_teammatePOIsIconSize", "8", CVAR_ARCHIVE ) // No effect unless cg_drawFriend is 2
 CG_CVAR( cg_teammatePOIsIconMaxSize, "cg_teammatePOIsIconMaxSize", "12", CVAR_ARCHIVE ) // No effect unless cg_drawFriend is 2
 CG_CVAR( cg_teammatePOIsDist, "cg_teammatePOIsDist", "4000", CVAR_ARCHIVE ) // No effect unless cg_drawFriend is 2
+CG_CVAR( cg_teammatePOIs, "cg_teammatePOIs", "1", CVAR_ROM ) // Read-only QL compat CG cvar cg_teammatePOIs = (cg_drawFriend.int>1)
 
 // Item POIs
 CG_CVAR( cg_itemPOIs, "cg_itemPOIs", "1", CVAR_ARCHIVE )
