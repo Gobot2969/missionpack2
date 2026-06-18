@@ -2460,10 +2460,10 @@ static const itemPositionType_t itemPositionTypes[] = {
     { "item_health_mega",       ITEMPOS_HEALTH_MEGA },
     
     // Holdable items
-    { "holdable_teleporter",    ITEMPOS_TELEPORTER },
-    { "holdable_medkit",        ITEMPOS_MEDKIT },
-    { "holdable_kamikaze",      ITEMPOS_KAMIKAZE },
-    { "holdable_portal",        ITEMPOS_PORTAL },
+    { "holdable_teleporter",      ITEMPOS_TELEPORTER },
+    { "holdable_medkit",          ITEMPOS_MEDKIT },
+    { "holdable_kamikaze",        ITEMPOS_KAMIKAZE },
+    { "holdable_portal",          ITEMPOS_PORTAL },
     { "holdable_invulnerability", ITEMPOS_INVULNERABILITY },
     
     // Powerup items (instant)
@@ -2473,15 +2473,17 @@ static const itemPositionType_t itemPositionTypes[] = {
     { "item_invis",             ITEMPOS_INVIS },
     { "item_regen",             ITEMPOS_REGEN },
     { "item_flight",            ITEMPOS_FLIGHT },
-    
-    // Objective/team items
-    { "team_CTF_redflag",       ITEMPOS_FLAG },   // red flag is attacking team's objective
-    { "team_CTF_blueflag",      ITEMPOS_FLAG },   // blue flag is defending team's objective
-    { "team_CTF_neutralflag",   ITEMPOS_FLAG },   // neutral flag (can vary by context)
+
+	// TA Persistent Powerups
     // { "item_scout",             ITEMPOS_SCOUT },
     // { "item_guard",             ITEMPOS_GUARD },
     // { "item_doubler",           ITEMPOS_DOUBLER },
     // { "item_ammoregen",         ITEMPOS_AMMOREGEN },
+    
+    // Objective/team items
+    { "team_CTF_redflag",       ITEMPOS_REDFLAG },   // red flag
+    { "team_CTF_blueflag",      ITEMPOS_BLUEFLAG },   // blue flag
+    { "team_CTF_neutralflag",   ITEMPOS_NEUTRALFLAG },   // neutral flag 
     
     { NULL, -1 }  // sentinel
 };
@@ -2497,7 +2499,7 @@ static int ItemPos_GetType(gentity_t *ent) {
 }
 
 void CheckItemPositions( void ) {
-    int i, cnt;
+    int i, cnt, timer;
     char entry[64], string[MAX_STRING_CHARS - 12];
     int stringlength = 0;
     gentity_t *item;
@@ -2519,21 +2521,35 @@ void CheckItemPositions( void ) {
 
         item = &g_entities[i];
         
-        if ( !item->inuse || !item->classname )
+		// Filter out things that aren't classy enough
+        if ( !item->inuse || !item->classname ) {
             continue;
+		}
 
 		// Filter out dropped items
         if ( item->flags & FL_DROPPED_ITEM ) {
             continue;
 		}
         
+		// Filter out invalid itempos
         itemType = ItemPos_GetType( item );
-        if ( itemType < 0 )
+        if ( itemType < 0 ) {
             continue;
+		}
         
+		// Timer calculation
+		if (itemType < ITEMPOS_POWERUP_MAX) {
+			timer = item->nextthink > level.time ? item->nextthink - level.time : 0;
+		} else if (itemType == ITEMPOS_REDFLAG || itemType == ITEMPOS_BLUEFLAG || itemType == ITEMPOS_NEUTRALFLAG) {
+			// item->s.frame == 1 indicates the flag is taken/carried by a player TODO: revise this
+            timer = (item->s.frame == 1) ? 1 : 0;
+		} else {
+			timer = 0; // ??
+		}
+		
         j = BG_sprintf( entry, " %i %i %i %i %i %i",
             i, itemType,
-            item->nextthink > level.time ? item->nextthink - level.time : 0,
+            timer,
             (int)item->r.currentOrigin[0],
             (int)item->r.currentOrigin[1],
             (int)item->r.currentOrigin[2] );

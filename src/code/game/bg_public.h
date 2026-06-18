@@ -606,9 +606,9 @@ typedef enum {
 
 	ITEMPOS_POWERUP_MAX, 		// Powerups come before this and special objective ones start immediately after
 	
-	ITEMPOS_FLAG,				// Server-sided catch-all to alias objective ent class names to. I.e. both "team_CTF_redflag" and "team_CTF_blueflag"
-    ITEMPOS_FLAG_ATTACK,		// Clients should end up with this
-    ITEMPOS_FLAG_DEFEND,		// Clients should end up with this
+	ITEMPOS_REDFLAG,		// Server-sided catch-all to alias objective ent class names to. I.e. both "team_CTF_redflag" and "team_CTF_blueflag"
+    ITEMPOS_BLUEFLAG,		// Clients should end up with this
+    ITEMPOS_NEUTRALFLAG,	// Clients should end up with this
     ITEMPOS_MAX,
 } itemPosType_t;
 

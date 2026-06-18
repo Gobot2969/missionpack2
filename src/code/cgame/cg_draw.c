@@ -2967,10 +2967,8 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 
 // ~DIMMSKII
 
-#define CG_TEAMMATE_POI_ICON_SIZE  8.0f
-#define CG_TEAMMATE_POI_ICON_SIZE_MAX  12.0f
-#define CG_TEAMMATE_POI_TEXT_FOV_FRAC 0.4f		// Float. Percentage of screen fov outside which to hide POI texts
-#define CG_TEAMMATE_POI_TEXT_MARGIN  2.0f
+#define CG_POI_TEXT_MARGIN  2.0f
+#define CG_POI_TEXT_FOV_FRAC 0.4f		// Float. Percentage of screen fov outside which to hide POI texts
 #define CG_TEAMMATE_POI_WORLD_Z_OFFSET  48.0f	// TODO: we have usable defines somewhere like view height
 
 /*
@@ -3071,7 +3069,7 @@ static qboolean CG_IsTargetedPOI( vec3_t worldPos/*, float maxDistance*/ ) {
 	dot = DotProduct( cg.refdef.viewaxis[0], toTarget );
 
 	// 5. Calculate arc deg value
-	arcDegThreshold = (cg.refdef.fov_x + cg.refdef.fov_y) * 0.5f * CG_TEAMMATE_POI_TEXT_FOV_FRAC; // Average of both axes' FOVs times some fraction you don't want to see it. Works while zoomed as well.
+	arcDegThreshold = (cg.refdef.fov_x + cg.refdef.fov_y) * 0.5f * CG_POI_TEXT_FOV_FRAC; // Average of both axes' FOVs times some fraction you don't want to see it. Works while zoomed as well.
 
 	// 6. Convert arc degree threshold to a cosine value
 	// We divide by 2 because the total cone arc spans both left and right of the crosshair
@@ -3103,7 +3101,7 @@ static void CG_DrawPOI( const char *text, vec4_t textColor, float barVal, vec3_t
 		return;
 	}
 
-	maxDist = cg_teammatePOIsDist.value;
+	maxDist = cg_poiMaxDist.value;
 
 	// Return if the alpha value will end up as zero regardless
 	if (dist > maxDist) {
@@ -3130,7 +3128,7 @@ static void CG_DrawPOI( const char *text, vec4_t textColor, float barVal, vec3_t
 	// Draw POI details (if needed)
 	if (text) {
 		wlabel = TINYCHAR_WIDTH * (float)CG_DrawStrlen(text);
-		hlabel = CG_TEAMMATE_POI_TEXT_MARGIN*2.0f + TINYCHAR_HEIGHT;
+		hlabel = CG_POI_TEXT_MARGIN*2.0f + TINYCHAR_HEIGHT;
 		
 		// Draw background
 		drawColor[0] = 0.0f;
@@ -3144,7 +3142,7 @@ static void CG_DrawPOI( const char *text, vec4_t textColor, float barVal, vec3_t
 		drawColor[1] = textColor[1];
 		drawColor[2] = textColor[2];
 		drawColor[3] = textColor[3] * (1.0f - dist / maxDist);
-		CG_DrawString( sx, sy - hw - TINYCHAR_HEIGHT - CG_TEAMMATE_POI_TEXT_MARGIN, text, drawColor,
+		CG_DrawString( sx, sy - hw - TINYCHAR_HEIGHT - CG_POI_TEXT_MARGIN, text, drawColor,
 			TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0,
 			DS_CENTER | DS_SHADOW | DS_PROPORTIONAL | DS_FORCE_COLOR );
 	
@@ -3166,7 +3164,7 @@ CG_DrawTeammatePOI( const char *name, int health, int armor, vec3_t worldPos ) {
 	nameColor[1] = nameColor[2] = (float)health/100.0f;
 	nameColor[3] = 1.0f;
 
-	CG_DrawPOI( ( (cg_teammateNames.integer > 1) || (CG_IsTargetedPOI(worldPos)&&cg_teammateNames.integer>0) ) ? name : NULL, nameColor, (float)health/100.0f, worldPos, cgs.media.friendShader, cg_teammatePOIsIconSize.value, cg_teammatePOIsIconMaxSize.value, colorWhite );
+	CG_DrawPOI( ( (cg_teammateNames.integer > 1) || (CG_IsTargetedPOI(worldPos)&&cg_teammateNames.integer>0) ) ? name : "", nameColor, (float)health/100.0f, worldPos, cgs.media.friendShader, cg_teammatePOIsIconSize.value, cg_teammatePOIsIconMaxSize.value, colorWhite );
 }
 
 /*
@@ -3334,13 +3332,14 @@ Draws a single item or objective POI
 =============
 */
 CG_DrawItemPOI( itemPos_t *ip ) {
-	qhandle_t pic;
-	vec4_t color;
+	qhandle_t 	pic;
+	vec4_t 		color, textColor;
+	char		*text;
 
-	if (ip->type < ITEMPOS_POWERUP_MAX) {
-		// POWERUPS POIS
+	// Text color white by default
+	memcpy(&textColor[0], &colorWhite[0], sizeof(vec4_t));
 
-		char	*text;
+	if (ip->type < ITEMPOS_POWERUP_MAX) { // POWERUPS POIS
 /*		switch (ip->type) {
 			case ITEMPOS_ARMOR_BODY:
 				pic = CG_GetPickupIconByClassname("item_armor_body");
@@ -3383,15 +3382,15 @@ CG_DrawItemPOI( itemPos_t *ip ) {
 			int minutes = totalSeconds / 60;
 			int seconds = totalSeconds % 60;
 
-			// Set the text to timer if the client has it enabled
-			text = (cg_itemTimers.integer > 0) ? va( "%02i:%02i", minutes, seconds ) : "";
+			// Set the text to timer depending on client's cg_itemTimers config
+			text = ( (cg_itemTimers.integer > 1) || (CG_IsTargetedPOI(ip->origin)&&cg_itemTimers.integer>0) ) ? va("%02i:%02i", minutes, seconds) : "";
 
 			// Set picColor to dark grey because it's taken
 			color[0] = color[1] = color[2] = 0.0f;  // R,G,B to zero
 			color[3] = 0.8f;  // Slightly less alpha to start with
 		} else {
 			trace_t		tr;
-//			centity_t *cent; // TODO: Add int entNum to the itemPos_t structure because we might want the cent eventually. Reverse iteration up to GENTITY_MAX lookup would be too slow for paint methods. We already have it in the message. Just store it upon receiving. ~Dimmskii
+			//centity_t *cent; // TODO: Add int entNum to the itemPos_t structure because we might want the cent eventually. Reverse iteration up to GENTITY_MAX lookup would be too slow for paint methods. We already have it in the message. Just store it upon receiving. ~Dimmskii
 
 			// Perform the trace from the viewer's eye to the origin of the pickup if it's not picked up
         	CG_Trace( &tr,
@@ -3424,12 +3423,25 @@ CG_DrawItemPOI( itemPos_t *ip ) {
 			memcpy(&color[0], &colorWhite[0], sizeof(vec4_t));
 		}
 
-		CG_DrawPOI( ( (cg_teammateNames.integer > 1) || (CG_IsTargetedPOI(ip->origin)&&cg_teammateNames.integer>0) ) ? text : NULL, colorWhite, 1.0f, ip->origin, pic, 24, 24, color );
-	} else {
-		// OBJECTIVE POIS
-		
-		CG_DrawPOI( ( (cg_teammateNames.integer > 1) || (CG_IsTargetedPOI(ip->origin)&&cg_teammateNames.integer>0) ) ? "Objective" : NULL, colorWhite, 1.0f, ip->origin, cgs.media.waterBubbleShader, 24, 24, color );
-	}
+		CG_DrawPOI( text, textColor, 1.0f, ip->origin, pic, cg_itemPOIsIconSize.value, cg_itemPOIsIconMaxSize.value, color );
+	
+	} /*else if (ip->type == ITEMPOS_REDFLAG || ip->type == ITEMPOS_BLUEFLAG || ip->type == ITEMPOS_NEUTRALFLAG) { // FLAG POIS
+		pic = cgs.media.waterBubbleShader;
+		if (ip->timer > 0) {
+			text = "Flagus McTaken";
+			
+			// Set picColor to dark grey because it's taken
+			color[0] = color[1] = color[2] = 0.0f;  // R,G,B to zero
+			color[3] = 0.8f;  // Slightly less alpha to start with
+
+		} else {
+			text = "Flagus Returnus";
+			
+			// Set color to white because the powerup is available
+			memcpy(&color[0], &colorWhite[0], sizeof(vec4_t));
+		}
+		CG_DrawPOI( text, textColor, 1.0f, ip->origin, pic, cg_itemPOIsIconSize.value, cg_itemPOIsIconMaxSize.value, color );
+	}*/ // TODO: Expand the system to draw team objectives: flags, harvey, obelisk, etc
 }
 
 /*
