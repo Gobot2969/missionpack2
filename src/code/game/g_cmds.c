@@ -969,9 +969,15 @@ void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
 		}
 
 		#ifdef MISSIONPACK2
-		// dead arena players should only follow alive players
-		if ( isDeadArenaPlayer && g_entities[ clientnum ].health <= 0 ) {
-			continue;
+		if ( isDeadArenaPlayer ) {
+			// dead arena players should only follow alive players
+			if ( g_entities[ clientnum ].health <= 0 ) {
+				continue;
+			}
+			// dead arena players should only follow teammates unless g_allSpec > 0
+			if ( level.clients[ clientnum ].sess.sessionTeam != client->sess.sessionTeam && g_allSpec.integer < 1 ) {
+				continue;
+			}
 		}
 		#endif
 
