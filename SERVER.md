@@ -2,10 +2,10 @@
 
 ## 1. Gametype Definitions
 
-The gametype indexing has been updated and expanded from vanilla Quake 3 and Team Arena. Use these integer values for `g_gametype`:
+The GT_ enums in this mod are as follows:
 
 | Value | Gametype Description |
-| :--- | :--- |
+| --- | --- |
 | `0` | Free For All (FFA) |
 | `1` | Tournament (Duel) |
 | `2` | `GT_SINGLE_PLAYER` *(Inactive / Unused)* |
@@ -28,10 +28,8 @@ The gametype indexing has been updated and expanded from vanilla Quake 3 and Tea
 These variables adjust general server settings.
 
 | Variable | Default | Description |
-| :--- | :--- | :--- |
-| `g_noSelfDamage` | `0` | Disables splash and environmental damage dealt to oneself (`1` = Disabled, `0` = Standard self-damage behavior). |
-| `g_startHealth` | `100` | Defines the starting health pool upon a standard player respawn (Range: `0` to `200`). |
-| `g_startArmor` | `0` | Defines the starting armor pool upon a standard player respawn (Range: `0` to `200`). |
+| --- | --- | --- |
+| `g_unlagged` | `1` | Enables unlagged code. `0` = Off `1` = On 
 | `g_teamVisibility` | `1` | Whether or not server allows teammates to see eachothers' positions globally. `0` = Vanilla behavior; don't send any new messages; players with cg_drawFriend < 2 will raycast to hide known within PVS. `1` = Send 'tpos' message in team games, allowing allies to see eachother. |
 | `g_itemVisibility` | `1` | Whether or not server allows players in match to receive item positions, respawn timers, etc. `0` = Vanilla behavior; don't send any new messages; nobody is allowed to see item positions and timers. `1` = Send 'ipos' message with item locations and stats, such as respawn times. |
 | `g_allSpec` | `0` | Whether or not dead players in round-based gamemodes can spectate everybody. `0` = Default team-only dead spectators. `1` = Dead players can spectate everybody, including enemies. |
@@ -46,18 +44,22 @@ For variables containing a wildcard symbol (*X*), swap the token out for one of 
 *   `MG` (Machinegun), `SG` (Shotgun), `GL` (Grenade Launcher), `RL` (Rocket Launcher), `LG` (Lightning Gun), `RG` (Railgun), `PG` (Plasma Gun), `BFG` (BFG10K), `NG` (Nailgun), `PL` (Prox Launcher), `CG` (Chaingun), `HMG` (Heavy Machine Gun).
 
 | Variable | Default | Description |
-| :--- | :--- | :--- |
+| --- | --- | --- |
+| `g_noSelfDamage` | `0` | Disables splash and environmental damage dealt to oneself (`1` = Disabled, `0` = Standard self-damage behavior). |
+| `g_startHealth` | `100` | Defines the starting health pool upon a standard player respawn (Range: `0` to `200`). |
+| `g_startArmor` | `0` | Defines the starting armor pool upon a standard player respawn (Range: `0` to `200`). |
+| --- | --- | --- |
 | `g_startingWeapon` | `0` | Selects a specific standalone primary weapon id for players to spawn with by default (`0` = Gauntlet/Machinegun baseline). |
 | `g_startAmmo*X*` | ` ` | Sets the baseline starting ammunition reserve given to players on spawn for the specified weapon identifier *X*. |
 | `g_arenaAmmo*X*` | ` ` | Sets the baseline starting ammunition reserve given to players specifically in Arena/Team Arena game modes for weapon *X*. |
-| `g_damage*X*` | `?` | Sets the explicit base direct-hit damage value for the specified weapon code *X* (Range: `0` to `999`). |
+| `g_damage*X*` | ` ` | Sets the explicit base direct-hit damage value for the specified weapon code *X* (Range: `0` to `999`). |
 | `g_splashDamage*X*` | ` ` | Sets the impact blast damage coefficient for splash-damage tracking weapons (Applicable codes: `GL`, `RL`, `PG`, `BFG`). |
 | `g_splashRadius*X*` | ` ` | Sets the radial blast distance falloff boundary for splash-damage tracking weapons (Applicable codes: `GL`, `RL`, `PG`, `BFG`). |
-| `g_velocityRL` | `?` | Sets the physical travel velocity speed of fired Rocket Launcher projectiles. |
-| `g_sgPellets` | `?` | Sets the exact number of independent hit-scan pellets generated per primary Shotgun blast. |
+| `g_velocityRL` | `900` | Sets the physical travel velocity speed of fired Rocket Launcher projectiles. |
+| `g_sgPellets` | `11` | Sets the exact number of independent hit-scan pellets generated per primary Shotgun blast. |
 | `g_sgPelletSpread` | `700` | Configures the horizontal and vertical dispersion pattern width of Shotgun pellets. |
 | `g_nailBounce` | `1` | Toggles Quake Live-style bouncing projectiles for the Nailgun (`1` = On, `0` = Off). |
-| :--- | :--- | :--- |
+| --- | --- | --- |
 | `g_ammoRespawn` | `5` | Ammo pickup respawn pacing configuration applied within FFA and Tournament modes in seconds. |
 | `g_ammoTeamRespawn` | `5` | Ammo pickup respawn pacing configuration applied within team-based gametypes in seconds. |
 | `g_armorRespawn` | `25` | Armor pickup respawn pacing configuration applied within FFA and Tournament modes in seconds. |
@@ -70,7 +72,7 @@ For variables containing a wildcard symbol (*X*), swap the token out for one of 
 | `g_powerupTeamRespawn` | `120` | Major Powerup item respawn pacing configuration applied within team-based gametypes in seconds. |
 | `g_holdableRespawn` | `60` | Inventory Holdable item respawn pacing configuration applied within FFA and Tournament modes in seconds. |
 | `g_holdableTeamRespawn` | `60` | Inventory Holdable item respawn pacing configuration applied within team-based gametypes in seconds. |
-| :--- | :--- | :--- |
+| --- | --- | --- |
 | `g_grapple` | `0` | Master global toggle enabling grappling hook weapon (`1` = On, `0` = Off). |
 | `g_grappleDelayTime` | `400` | Grapple delay time. |
 | `g_grappleHoldTime` | `0` | Maximum duration a line can actively latch onto a surface in seconds (`0` allows infinite attachment). |
@@ -80,18 +82,14 @@ For variables containing a wildcard symbol (*X*), swap the token out for one of 
 
 ---
 
-## 6. Inventory Filtering & Spawn Loadouts
-
-These bitmask commands strip items out of compiled game map objects, or explicitly bundle starting kits. To target multiple items simultaneously, compute the parameter argument by summing the decimal bitweight integers of your target choices.
-
-### Weapon Generation & Spawn Kits (`wpflags`, `removeweapon`, `removeammo`)
+### Item/weapon flagged cvars
 
 *   **wpflags:** Set starting weapon inventories. *(Note: Players always retain the Gauntlet and Machinegun regardless of mask modification settings).*
 *   **removeweapon:** Drops matching weapon pick-ups directly out of the active map context.
 *   **removeammo:** Drops corresponding weapon-specific ammunition cases directly out of the active map context.
 
 | Bitweight Integer | Targeted Asset Name |
-| :--- | :--- |
+| --- | --- |
 | `1` | Machinegun |
 | `2` | Shotgun |
 | `4` | Grenade Launcher |
@@ -105,12 +103,12 @@ These bitmask commands strip items out of compiled game map objects, or explicit
 | `1024` | Chaingun |
 | `2048` | Heavy Machine Gun |
 
-### Standard Entity Filtering (`removeitem`)
+### Item filter flags (`removeitem`)
 
 Filters health resources, protection levels, and utility inventories out of the physical map layouts.
 
 | Bitweight Integer | Targeted Asset Name |
-| :--- | :--- |
+| --- | --- |
 | `1` | Armor Shard |
 | `2` | Combat Armor (Yellow) |
 | `4` | Body Armor (Red) |
@@ -125,12 +123,12 @@ Filters health resources, protection levels, and utility inventories out of the 
 | `2048` | Holdable Invulnerability |
 | `4096` | Armor Jacket (Green) |
 
-### Powerup Filtering (`removepowerup`)
+### Powerup filter flags (`removepowerup`)
 
-Filters timed multi-tier combat modifier field pick-ups out of the physical map layouts.
+Powerup spawn filters.
 
 | Bitweight Integer | Targeted Asset Name |
-| :--- | :--- |
+| --- | --- |
 | `1` | Quad Damage |
 | `2` | Environmental Battle Suit |
 | `4` | Haste |
