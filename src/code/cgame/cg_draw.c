@@ -3383,8 +3383,8 @@ CG_DrawItemPOI( itemPos_t *ip ) {
 			int minutes = totalSeconds / 60;
 			int seconds = totalSeconds % 60;
 
-			// Set the text to timer
-			text = va( "%02i:%02i", minutes, seconds );
+			// Set the text to timer if the client has it enabled
+			text = (cg_itemTimers.integer > 0) ? va( "%02i:%02i", minutes, seconds ) : "";
 
 			// Set picColor to dark grey because it's taken
 			color[0] = color[1] = color[2] = 0.0f;  // R,G,B to zero

@@ -145,6 +145,7 @@ CG_CVAR( cg_teammatePOIs, "cg_teammatePOIs", "1", CVAR_ROM ) // Read-only QL com
 
 // Item POIs
 CG_CVAR( cg_itemPOIs, "cg_itemPOIs", "1", CVAR_ARCHIVE )
+CG_CVAR( cg_itemTimers, "cg_itemTimers", "1", CVAR_ARCHIVE )
 
 // END DIMMSKII
 
