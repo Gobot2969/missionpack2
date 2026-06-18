@@ -449,7 +449,8 @@ static void CG_DrawSelectedPlayerWeapon( rectDef_t *rect ) {
 
 static void CG_DrawPlayerScore( rectDef_t *rect, float scale, vec4_t color, qhandle_t shader, int textStyle ) {
   char num[16];
-  int value = cg.snap->ps.persistant[PERS_SCORE];
+  //int value = cg.snap->ps.persistant[PERS_SCORE];
+  int value = CG_GetValue(CG_PLAYER_SCORE); // ~DIMMSKII - needed for HUD shows spectatee scores mod
 
 	if (shader) {
 		trap_R_SetColor( color );
@@ -466,7 +467,7 @@ static void CG_DrawPlayerScore( rectDef_t *rect, float scale, vec4_t color, qhan
 #ifdef MISSIONPACK2
 static void CG_DrawPlayerRoundWins( rectDef_t *rect, float scale, vec4_t color, qhandle_t shader, int textStyle ) {
   char num[16];
-  int value = cg.snap->ps.persistant[PERS_ROUNDWINS];
+  int value = CG_GetValue(CG_PLAYER_ROUNDWINS); // ~DIMMSKII - needed for HUD shows spectatee scores mod
 
 	if (shader) {
 		trap_R_SetColor( color );
@@ -933,8 +934,21 @@ float CG_GetValue(int ownerDraw) {
 		}
     break;
   case CG_PLAYER_SCORE:
-	  return cg.snap->ps.persistant[PERS_SCORE];
-    break;
+  	// ~DIMMSKII
+	// HUD shows spectatee scores mod
+	if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR || (cg.snap->ps.pm_flags & PMF_FOLLOW) ) { // Deadspec check TODO: Add proper method to check dead
+		int i;
+		//return cgs.clientinfo[ cg.snap->ps.clientNum ].score;
+		// TODO not efficient. Luckily, only happens when you spec
+		for (i = 0; i < cg.numScores; i++) {
+			if (cg.scores[i].client == cg.snap->ps.clientNum) {
+				return cg.scores[i].score;
+			}
+		}
+	}
+	// END DIMMSKII
+	return cg.snap->ps.persistant[PERS_SCORE];
+	break;
   case CG_PLAYER_HEALTH:
 		return ps->stats[STAT_HEALTH];
     break;
@@ -946,7 +960,17 @@ float CG_GetValue(int ownerDraw) {
     break;
 // ~Dimmskii
 #ifdef MISSIONPACK2
-case CG_PLAYER_ROUNDWINS: 	// Arena wins
+  case CG_PLAYER_ROUNDWINS: 	// Arena wins
+  // HUD shows spectatee scores mod
+  if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR || (cg.snap->ps.pm_flags & PMF_FOLLOW) ) { // Deadspec check TODO: Add proper method to check dead
+	int i;
+	// TODO not efficient. Luckily, only happens when you spec
+	for (i = 0; i < cg.numScores; i++) {
+		if (cg.scores[i].client == cg.snap->ps.clientNum) {
+			return cg.scores[i].roundWins;
+		}
+	}
+  }
 	  return cg.snap->ps.persistant[PERS_ROUNDWINS];
     break;
 #endif
@@ -1009,6 +1033,18 @@ qboolean CG_YourTeamHasFlag() {
 // 
 qboolean CG_OwnerDrawVisible(int flags) {
 
+	// ~DIMMSKII
+	// Smort self-contradicting CG_SHOW_NEVER value for things like TA HUD usage of CG_SHOW_SINGLEPLAYER i.e.
+	// menudef.h:
+	// #define CG_SHOW_NEVER         0x00080004      // ~Dimmskii - Never show = CG_SHOW_ANYTEAMGAME | CG_SHOW_ANYNONTEAMGAME
+	// #define CG_SHOW_SINGLEPLAYER   CG_SHOW_NEVER // ~Dimmskii - Never show
+	// #define CG_SHOW_DOMINATION     CG_SHOW_NEVER // ~Dimmskii - QL Compat - Never show
+	// This checks if BOTH bits are set, ignoring any other active flags
+	if ((flags & CG_SHOW_NEVER) == CG_SHOW_NEVER) {
+		return qfalse;
+	}
+	// END DIMMSKII
+
 	if (flags & CG_SHOW_TEAMINFO) {
 		return (cg_currentSelectedPlayer.integer == numSortedTeamPlayers);
 	}
@@ -1035,7 +1071,6 @@ qboolean CG_OwnerDrawVisible(int flags) {
 	}
 
 // ~Dimmskii
-#ifdef MISSIONPACK2
 	if (flags & CG_SHOW_ANYARENAGAME) {
 		if( cgs.gametype != GT_ARENA && cgs.gametype != GT_TEAMARENA ) {
 			return qfalse;
@@ -1047,7 +1082,6 @@ qboolean CG_OwnerDrawVisible(int flags) {
 			return qfalse;
 		}
 	}
-#endif
 // END ~Dimmskii
 
 	if (flags & CG_SHOW_ANYTEAMGAME) {
@@ -1760,6 +1794,32 @@ void CG_OwnerDraw(float x, float y, float w, float h, float text_x, float text_y
   case CG_MAP_NAME:
 	CG_DrawMapName(&rect, scale, color, shader, textStyle);
 		break;
+
+// ~Dimmskii - QL ENUMS
+  case CG_TEAM_COLORIZED:
+    CG_DrawTeamColorized(&rect, shader);
+    break;
+  case CG_ARMORTIERED_COLORIZED:
+ 	CG_DrawArmorTieredColorized();
+    break;
+
+  case CG_PLAYER_ARMOR_BAR_100:
+ 	CG_DrawPlayerHealthBar(&rect, shader, qtrue, qfalse);
+    break;
+
+  case CG_PLAYER_ARMOR_BAR_200:
+ 	CG_DrawPlayerHealthBar(&rect, shader, qtrue, qtrue);
+    break;
+
+  case CG_PLAYER_HEALTH_BAR_100:
+ 	CG_DrawPlayerHealthBar(&rect, shader, qfalse, qfalse);
+    break;
+
+  case CG_PLAYER_HEALTH_BAR_200:
+ 	CG_DrawPlayerHealthBar(&rect, shader, qfalse, qtrue);
+    break;
+// End Dimmskii
+
   default:
     break;
   }
@@ -1931,4 +1991,91 @@ void CG_GetTeamColor(vec4_t *color) {
     (*color)[3] = 0.25f;
 	}
 }
+
+// ~Dimmskii
+
+void CG_GetTeamColor2(vec4_t *color) {
+  if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_RED) {
+    (*color)[0] = 1.0f;
+    (*color)[1] = (*color)[2] = 0.25f;
+  } else if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE) {
+    (*color)[0] = (*color)[1] = 0.25f;
+    (*color)[2] = 1.0f;
+  } else {
+	(*color)[0] = (*color)[1] = (*color)[2] = 0.5f;
+  }
+  (*color)[3] = 1.0f;
+}
+
+// ql def CG_TEAM_COLORIZED
+void CG_DrawTeamColorized(rectDef_t *rect, qhandle_t shader) {
+	if (shader) {
+		vec4_t color = {1,1,1,1}; // New color
+		CG_GetTeamColor2( &color );
+		trap_R_SetColor( color );
+		CG_DrawPic(rect->x, rect->y, rect->w, rect->h, shader);
+		trap_R_SetColor( NULL );
+	}
+}
+
+// ql def CG_ARMORTIERED_COLORIZED
+void CG_DrawArmorTieredColorized(void) {
+
+}
+
+// ql def CG_PLAYER_ARMOR_BAR_100
+// ql def CG_PLAYER_ARMOR_BAR_200
+// ql def CG_PLAYER_HEALTH_BAR_100
+// ql def CG_PLAYER_HEALTH_BAR_200
+void CG_DrawPlayerHealthBar(rectDef_t *rect, qhandle_t shader, qboolean bArmor, qboolean b200) {
+	if (shader) {
+		playerState_t	*ps;
+		float value;
+		char	num[16];
+		vec4_t color = {1,1,1,1}; // New color
+		CG_GetTeamColor2( &color );
+		ps = &cg.snap->ps;
+		if (bArmor) {
+			value = (float)ps->stats[STAT_ARMOR];
+		} else {
+			value = (float)ps->stats[STAT_HEALTH];
+		}
+		if (b200) {
+			value = (value / 100.0f) - 1.0f;
+			if (value > 0) {
+				float ax, ay, aw, ah;
+				ax = rect->x;
+				ay = rect->y;
+				aw = rect->w;
+				ah = rect->h;
+				CG_AdjustFrom640( &ax, &ay, &aw, &ah );
+				trap_R_SetColor( color );
+				trap_R_DrawStretchPic( ax, ay + ah - (ah*value), aw, ah*value, 0, 1-value, 1, 1, shader );
+				trap_R_SetColor( NULL );
+			}
+		} else {
+			value = value / 100.0f;
+			//if (value > 1.0f) {
+			//	value = 1.0f;
+			//}
+			if (value > 0) {
+				float ax, ay, aw, ah;
+				ax = rect->x;
+				ay = rect->y;
+				aw = rect->w;
+				ah = rect->h;
+				CG_AdjustFrom640( &ax, &ay, &aw, &ah );
+				trap_R_SetColor( color );
+				if (bArmor) {
+					trap_R_DrawStretchPic( ax + aw - (aw*value), ay, aw*value, ah, 1-value, 0, 1, 1, shader );
+				} else {
+					trap_R_DrawStretchPic( ax, ay, aw*value, ah, 0, 0, value, 1, shader );
+				}
+				trap_R_SetColor( NULL );
+			}
+		}
+	}
+}
+
+// End Dimmskii
 

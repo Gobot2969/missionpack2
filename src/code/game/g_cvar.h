@@ -29,10 +29,15 @@ G_CVAR( g_fraglimit, "fraglimit", "20", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NO
 G_CVAR( g_timelimit, "timelimit", "0", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue, qfalse )
 G_CVAR( g_capturelimit, "capturelimit", "8", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue, qfalse )
 
+// ~DIMMSKII
 #ifdef MISSIONPACK2
 G_CVAR( g_winlimit, "winlimit", "10", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue, qfalse )
 G_CVAR( g_roundtime, "roundtime", "300", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue, qfalse )
 #endif
+
+G_CVAR( g_teamVisibility, "g_teamVisibility", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )
+G_CVAR( g_itemVisibility, "g_itemVisibility", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )
+// END DIMMSKII
 
 G_CVAR( g_synchronousClients, "g_synchronousClients", "0", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
 

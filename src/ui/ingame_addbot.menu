@@ -8,7 +8,7 @@ menuDef {
     	visible 0
     	fullscreen 0
 	outOfBoundsClick			// this closes the window if it gets a click out of the rectangle
-    	rect 106 30 192 123
+		rect 136 30 192 123
 		disableColor  .5 .5 .5 1 
     	focusColor 1 .75 0 1
     	style 1

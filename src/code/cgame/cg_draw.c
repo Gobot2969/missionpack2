@@ -1022,6 +1022,12 @@ static float CG_DrawTeamOverlay( float y, qboolean right, qboolean upper ) {
 				p = CG_ConfigString(CS_LOCATIONS + ci->location);
 				if (!p || !*p)
 					p = "unknown";
+
+				// ~Dimmskii
+				if (ci->health <= 0) // Empty string if dead
+					p = "";
+				// END Dimmskii
+
 				len = CG_DrawStrlen(p);
 				if (len > lwidth)
 					len = lwidth;
@@ -2673,10 +2679,17 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 			CG_DrawReward();
 		}
     
+		// ~DIMMSKII
+		CG_DrawItemPOIs();
+		// END DIMMSKII
+		
 		if ( cgs.gametype >= GT_TEAM ) {
-#ifndef MISSIONPACK
+			// ~DIMMSKII
+			CG_DrawTeammatePOIs();
+			// END DIMMSKII
+		#ifndef MISSIONPACK
 			CG_DrawTeamInfo();
-#endif
+		#endif
 		}
 	}
 
@@ -2914,7 +2927,6 @@ void CG_TrackClientTeamChange( void )
 	}
 }
 
-
 /*
 =====================
 CG_DrawActive
@@ -2952,3 +2964,573 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 	// draw status bar and other floating elements
  	CG_Draw2D( stereoView );
 }
+
+// ~DIMMSKII
+
+#define CG_POI_TEXT_MARGIN  2.0f
+#define CG_POI_TEXT_FOV_FRAC 0.4f		// Float. Percentage of screen fov outside which to hide POI texts
+#define CG_TEAMMATE_POI_WORLD_Z_OFFSET  48.0f	// TODO: we have usable defines somewhere like view height
+
+/*
+=============
+CG_WorldToScreen
+
+Projects a world-space position to virtual 640x480 screen coordinates.
+Returns qfalse if the point is behind the camera.
+=============
+*/
+static qboolean CG_WorldToScreen( vec3_t worldPos, float *x, float *y, float *dist ) {
+	vec3_t delta;
+	float dot, px, py;
+	float halfW, halfH, centerX, centerY;
+
+	VectorSubtract( worldPos, cg.refdef.vieworg, delta );
+
+	dot = DotProduct( delta, cg.refdef.viewaxis[0] );
+	if ( dot < 1.0f ) {
+		return qfalse;
+	}
+
+	px = DotProduct( delta, cg.refdef.viewaxis[1] );
+	py = DotProduct( delta, cg.refdef.viewaxis[2] );
+
+	centerX = ( cg.refdef.x + cg.refdef.width  * 0.5f - cgs.screenXBias ) / cgs.screenXScale;
+	centerY = ( cg.refdef.y + cg.refdef.height * 0.5f - cgs.screenYBias ) / cgs.screenYScale;
+	halfW   = ( cg.refdef.width  * 0.5f ) / cgs.screenXScale;
+	halfH   = ( cg.refdef.height * 0.5f ) / cgs.screenYScale;
+
+	*x = centerX - halfW * px / ( dot * tan( DEG2RAD( cg.refdef.fov_x * 0.5f ) ) );
+	*y = centerY - halfH * py / ( dot * tan( DEG2RAD( cg.refdef.fov_y * 0.5f ) ) );
+	*dist = VectorLength(delta);
+
+	return qtrue;
+}
+
+/*
+=============
+CG_ShouldDrawTeammatePOIs
+
+Returns whether or not to draw teammate POIs.
+=============
+*/
+static qboolean CG_ShouldDrawTeammatePOIs( void ) {
+	team_t	myTeam;
+
+	// Make sure it's a team game
+	if ( !cg.snap || cgs.gametype < GT_TEAM ) {
+		return qfalse;
+	}
+
+	// Must be on a valid team
+	myTeam = (team_t)cg.snap->ps.persistant[PERS_TEAM];
+	if ( myTeam != TEAM_RED && myTeam != TEAM_BLUE ) {
+		return qfalse;
+	}
+
+	// Don't show if player is dead
+	if ( cg.predictedPlayerState.stats[STAT_HEALTH] <= 0 ) {
+		return qfalse;
+	}
+
+	if ( cg_drawFriend.integer < 2 ) { // cg_drawFriend 2 to enable POIs (not old quake 3 markers)
+		return qfalse;
+	}
+
+	return qtrue;
+}
+
+
+
+/*
+=============
+CG_IsTargetedPOI
+
+Returns true if the worldPos vector falls within the specified arc angle 
+and distance threshold relative to the player's view.
+=============
+*/
+static qboolean CG_IsTargetedPOI( vec3_t worldPos/*, float maxDistance*/ ) {
+	vec3_t	toTarget;
+	float	distance, dot, cosThreshold, arcDegThreshold;
+
+	// 1. Calculate the vector from the player's eyes to the target
+	VectorSubtract( worldPos, cg.refdef.vieworg, toTarget );
+
+	// 2. Normalize the vector to get the direction, and get the distance
+	distance = VectorNormalize( toTarget );
+
+	// 3: Reject if the target is further away than your maximum threshold
+	//if ( maxDistance > 0 && distance > maxDistance ) {
+	//	return qfalse;
+	//}
+
+	// 4. Calculate dot product between forward view axis and direction to target
+	// cg.refdef.viewaxis[0] is the normalized forward vector
+	dot = DotProduct( cg.refdef.viewaxis[0], toTarget );
+
+	// 5. Calculate arc deg value
+	arcDegThreshold = (cg.refdef.fov_x + cg.refdef.fov_y) * 0.5f * CG_POI_TEXT_FOV_FRAC; // Average of both axes' FOVs times some fraction you don't want to see it. Works while zoomed as well.
+
+	// 6. Convert arc degree threshold to a cosine value
+	// We divide by 2 because the total cone arc spans both left and right of the crosshair
+	cosThreshold = cos( DEG2RAD( arcDegThreshold * 0.5f ) );
+
+	// 6. If the dot product is higher than the cosine threshold, it's inside the cone
+	if ( dot >= cosThreshold ) {
+		return qtrue;
+	}
+
+	return qfalse;
+}
+
+
+/*
+=============
+CG_DrawPOI
+
+General combined function for usage by CG_DrawTeammatePOI and CG_DrawItemPOI.
+Does the actual POI drawing.
+=============
+*/
+static void CG_DrawPOI( const char *text, vec4_t textColor, float barVal, vec3_t worldPos, qhandle_t pic, float picSize, float picSizeMax, vec4_t picColor) {
+	float sx, sy, dist, maxdist, w, hw, maxDist, wlabel, hlabel;
+	vec3_t delta;
+	vec4_t	drawColor;
+
+	if ( !CG_WorldToScreen( worldPos, &sx, &sy, &dist ) ) {
+		return;
+	}
+
+	maxDist = cg_poiMaxDist.value;
+
+	// Return if the alpha value will end up as zero regardless
+	if (dist > maxDist) {
+		return;
+	}
+	
+	//VectorSubtract(worldPos, cg.refdef.vieworg, delta);
+	//dist = VectorLength(delta);
+	w = picSize * 640.0f / dist;
+	if (w > picSizeMax) {
+		w = picSizeMax;
+	}
+	hw = w/2.0f;
+
+	// Draw the marker pic
+	if (pic) {
+		drawColor[0] = picColor[0];
+		drawColor[1] = picColor[1];
+		drawColor[2] = picColor[2];
+		drawColor[3] = picColor[3] * (1.0f - dist / maxDist);
+		CG_DrawPicColor( sx - hw, sy - hw, w, w, pic, drawColor );
+	}
+
+	// Draw POI details (if needed)
+	if (text) {
+		wlabel = TINYCHAR_WIDTH * (float)CG_DrawStrlen(text);
+		hlabel = CG_POI_TEXT_MARGIN*2.0f + TINYCHAR_HEIGHT;
+		
+		// Draw background
+		drawColor[0] = 0.0f;
+		drawColor[1] = 0.0f;
+		drawColor[2] = 0.0f;
+		drawColor[3] = (1.0f - dist / maxDist) * cg_poiTextBgAlpha.value;
+		CG_FillRect( sx-(wlabel/2.0f), sy-hw-hlabel, wlabel, hlabel, drawColor );
+		
+		// Draw str
+		drawColor[0] = textColor[0];
+		drawColor[1] = textColor[1];
+		drawColor[2] = textColor[2];
+		drawColor[3] = textColor[3] * (1.0f - dist / maxDist);
+		CG_DrawString( sx, sy - hw - TINYCHAR_HEIGHT - CG_POI_TEXT_MARGIN, text, drawColor,
+			TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0,
+			DS_CENTER | DS_SHADOW | DS_PROPORTIONAL | DS_FORCE_COLOR );
+	
+	}
+}
+
+/*
+=============
+CG_DrawTeammatePOI
+
+Draws a single teammate POI marker at world position.
+=============
+*/
+CG_DrawTeammatePOI( const char *name, int health, int armor, vec3_t worldPos ) {
+	vec4_t	nameColor;
+	
+	// nameColor based on HP. FIXME: do it better
+	nameColor[0] = 1.0f;
+	nameColor[1] = nameColor[2] = (float)health/100.0f;
+	nameColor[3] = 1.0f;
+
+	CG_DrawPOI( ( (cg_teammateNames.integer > 1) || (CG_IsTargetedPOI(worldPos)&&cg_teammateNames.integer>0) ) ? name : "", nameColor, (float)health/100.0f, worldPos, cgs.media.friendShader, cg_teammatePOIsIconSize.value, cg_teammatePOIsIconMaxSize.value, colorWhite );
+}
+
+/*
+=============
+CG_DrawTeammatePOIs
+
+Draws teammate location POIs that are visible through walls.
+TODO: Sample multi pointi for the trace if g_teamVisibility is 0
+=============
+*/
+static void CG_DrawTeammatePOIs( void ) {
+	int			i, localTeam;
+	centity_t	*cent;
+	clientInfo_t *ci;
+	vec3_t		pos;
+	int			health, armor;
+	trace_t		tr;
+
+	//if ( !CG_ShouldDrawTeammatePOIs() ) {
+	//	return;
+	//}
+
+	localTeam = cg.snap->ps.persistant[PERS_TEAM];
+
+	if ( !cgs.g_teamVisibility ) {
+		// Iterate through all entities (up to MAX_GENTITIES)
+		for ( i = 0; i < MAX_GENTITIES; i++ ) {
+			cent = &cg_entities[i];
+			
+			if ( !cent->currentValid ) {
+				continue;
+			}
+
+			// Only process players
+			if ( cent->currentState.eType != ET_PLAYER ) {
+				continue;
+			}
+
+			// Get client info
+			if ( cent->currentState.clientNum < 0 || cent->currentState.clientNum >= MAX_CLIENTS ) {
+				continue;
+			}
+
+			ci = &cgs.clientinfo[cent->currentState.clientNum];
+
+			// Only teammates
+			if ( ci->team != localTeam ) {
+				continue;
+			}
+
+			// Skip dead
+			if (cent->currentState.eFlags & EF_DEAD) {
+				continue;
+			}
+
+			// Skip self
+			if ( cent->currentState.clientNum == cg.snap->ps.clientNum ) {
+				continue;
+			}
+
+			// Get teammate position (with Z offset for visibility above model)
+			VectorCopy( cent->lerpOrigin, pos );
+
+			// Perform the trace from the viewer's eye to the teammate
+        	CG_Trace( &tr,
+                  cg.refdef.vieworg,    // start: camera/eye position
+                  NULL,                 // mins (NULL for a ray, not a box)
+                  NULL,                 // maxs (NULL for a ray)
+                  pos,       			// end: teammate's position
+                  cg.snap->ps.clientNum, // skip the local player entity
+                  CONTENTS_SOLID );     // only test against solid world geometry
+
+			// Check the trace result and skip occulted
+			if ( tr.fraction < 1.0f && tr.entityNum != cent->currentState.number ) {
+				continue;
+			}
+
+			// Get health and armor from clientinfo (these are tracked by server)
+			health = ci->health;
+			armor = ci->armor;
+
+			pos[2] += CG_TEAMMATE_POI_WORLD_Z_OFFSET; // Add offset AFTER trace
+
+			// Draw the marker
+			CG_DrawTeammatePOI( ci->name, health, armor, pos );
+		}
+		return;
+	}
+
+	// g_teamVisibility is on: use tpos for all teammates,
+    // prefer PVS entity data when available (smoother)
+    for ( i = 0; i < MAX_CLIENTS; i++ ) {
+        teammatePos_t *tp;
+
+        if ( i == cg.snap->ps.clientNum ) {
+            continue;
+        }
+
+        ci = &cgs.clientinfo[i];
+
+        if ( !ci->infoValid || ci->team != localTeam || ci->health <= 0 ) {
+            continue;
+        }
+
+        // Check if this teammate is in PVS (use entity data)
+        cent = &cg_entities[i];
+        if ( cent->currentValid &&
+             cent->currentState.eType == ET_PLAYER &&
+             !( cent->currentState.eFlags & EF_DEAD ) ) {
+            VectorCopy( cent->lerpOrigin, pos );
+            pos[2] += CG_TEAMMATE_POI_WORLD_Z_OFFSET;
+			CG_DrawTeammatePOI( ci->name, ci->health, ci->armor, pos );
+            continue;
+        }
+
+        // Off-PVS: fall back to tpos
+        tp = &cg_teammatePositions[i];
+
+        if ( !tp->valid ) {
+            continue;
+        }
+
+        {
+            float   f;
+            int     dt;
+
+            dt = tp->serverTime - tp->prevServerTime;
+            if ( dt > 0 ) {
+                f = (float)( cg.time - tp->serverTime ) / (float)dt;
+                if ( f < 0.0f ) f = 0.0f;
+                if ( f > 1.0f ) f = 1.0f;
+                LerpPosition( tp->prevOrigin, tp->origin, f, pos );
+            } else {
+                VectorCopy( tp->origin, pos );
+            }
+        }
+
+        pos[2] += CG_TEAMMATE_POI_WORLD_Z_OFFSET;
+
+		CG_DrawTeammatePOI( ci->name, ci->health, ci->armor, pos );
+    }
+}
+
+/*
+=============
+CG_ShouldDrawItemPOIs
+
+Returns whether or not to draw item POIs.
+=============
+*/
+static qboolean CG_ShouldDrawItemPOIs( void ) {
+
+	if ( cg_itemPOIs.integer < 1 ) {
+		return qfalse;
+	}
+
+	return qtrue;
+}
+
+/*
+=============
+CG_DrawItemPOI
+
+Draws a single item or objective POI
+=============
+*/
+CG_DrawItemPOI( itemPos_t *ip ) {
+	qhandle_t 	pic;
+	vec4_t 		color, textColor;
+	char		*text;
+
+	// Text color white by default
+	memcpy(&textColor[0], &colorWhite[0], sizeof(vec4_t));
+
+	if (ip->type < ITEMPOS_POWERUP_MAX) { // POWERUPS POIS
+/*		switch (ip->type) {
+			case ITEMPOS_ARMOR_BODY:
+				pic = CG_GetPickupIconByClassname("item_armor_body");
+				break;
+			case ITEMPOS_HEALTH_MEGA:
+				pic = CG_GetPickupIconByClassname("item_health_mega");
+				break;
+			case ITEMPOS_TELEPORTER:
+				pic = CG_GetPickupIconByClassname("holdable_teleporter");
+				break;
+			case ITEMPOS_MEDKIT:
+				pic = CG_GetPickupIconByClassname("holdable_medkit");
+				break;
+			case ITEMPOS_QUAD:
+				pic = CG_GetPickupIconByClassname("item_quad");
+				break;
+			case ITEMPOS_BATTLESUIT:
+				pic = CG_GetPickupIconByClassname("item_enviro");
+				break;
+			case ITEMPOS_HASTE:
+				pic = CG_GetPickupIconByClassname("item_haste");
+				break;
+			case ITEMPOS_INVIS:
+				pic = CG_GetPickupIconByClassname("item_invis");
+				break;
+			case ITEMPOS_REGEN:
+				pic = CG_GetPickupIconByClassname("item_regen");
+				break;
+			case ITEMPOS_FLIGHT:
+				pic = CG_GetPickupIconByClassname("item_flight");
+				break;
+		}*/
+		pic = cgs.media.poiPics[ip->type];
+
+		if (ip->timer > 0) {
+			// Convert total milliseconds to total seconds
+			int totalSeconds = ip->timer / 1000;
+
+			// Calculate individual minute and second components
+			int minutes = totalSeconds / 60;
+			int seconds = totalSeconds % 60;
+
+			// Set the text to timer depending on client's cg_itemTimers config
+			text = ( (cg_itemTimers.integer > 1) || (CG_IsTargetedPOI(ip->origin)&&cg_itemTimers.integer>0) ) ? va("%02i:%02i", minutes, seconds) : "";
+
+			// Set picColor to dark grey because it's taken
+			color[0] = color[1] = color[2] = 0.0f;  // R,G,B to zero
+			color[3] = 0.8f;  // Slightly less alpha to start with
+		} else {
+			trace_t		tr;
+			//centity_t *cent; // TODO: Add int entNum to the itemPos_t structure because we might want the cent eventually. Reverse iteration up to GENTITY_MAX lookup would be too slow for paint methods. We already have it in the message. Just store it upon receiving. ~Dimmskii
+
+			// Perform the trace from the viewer's eye to the origin of the pickup if it's not picked up
+        	CG_Trace( &tr,
+                  cg.refdef.vieworg,    // start: camera/eye position
+                  NULL,                 // mins (NULL for a ray, not a box)
+                  NULL,                 // maxs (NULL for a ray)
+                  ip->origin,       	// end: item's position
+                  cg.snap->ps.clientNum, // skip the local player entity
+                  CONTENTS_SOLID );     // only test against solid world geometry
+			
+			// Check the trace result and don't draw a POI at all if the trace reaches the existing pickup
+			if ( tr.fraction >= 1.0f ) {
+				return;
+			}
+
+/*
+			*cent = &cg_entities[ ip->entNum ];
+
+			if ( cent->currentValid && !(cent->currentState.eFlags & EF_NODRAW) ) {
+				// The item is physically spawned on the map and visible. 
+				// We don't need a POI icon right now.
+				return;
+			}
+*/
+
+			// No timer text because powerup is available
+			text = "";
+
+			// Set color to white because the powerup is available
+			memcpy(&color[0], &colorWhite[0], sizeof(vec4_t));
+		}
+
+		CG_DrawPOI( text, textColor, 1.0f, ip->origin, pic, cg_itemPOIsIconSize.value, cg_itemPOIsIconMaxSize.value, color );
+	
+	} /*else if (ip->type == ITEMPOS_REDFLAG || ip->type == ITEMPOS_BLUEFLAG || ip->type == ITEMPOS_NEUTRALFLAG) { // FLAG POIS
+		pic = cgs.media.waterBubbleShader;
+		if (ip->timer > 0) {
+			text = "Flagus McTaken";
+			
+			// Set picColor to dark grey because it's taken
+			color[0] = color[1] = color[2] = 0.0f;  // R,G,B to zero
+			color[3] = 0.8f;  // Slightly less alpha to start with
+
+		} else {
+			text = "Flagus Returnus";
+			
+			// Set color to white because the powerup is available
+			memcpy(&color[0], &colorWhite[0], sizeof(vec4_t));
+		}
+		CG_DrawPOI( text, textColor, 1.0f, ip->origin, pic, cg_itemPOIsIconSize.value, cg_itemPOIsIconMaxSize.value, color );
+	}*/ // TODO: Expand the system to draw team objectives: flags, harvey, obelisk, etc
+}
+
+/*
+=============
+CG_DrawItemPOIs
+
+Draws item and objective POIs that are visible through walls.
+=============
+*/
+static void CG_DrawItemPOIs( void ) {
+	int			i;
+	itemPos_t	*ip;
+	centity_t	*cent;
+	vec3_t		pos;
+
+	if ( !CG_ShouldDrawItemPOIs() ) {
+		return;
+	}
+
+	if ( cgs.g_itemVisibility ) {
+		// Iterate through all entities (up to MAX_GENTITIES)
+		for ( i = 0; i < MAX_GENTITIES; i++ ) {
+			ip = &cg_itemPositions[i]; 
+			if ( !ip->valid ) {
+				continue;
+			}
+			CG_DrawItemPOI( ip );
+		}
+		return;
+	}
+}
+
+/*
+=============
+LerpPosition
+
+Interpolation util method.
+=============
+*/
+static void LerpPosition( const vec3_t from, const vec3_t to, float f, vec3_t out ) {
+    out[0] = from[0] + f * ( to[0] - from[0] );
+    out[1] = from[1] + f * ( to[1] - from[1] );
+    out[2] = from[2] + f * ( to[2] - from[2] );
+}
+
+/*
+=============
+CG_GetPickupIconByClassname
+
+Returns the 2D icon qhandle_t matching a specific classname string.
+=============
+*/
+static qhandle_t CG_GetPickupIconByClassname( const char *classname ) {
+	int i;
+
+	// 1. Safety check for null or empty strings
+	if ( !classname || !classname[0] ) {
+		return 0;
+	}
+
+	// 2. Loop through all registered items starting at index 1
+	// Index 0 in bg_itemlist is always the null item descriptor
+	for ( i = 1; i < bg_numItems; i++ ) {
+		
+		// 3. Compare the item's classname with your target string (case-insensitive)
+		if ( Q_stricmp( bg_itemlist[i].classname, classname ) == 0 ) {
+			
+			// 4. Return the pre-cached client asset handle if found
+			return cg_items[i].icon;
+		}
+	}
+
+	// Return 0 (no shader) if the classname wasn't found in bg_misc.c
+	return 0;
+}
+
+/*
+=============
+CG_DrawPicColor
+
+Coordinates are 640*480 virtual values
+TODO: move this to like cg_drawtools or something
+=============
+*/
+static void CG_DrawPicColor( float x, float y, float width, float height, qhandle_t hShader, vec4_t color ) {
+	CG_AdjustFrom640( &x, &y, &width, &height );
+	trap_R_SetColor( color );
+	trap_R_DrawStretchPic( x, y, width, height, 0, 0, 1, 1, hShader );
+	trap_R_SetColor( NULL );
+}
+
+// ~END DIMMSKII

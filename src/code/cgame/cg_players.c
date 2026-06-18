@@ -2287,14 +2287,16 @@ static void CG_PlayerSprites( centity_t *cent ) {
 	} */
 	if ((!cg.demoPlayback) || (cg_playback_follow == -1)) {
 		if ( !(cent->currentState.eFlags & EF_DEAD) && cg.snap->ps.persistant[PERS_TEAM] == team && cgs.gametype >= GT_TEAM) {
-			if (cg_drawFriend.integer) {
+			//if (cg_drawFriend.integer) {
+			if (cg_drawFriend.integer == 1) { // ~Dimmskii a value greater than 1 enables modern "team POIs"
 				CG_PlayerFloatSprite( cent, cgs.media.friendShader );
 			}
 			return;
 		}
 	} else {
 		if ( !(cent->currentState.eFlags & EF_DEAD) &&  cgs.clientinfo[cg_playback_follow].team == team && cgs.gametype >= GT_TEAM) {
-			if (cg_drawFriend.integer) {
+			//if (cg_drawFriend.integer) {
+			if (cg_drawFriend.integer == 1) { // ~Dimmskii a value greater than 1 enables modern "team POIs"
 				CG_PlayerFloatSprite( cent, cgs.media.friendShader );
 			}
 		}

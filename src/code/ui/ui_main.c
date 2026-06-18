@@ -42,6 +42,7 @@ static const char *netSources[] = {
 };
 static const int numNetSources = sizeof(netSources) / sizeof(const char*);
 
+/*
 static const serverFilter_t serverFilters[] = {
 	{"All", "" },
 	{"Quake 3 Arena", "" },
@@ -87,9 +88,128 @@ static const char *teamArenaGameNames[] = {
 };
 
 static int const numTeamArenaGameNames = sizeof(teamArenaGameNames) / sizeof(const char*);
+*/
+
+// ~DIMMSKII
+
+// TODO: Parse all of these arrays somehow as "browsergametypes" from gameinfo.txt or some other more mod-friendly location.
+// Why can't users customize their server browsers just like they do with the HUD? Gametypes and mod dirs evolve.
+
+static const int gameTypes_missionpack2[] = { // So we can filter to our own gamedir
+	GT_FFA,
+	GT_TOURNAMENT,
+	GT_SINGLE_PLAYER,
+	GT_ARENA,
+	GT_TEAM,
+	GT_TEAMARENA,
+	GT_FREEZETAG,
+	GT_CTF,	
+	GT_1FCTF,
+	GT_OBELISK,	
+	GT_HARVESTER,
+};
+
+static const int gameTypes_baseq3[] = {
+	GT_FFA,
+	GT_TOURNAMENT,
+	GT_FFA,				// GT_SINGLE_PLAYER
+	GT_TEAM,
+	GT_CTF,
+};
+
+static const int gameTypes_missionpack[] = {
+	GT_FFA,
+	GT_TOURNAMENT,
+	GT_FFA,				// GT_SINGLE_PLAYER
+	GT_ARENA,
+	GT_TEAM,
+	GT_CTF,
+	GT_1FCTF,
+	GT_OBELISK,
+	GT_HARVESTER,
+	-1, 			// GT_TEAM_TOURNAMENT
+};
+
+static const int gameTypes_arena[] = { // RA3
+	-1,
+	-1,
+	-1,
+	-1,
+	-1,
+	-1,
+	-1,
+	-1,
+	-1,
+};
+
+static const int gameTypes_osp[] = { // OSP
+	GT_FFA,
+	GT_TOURNAMENT,
+	GT_FFA,			// GT_SINGLE_PLAYER
+	GT_TEAM,
+	GT_CTF,
+	GT_TEAMARENA,
+};
+
+static const int gameTypes_cpma[] = { // Challenge Pro Mode Arena
+	GT_FFA,
+	GT_TOURNAMENT,
+	GT_FFA,				// ?
+	GT_TEAM,
+	GT_CTF,
+	GT_TEAMARENA,
+	GT_FREEZETAG,
+};
+
+static const int gameTypes_q3ut4[] = { // UrbanTerror 4
+	GT_FFA,
+	GT_ARENA,			// LMS
+	GT_FFA,				// ?
+	GT_TEAM,
+	GT_TEAMARENA,
+	-1,					// FTL
+	-1,					// CNH
+	GT_CTF,
+	-1,					// BM
+	-1,					// JUMP
+	GT_FREEZETAG,
+	-1,					// GUN
+};
+
+static const int gameTypes_unfreeze[] = { // Unfreeze
+	-1,
+	-1,
+	-1,	
+	GT_FREEZETAG,
+	-1,
+	-1,
+	-1,
+};
+
+typedef struct {
+	const char  *gamedir;
+	const char	*name;
+	const int   *gameTypes;
+	int          numGameTypes;
+} gameTypeList_t;
+
+static const gameTypeList_t gameTypeLists[] = {
+	{ "missionpack2",	"Ultimate Arena",	   	gameTypes_missionpack2,		ARRAY_LEN(gameTypes_missionpack2) },
+	{ "baseq3",			"Quake III Arena",	   	gameTypes_baseq3,      		ARRAY_LEN(gameTypes_baseq3) },
+	{ "missionpack",	"Team Arena",			gameTypes_missionpack,  	ARRAY_LEN(gameTypes_missionpack) },
+	{ "arena",			"Rocket Arena 3", 		gameTypes_arena,  			ARRAY_LEN(gameTypes_arena) },
+	{ "osp",			"OSP", 					gameTypes_osp,  			ARRAY_LEN(gameTypes_osp) },
+	{ "cpma",			"CPMA", 				gameTypes_cpma,  			ARRAY_LEN(gameTypes_cpma) },
+	{ "q3ut4",			"Urban Terror 4", 		gameTypes_q3ut4,  			ARRAY_LEN(gameTypes_q3ut4) },
+	{ "unfreeze",		"Unfreeze", 			gameTypes_unfreeze,  		ARRAY_LEN(gameTypes_unfreeze) },
+};
+
+static const int numGameTypeLists = ARRAY_LEN(gameTypeLists);
+
+// END DIMMSKII
 
 
-static const int numServerFilters = sizeof(serverFilters) / sizeof(serverFilter_t);
+//static const int numServerFilters = sizeof(serverFilters) / sizeof(serverFilter_t);
 
 static const char *sortKeys[] = {
 	"Server Name",
@@ -107,9 +227,11 @@ static char* netnames[] = {
 	NULL
 };
 
+/*
 #ifndef MISSIONPACK // bk001206
 static char quake3worldMessage[] = "Visit www.quake3world.com - News, Community, Events, Files";
 #endif
+*/
 
 static int gamecodetoui[] = {4,2,3,0,5,1,6};
 
@@ -994,9 +1116,11 @@ void UI_Load() {
 }
 
 static const char *handicapValues[] = {"None","95","90","85","80","75","70","65","60","55","50","45","40","35","30","25","20","15","10","5",NULL};
+/*
 #ifndef MISSIONPACK // bk001206
 static int numHandicaps = sizeof(handicapValues) / sizeof(const char*);
 #endif
+*/
 
 static void UI_DrawHandicap(rectDef_t *rect, float scale, vec4_t color, int textStyle) {
   int i, h;
@@ -1028,6 +1152,7 @@ static void UI_SetCapFragLimits(qboolean uiVars) {
 		trap_Cvar_Set("fraglimit", va("%d", frag));
 	}
 }
+/*
 // ui_gameType assumes gametype 0 is -1 ALL and will not show
 static void UI_DrawGameType(rectDef_t *rect, float scale, vec4_t color, int textStyle) {
   Text_Paint(rect->x, rect->y, scale, color, uiInfo.gameTypes[ui_gameType.integer].gameType, 0, 0, textStyle);
@@ -1040,6 +1165,18 @@ static void UI_DrawNetGameType(rectDef_t *rect, float scale, vec4_t color, int t
 	}
   Text_Paint(rect->x, rect->y, scale, color, uiInfo.gameTypes[ui_netGameType.integer].gameType , 0, 0, textStyle);
 }
+*/
+
+// ~Dimmskii 
+static void UI_DrawGameType(rectDef_t *rect, float scale, vec4_t color, int textStyle) {
+	if (ui_gameType.integer < 0 || ui_gameType.integer > uiInfo.numGameTypes) {
+		trap_Cvar_Set("ui_gameType", "0");
+		trap_Cvar_Set("ui_netGameType", "0");
+		trap_Cvar_Set("ui_actualNetGameType", "0");
+	}
+	Text_Paint(rect->x, rect->y, scale, color, uiInfo.gameTypes[ui_gameType.integer].gameType , 0, 0, textStyle);
+}
+// End Dimmskii
 
 static void UI_DrawJoinGameType(rectDef_t *rect, float scale, vec4_t color, int textStyle) {
 	if (ui_joinGameType.integer < 0 || ui_joinGameType.integer > uiInfo.numJoinGameTypes) {
@@ -1137,18 +1274,17 @@ static void UI_DrawSkill(rectDef_t *rect, float scale, vec4_t color, int textSty
 
 
 static void UI_DrawTeamName(rectDef_t *rect, float scale, vec4_t color, qboolean blue, int textStyle) {
-#ifdef MISSIONPACK2
-	Text_Paint(rect->x, rect->y, scale, color, va("%s", (blue) ? "Blue" : "Red"),0, 0, textStyle);
-#else
+	Text_Paint(rect->x, rect->y, scale, color, va("%s", (blue) ? "Blue" : "Red"),0, 0, textStyle); // ~DIMMSKII
+/*
   int i;
   i = UI_TeamIndexFromName(UI_Cvar_VariableString((blue) ? "ui_blueTeam" : "ui_redTeam"));
   if (i >= 0 && i < uiInfo.teamCount) {
     Text_Paint(rect->x, rect->y, scale, color, va("%s: %s", (blue) ? "Blue" : "Red", uiInfo.teamList[i].teamName),0, 0, textStyle);
   }
-#endif
+*/
 }
 
-#ifdef MISSIONPACK2
+// ~DIMMSKII
 static void UI_DrawTeamMember(rectDef_t *rect, float scale, vec4_t color, qboolean blue, int num, int textStyle) {
 	// 0 - None
 	// 1 - Human
@@ -1168,7 +1304,9 @@ static void UI_DrawTeamMember(rectDef_t *rect, float scale, vec4_t color, qboole
 	}
   Text_Paint(rect->x, rect->y, scale, color, text, 0, 0, textStyle);
 }
-#else
+// END DIMMSKII
+
+/*
 static void UI_DrawTeamMember(rectDef_t *rect, float scale, vec4_t color, qboolean blue, int num, int textStyle) {
 	// 0 - None
 	// 1 - Human
@@ -1182,7 +1320,8 @@ static void UI_DrawTeamMember(rectDef_t *rect, float scale, vec4_t color, qboole
 	} else {
 		value -= 2;
 
-		if (ui_actualNetGameType.integer >= GT_TEAM) {
+		//if (ui_actualNetGameType.integer >= GT_TEAM) {
+		if (ui_gameType.integer >= GT_TEAM) { // ~Dimmskii
 			if (value >= uiInfo.characterCount) {
 				value = 0;
 			}
@@ -1196,7 +1335,7 @@ static void UI_DrawTeamMember(rectDef_t *rect, float scale, vec4_t color, qboole
 	}
   Text_Paint(rect->x, rect->y, scale, color, text, 0, 0, textStyle);
 }
-#endif
+*/
 
 static void UI_DrawEffects(rectDef_t *rect, float scale, vec4_t color) {
 	vec4_t colors;
@@ -1288,9 +1427,7 @@ static void UI_DrawMapCinematic(rectDef_t *rect, float scale, vec4_t color, qboo
 
 
 static qboolean updateModel = qtrue;
-#ifndef MISSIONPACK2
-static qboolean q3Model = qtrue;
-#endif
+//static qboolean q3Model = qtrue;
 
 static void UI_DrawPlayerModel(rectDef_t *rect) {
   static playerInfo_t info;
@@ -1299,7 +1436,7 @@ static void UI_DrawPlayerModel(rectDef_t *rect) {
 	char head[256];
 	vec3_t	viewangles;
 	vec3_t	moveangles;
-#ifndef MISSIONPACK2
+/*
 	  if (trap_Cvar_VariableValue("ui_Q3Model")) {
 	  strcpy(model, UI_Cvar_VariableString("model"));
 		strcpy(head, UI_Cvar_VariableString("headmodel"));
@@ -1318,12 +1455,13 @@ static void UI_DrawPlayerModel(rectDef_t *rect) {
 			updateModel = qtrue;
 		}
 	}
-#else
+*/
+// ~Dimmskii
 	strcpy(model, UI_Cvar_VariableString("model"));
 	strcpy(head, UI_Cvar_VariableString("headmodel"));
 	team[0] = '\0';
 	updateModel = qtrue;
-#endif
+// End Dimmskii
   if (updateModel) {
   	memset( &info, 0, sizeof(playerInfo_t) );
   	viewangles[YAW]   = 180 - 10;
@@ -1377,7 +1515,8 @@ static void UI_DrawNetFilter(rectDef_t *rect, float scale, vec4_t color, int tex
 	/*if (ui_serverFilterType.integer < 0 || ui_serverFilterType.integer > numServerFilters) {
 		ui_serverFilterType.integer = 0;
 	}*/
-  Text_Paint(rect->x, rect->y, scale, color, va("Filter: %s", serverFilters[0/*ui_serverFilterType.integer*/].description), 0, 0, textStyle);
+  //Text_Paint(rect->x, rect->y, scale, color, va("Filter: %s", serverFilters[0/*ui_serverFilterType.integer*/].description), 0, 0, textStyle);
+  Text_Paint(rect->x, rect->y, scale, color, va("Filter: %s", gameTypeLists[ui_serverFilterType.integer].name), 0, 0, textStyle); // ~dimmskii
 }
 
 
@@ -1443,12 +1582,14 @@ static void UI_DrawTierGameType(rectDef_t *rect, float scale, vec4_t color, int 
 }
 
 
+/*
 #ifndef MISSIONPACK // bk001206
 static const char *UI_OpponentLeaderName() {
   int i = UI_TeamIndexFromName(UI_Cvar_VariableString("ui_opponentName"));
 	return uiInfo.teamList[i].teamMembers[0];
 }
 #endif
+*/
 
 static const char *UI_AIFromName(const char *name) {
 	int j;
@@ -1460,6 +1601,7 @@ static const char *UI_AIFromName(const char *name) {
 	return "James";
 }
 
+/*
 #ifndef MISSIONPACK // bk001206
 static const int UI_AIIndex(const char *name) {
 	int j;
@@ -1504,6 +1646,7 @@ static const char *UI_OpponentLeaderModel() {
 	return "James";
 }
 #endif
+*/
 
 
 static qboolean updateOpponentModel = qtrue;
@@ -1535,6 +1678,8 @@ static void UI_DrawOpponent(rectDef_t *rect) {
   UI_DrawPlayer( rect->x, rect->y, rect->w, rect->h, &info2, uiInfo.uiDC.realTime / 2);
 
 }
+
+// ~Dimmskii TODO: get rid of all ui_opponentName and ui_teamName usage. For TA compat, maybe render non-SP team names and logos.
 
 static void UI_NextOpponent() {
   int i = UI_TeamIndexFromName(UI_Cvar_VariableString("ui_opponentName"));
@@ -1683,7 +1828,7 @@ static int UI_OwnerDrawWidth(int ownerDraw, float scale) {
 				}
 			  s = skillLevels[i-1];
       break;
-#ifndef MISSIONPACK2
+/*
     case UI_BLUETEAMNAME:
 			  i = UI_TeamIndexFromName(UI_Cvar_VariableString("ui_blueTeam"));
 			  if (i >= 0 && i < uiInfo.teamCount) {
@@ -1696,8 +1841,9 @@ static int UI_OwnerDrawWidth(int ownerDraw, float scale) {
 			    s = va("%s: %s", "Red", uiInfo.teamList[i].teamName);
 			  }
       break;
-#endif
-#ifdef MISSIONPACK2
+*/
+
+// ~DIMMSKII
     case UI_BLUETEAM1:
 		case UI_BLUETEAM2:
 		case UI_BLUETEAM3:
@@ -1740,7 +1886,9 @@ static int UI_OwnerDrawWidth(int ownerDraw, float scale) {
 			}
 			s = va("%i. %s", ownerDraw-UI_REDTEAM1 + 1, text);
       break;
-#else
+// END DIMMSKII
+
+/*
     case UI_BLUETEAM1:
 		case UI_BLUETEAM2:
 		case UI_BLUETEAM3:
@@ -1779,7 +1927,7 @@ static int UI_OwnerDrawWidth(int ownerDraw, float scale) {
 			}
 			s = va("%i. %s", ownerDraw-UI_REDTEAM1 + 1, text);
       break;
-#endif
+*/
 		case UI_NETSOURCE:
 			if (ui_netSource.integer < 0 || ui_netSource.integer > uiInfo.numJoinGameTypes) {
 				ui_netSource.integer = 0;
@@ -1790,7 +1938,19 @@ static int UI_OwnerDrawWidth(int ownerDraw, float scale) {
 			/*if (ui_serverFilterType.integer < 0 || ui_serverFilterType.integer > numServerFilters) {
 				ui_serverFilterType.integer = 0;
 			}*/
-			s = va("Filter: %s", serverFilters[0/*ui_serverFilterType.integer*/].description );
+			//s = va("Filter: %s", serverFilters[0/*ui_serverFilterType.integer*/].description );
+
+			// ~Dimmskii
+			if (ui_serverFilterType.integer < -1 || ui_serverFilterType.integer > numGameTypeLists) {
+				ui_serverFilterType.integer = -1;
+			}
+			if (ui_serverFilterType.integer < 0) {
+				s = va("Filter: %s", "All" ); // ~Dimmskii
+			} else {
+				s = va("Filter: %s", gameTypeLists[ui_serverFilterType.integer].name ); // ~dimmskii
+			}
+			// End Dimmskii
+
 			break;
 		case UI_TIER:
 			break;
@@ -1826,12 +1986,13 @@ static void UI_DrawBotName(rectDef_t *rect, float scale, vec4_t color, int textS
 	int value = uiInfo.botIndex;
 	int game = trap_Cvar_VariableValue("g_gametype");
 	const char *text = "";
-#ifdef MISSIONPACK2
+// ~DIMMSKII
 	if (value >= UI_GetNumBots()) {
 		value = 0;
 	}
 	text = UI_GetBotNameByNumber(value);
-#else
+// END DIMMSKII
+/*
 	if (game >= GT_TEAM) {
 		if (value >= uiInfo.characterCount) {
 			value = 0;
@@ -1843,7 +2004,7 @@ static void UI_DrawBotName(rectDef_t *rect, float scale, vec4_t color, int textS
 		}
 		text = UI_GetBotNameByNumber(value);
 	}
-#endif
+*/
   Text_Paint(rect->x, rect->y, scale, color, text, 0, 0, textStyle);
 }
 
@@ -2094,9 +2255,12 @@ static void UI_OwnerDraw(float x, float y, float w, float h, float text_x, float
     case UI_GAMETYPE:
       UI_DrawGameType(&rect, scale, color, textStyle);
       break;
-    case UI_NETGAMETYPE:
+	// ~Dimmskii removal of confusion. Maps on to UI_GAMETYPE in the def
+    /*
+	case UI_NETGAMETYPE:
       UI_DrawNetGameType(&rect, scale, color, textStyle);
       break;
+	*/
     case UI_JOINGAMETYPE:
 	  UI_DrawJoinGameType(&rect, scale, color, textStyle);
 	  break;
@@ -2126,10 +2290,8 @@ static void UI_OwnerDraw(float x, float y, float w, float h, float text_x, float
 		case UI_BLUETEAM3:
 		case UI_BLUETEAM4:
 		case UI_BLUETEAM5:
-#ifdef MISSIONPACK2
-		case UI_BLUETEAM6:
-		case UI_BLUETEAM7:
-#endif
+		case UI_BLUETEAM6:	// ~Dimmskii
+		case UI_BLUETEAM7:	// ~Dimmskii
       UI_DrawTeamMember(&rect, scale, color, qtrue, ownerDraw - UI_BLUETEAM1 + 1, textStyle);
       break;
     case UI_REDTEAM1:
@@ -2137,10 +2299,8 @@ static void UI_OwnerDraw(float x, float y, float w, float h, float text_x, float
 		case UI_REDTEAM3:
 		case UI_REDTEAM4:
 		case UI_REDTEAM5:
-#ifdef MISSIONPACK2
-		case UI_REDTEAM6:
-		case UI_REDTEAM7:
-#endif
+		case UI_REDTEAM6:	// ~Dimmskii
+		case UI_REDTEAM7:	// ~Dimmskii
       UI_DrawTeamMember(&rect, scale, color, qfalse, ownerDraw - UI_REDTEAM1 + 1, textStyle);
       break;
 		case UI_NETSOURCE:
@@ -2304,32 +2464,33 @@ static qboolean UI_OwnerDrawVisible(int flags) {
 			}
 			flags &= ~UI_SHOW_ANYNONTEAMGAME;
 		} 
-		if (flags & UI_SHOW_NETANYTEAMGAME) {
+/*		if (flags & UI_SHOW_NETANYTEAMGAME) { // ~Dimmskii now mapped to UI_SHOW_ANYTEAMGAME
 			if (uiInfo.gameTypes[ui_netGameType.integer].gtEnum <= GT_TEAM ) {
+			if (uiInfo.gameTypes[ui_gameType.integer].gtEnum <= GT_TEAM ) { // ~Dimmskii
 				vis = qfalse;
 			}
 			flags &= ~UI_SHOW_NETANYTEAMGAME;
 		} 
-		if (flags & UI_SHOW_NETANYNONTEAMGAME) {
+		if (flags & UI_SHOW_NETANYNONTEAMGAME) { // ~Dimmskii now mapped to UI_SHOW_ANYNONTEAMGAME
 			if (uiInfo.gameTypes[ui_netGameType.integer].gtEnum > GT_TEAM ) {
 				vis = qfalse;
 			}
 			flags &= ~UI_SHOW_NETANYNONTEAMGAME;
-		} 
-#ifdef MISSIONPACK2
+		} */
+// ~Dimmskii
 		if (flags & UI_SHOW_ARENAGAME) {
-			if (uiInfo.gameTypes[ui_netGameType.integer].gtEnum != GT_ARENA && uiInfo.gameTypes[ui_netGameType.integer].gtEnum != GT_TEAMARENA) {
+			if (uiInfo.gameTypes[ui_gameType.integer].gtEnum != GT_ARENA && uiInfo.gameTypes[ui_gameType.integer].gtEnum != GT_TEAMARENA) {
 				vis = qfalse;
 			}
 			flags &= ~UI_SHOW_ARENAGAME;
 		} 
 		if (flags & UI_SHOW_NOTARENAGAME) {
-			if (uiInfo.gameTypes[ui_netGameType.integer].gtEnum == GT_ARENA || uiInfo.gameTypes[ui_netGameType.integer].gtEnum == GT_TEAMARENA) {
+			if (uiInfo.gameTypes[ui_gameType.integer].gtEnum == GT_ARENA || uiInfo.gameTypes[ui_gameType.integer].gtEnum == GT_TEAMARENA) {
 				vis = qfalse;
 			}
 			flags &= ~UI_SHOW_NOTARENAGAME;
 		} 
-#endif
+// End Dimmskii
 		if (flags & UI_SHOW_NEWHIGHSCORE) {
 			if (uiInfo.newHighScoreTime < uiInfo.uiDC.realTime) {
 				vis = qfalse;
@@ -2430,6 +2591,7 @@ static qboolean UI_ClanName_HandleKey(int flags, float *special, int key) {
   return qfalse;
 }
 
+/*
 static qboolean UI_GameType_HandleKey(int flags, float *special, int key, qboolean resetMap) {
   if (key == K_MOUSE1 || key == K_MOUSE2 || key == K_ENTER || key == K_KP_ENTER) {
 		int oldCount = UI_MapCountByGameType(qtrue);
@@ -2493,6 +2655,59 @@ static qboolean UI_NetGameType_HandleKey(int flags, float *special, int key) {
   }
   return qfalse;
 }
+*/
+
+// ~Dimmskii
+static qboolean UI_GameType_HandleKey(int flags, float *special, int key, qboolean resetMap) {
+	int i, hostTypeIndex;
+  if (key == K_MOUSE1 || key == K_MOUSE2 || key == K_ENTER || key == K_KP_ENTER) {
+
+		// Iterate through hostgametypes array instead:
+		hostTypeIndex = -1;
+
+		for (i = 0; i < uiInfo.numHostGameTypes; i++) {
+			if (ui_gameType.integer == uiInfo.hostGameTypes[i].gtEnum) {
+				hostTypeIndex = i;
+				break;
+			}
+		}
+
+		if (hostTypeIndex == -1) {
+			hostTypeIndex = 0;
+		}
+		
+		if (key == K_MOUSE2) {
+			hostTypeIndex--;
+		} else {
+			hostTypeIndex++;
+		}
+		if (hostTypeIndex < 0) {
+			hostTypeIndex = uiInfo.numHostGameTypes - 1;
+		} else if (hostTypeIndex >= uiInfo.numHostGameTypes) {
+			hostTypeIndex = 0;
+		}
+
+		ui_gameType.integer = uiInfo.hostGameTypes[hostTypeIndex].gtEnum; // Set to gtEnum of incremented host type instead 
+
+
+		// Additionally, the original check now on ui_gameType itself for out of bounds
+    if (ui_gameType.integer < 0) {
+      ui_gameType.integer = uiInfo.numGameTypes - 1;
+		} else if (ui_gameType.integer >= uiInfo.numGameTypes) {
+      ui_gameType.integer = 0;
+    }
+
+	trap_Cvar_Set( "ui_gameType", va("%d", ui_gameType.integer));
+  	trap_Cvar_Set( "ui_netGameType", va("%d", ui_gameType.integer));
+  	trap_Cvar_Set( "ui_actualnetGameType", va("%d", ui_gameType.integer));
+  	//trap_Cvar_Set( "ui_currentNetMap", "0");
+	//	UI_MapCountByGameType(qfalse);
+	//	Menu_SetFeederSelection(NULL, FEEDER_ALLMAPS, 0, NULL);
+    return qtrue;
+  }
+  return qfalse;
+}
+// End Dimmskii
 
 static qboolean UI_JoinGameType_HandleKey(int flags, float *special, int key) {
 	if (key == K_MOUSE1 || key == K_MOUSE2 || key == K_ENTER || key == K_KP_ENTER) {
@@ -2578,14 +2793,16 @@ static qboolean UI_TeamMember_HandleKey(int flags, float *special, int key, qboo
 			value++;
 		}
 
-#ifdef MISSIONPACK2
+// ~Dimmskii
 		if (value >= UI_GetNumBots() + 2) {
 			value = 0;
 		} else if (value < 0) {
 			value = UI_GetNumBots() + 2 - 1;
 		}
-#else
-		if (ui_actualNetGameType.integer >= GT_TEAM) {
+// END Dimmskii
+/*
+		//if (ui_actualNetGameType.integer >= GT_TEAM) {
+		if (ui_gameType.integer >= GT_TEAM) { // ~Dimmskii
 			if (value >= uiInfo.characterCount + 2) {
 				value = 0;
 			} else if (value < 0) {
@@ -2598,7 +2815,7 @@ static qboolean UI_TeamMember_HandleKey(int flags, float *special, int key, qboo
 				value = UI_GetNumBots() + 2 - 1;
 			}
 		}
-#endif
+*/
 
 		trap_Cvar_Set(cvar, va("%i", value));
     return qtrue;
@@ -2639,9 +2856,9 @@ static qboolean UI_NetFilter_HandleKey(int flags, float *special, int key) {
   if (key == K_MOUSE1 || key == K_MOUSE2 || key == K_ENTER || key == K_KP_ENTER) {
 
 		if (key == K_MOUSE2) {
-			//ui_serverFilterType.integer--;
+			ui_serverFilterType.integer--;
 		} else {
-			//ui_serverFilterType.integer++;
+			ui_serverFilterType.integer++;
 		}
 
    /* if (ui_serverFilterType.integer >= numServerFilters) {
@@ -2649,6 +2866,15 @@ static qboolean UI_NetFilter_HandleKey(int flags, float *special, int key) {
     } else if (ui_serverFilterType.integer < 0) {
       ui_serverFilterType.integer = numServerFilters - 1;
 		}*/
+
+
+	// ~Dimmskii - Use new browser gametype lists
+    if (ui_serverFilterType.integer >= numGameTypeLists) {
+      ui_serverFilterType.integer = -1;
+    } else if (ui_serverFilterType.integer < -1) {
+      ui_serverFilterType.integer = numGameTypeLists - 1;
+		}
+
 		UI_BuildServerDisplayList(qtrue);
     return qtrue;
   }
@@ -2678,13 +2904,14 @@ static qboolean UI_BotName_HandleKey(int flags, float *special, int key) {
 			value++;
 		}
 
-#ifdef MISSIONPACK2
+// ~DIMMSKII
 		if (value >= UI_GetNumBots() + 2) {
 			value = 0;
 		} else if (value < 0) {
 			value = UI_GetNumBots() + 2 - 1;
 		}
-#else
+// END DIMMSKII
+/*
 		if (game >= GT_TEAM) {
 			if (value >= uiInfo.characterCount + 2) {
 				value = 0;
@@ -2698,7 +2925,7 @@ static qboolean UI_BotName_HandleKey(int flags, float *special, int key) {
 				value = UI_GetNumBots() + 2 - 1;
 			}
 		}
-#endif
+*/
 		uiInfo.botIndex = value;
     return qtrue;
   }
@@ -2798,32 +3025,36 @@ static qboolean UI_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, 
     case UI_GAMETYPE:
       return UI_GameType_HandleKey(flags, special, key, qtrue);
       break;
+    /*
+	// ~Dimmskii - Maps onto UI_GAMETYPE
     case UI_NETGAMETYPE:
       return UI_NetGameType_HandleKey(flags, special, key);
       break;
+	*/
     case UI_JOINGAMETYPE:
       return UI_JoinGameType_HandleKey(flags, special, key);
       break;
     case UI_SKILL:
       return UI_Skill_HandleKey(flags, special, key);
       break;
-#ifndef MISSIONPACK2
+/*
+	// ~Dimmskii - We no longer cycle TA clans because they don't exist here
     case UI_BLUETEAMNAME:
       return UI_TeamName_HandleKey(flags, special, key, qtrue);
       break;
     case UI_REDTEAMNAME:
       return UI_TeamName_HandleKey(flags, special, key, qfalse);
       break;
-#endif
+*/
     case UI_BLUETEAM1:
 		case UI_BLUETEAM2:
 		case UI_BLUETEAM3:
 		case UI_BLUETEAM4:
 		case UI_BLUETEAM5:
-#ifdef MISSIONPACK2
+// ~Dimmskii
 		case UI_BLUETEAM6:
 		case UI_BLUETEAM7:
-#endif
+// End Dimmskii
       UI_TeamMember_HandleKey(flags, special, key, qtrue, ownerDraw - UI_BLUETEAM1 + 1);
       break;
     case UI_REDTEAM1:
@@ -2831,10 +3062,10 @@ static qboolean UI_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, 
 		case UI_REDTEAM3:
 		case UI_REDTEAM4:
 		case UI_REDTEAM5:
-#ifdef MISSIONPACK2
+// ~Dimmskii
 		case UI_REDTEAM6:
 		case UI_REDTEAM7:
-#endif
+// End Dimmskii
       UI_TeamMember_HandleKey(flags, special, key, qfalse, ownerDraw - UI_REDTEAM1 + 1);
       break;
 		case UI_NETSOURCE:
@@ -3135,8 +3366,10 @@ static void UI_StartSkirmish(qboolean next) {
 	trap_Cvar_Set("g_warmup", "15");
 	trap_Cvar_Set("sv_pure", "0");
 	trap_Cvar_Set("g_friendlyFire", "0");
-	trap_Cvar_Set("g_redTeam", UI_Cvar_VariableString("ui_teamName"));
-	trap_Cvar_Set("g_blueTeam", UI_Cvar_VariableString("ui_opponentName"));
+//	trap_Cvar_Set("g_redTeam", UI_Cvar_VariableString("ui_teamName"));
+//	trap_Cvar_Set("g_blueTeam", UI_Cvar_VariableString("ui_opponentName"));
+	trap_Cvar_Set("g_redTeam", UI_Cvar_VariableString("ui_redTeam")); // ~Dimmskii
+	trap_Cvar_Set("g_blueTeam", UI_Cvar_VariableString("ui_blueTeam")); // ~Dimmskii
 
 	if (trap_Cvar_VariableValue("ui_recordSPDemo")) {
 		Com_sprintf(buff, MAX_STRING_CHARS, "%s_%i", uiInfo.mapList[ui_currentMap.integer].mapLoadName, g);
@@ -3302,11 +3535,13 @@ static void UI_RunMenuScript(char **args) {
 			trap_Cvar_Set("cg_cameraOrbit", "0");
 			trap_Cvar_Set("ui_singlePlayerActive", "0");
 			trap_Cvar_SetValue( "dedicated", Com_Clamp( 0, 2, ui_dedicated.integer ) );
-			trap_Cvar_SetValue( "g_gametype", Com_Clamp( 0, 11, uiInfo.gameTypes[ui_netGameType.integer].gtEnum ) );
-#ifndef MISSIONPACK2
-			trap_Cvar_Set("g_redTeam", UI_Cvar_VariableString("ui_teamName"));
-			trap_Cvar_Set("g_blueTeam", UI_Cvar_VariableString("ui_opponentName"));
-#endif
+			//trap_Cvar_SetValue( "g_gametype", Com_Clamp( 0, 11, uiInfo.gameTypes[ui_netGameType.integer].gtEnum ) );
+			trap_Cvar_SetValue( "g_gametype", Com_Clamp( 0, 11, uiInfo.gameTypes[ui_gameType.integer].gtEnum ) ); // ~Dimmskii
+			//trap_Cvar_Set("g_redTeam", UI_Cvar_VariableString("ui_teamName"));
+			//trap_Cvar_Set("g_blueTeam", UI_Cvar_VariableString("ui_opponentName"));
+			trap_Cvar_Set("g_redTeam", UI_Cvar_VariableString("ui_redTeam")); // ~Dimmskii
+			trap_Cvar_Set("g_blueTeam", UI_Cvar_VariableString("ui_blueTeam")); // ~Dimmskii
+
 			trap_Cmd_ExecuteText( EXEC_APPEND, va( "wait ; wait ; map %s\n", uiInfo.mapList[ui_currentNetMap.integer].mapLoadName ) );
 			skill = trap_Cvar_VariableValue( "g_spSkill" );
 			// set max clients based on spots
@@ -3331,7 +3566,7 @@ static void UI_RunMenuScript(char **args) {
 			}
 
 			trap_Cvar_Set("sv_maxClients", va("%d",clients));
-#ifdef MISSIONPACK2
+// ~DIMMSKII
 			for (i = 0; i < PLAYERS_PER_TEAM; i++) {
 				int bot = trap_Cvar_VariableValue( va("ui_blueteam%i", i+1));
 				if (bot > 1) {
@@ -3344,11 +3579,12 @@ static void UI_RunMenuScript(char **args) {
 					trap_Cmd_ExecuteText( EXEC_APPEND, buff );
 				}
 			}
-#else
+// END DIMMSKII
+/*
 			for (i = 0; i < PLAYERS_PER_TEAM; i++) {
 				int bot = trap_Cvar_VariableValue( va("ui_blueteam%i", i+1));
 				if (bot > 1) {
-					if (ui_actualNetGameType.integer >= GT_TEAM) {
+					if (ui_gameType.integer >= GT_TEAM) {
 						Com_sprintf( buff, sizeof(buff), "addbot %s %f %s\n", uiInfo.characterList[bot-2].name, skill, "Blue");
 					} else {
 						Com_sprintf( buff, sizeof(buff), "addbot %s %f \n", UI_GetBotNameByNumber(bot-2), skill);
@@ -3357,7 +3593,7 @@ static void UI_RunMenuScript(char **args) {
 				}
 				bot = trap_Cvar_VariableValue( va("ui_redteam%i", i+1));
 				if (bot > 1) {
-					if (ui_actualNetGameType.integer >= GT_TEAM) {
+					if (ui_gameType.integer >= GT_TEAM) {
 						Com_sprintf( buff, sizeof(buff), "addbot %s %f %s\n", uiInfo.characterList[bot-2].name, skill, "Red");
 					} else {
 						Com_sprintf( buff, sizeof(buff), "addbot %s %f \n", UI_GetBotNameByNumber(bot-2), skill);
@@ -3365,7 +3601,7 @@ static void UI_RunMenuScript(char **args) {
 					trap_Cmd_ExecuteText( EXEC_APPEND, buff );
 				}
 			}
-#endif
+*/
 		} else if (Q_stricmp(name, "updateSPMenu") == 0) {
 			UI_SetCapFragLimits(qtrue);
 			UI_MapCountByGameType(qtrue);
@@ -3551,23 +3787,27 @@ static void UI_RunMenuScript(char **args) {
 				trap_Cmd_ExecuteText( EXEC_APPEND, va("callvote kick %s\n",uiInfo.playerNames[uiInfo.playerIndex]) );
 			}
 		} else if (Q_stricmp(name, "voteGame") == 0) {
+			/*
 			if (ui_netGameType.integer >= 0 && ui_netGameType.integer < uiInfo.numGameTypes) {
 				trap_Cmd_ExecuteText( EXEC_APPEND, va("callvote g_gametype %i\n",uiInfo.gameTypes[ui_netGameType.integer].gtEnum) );
+			}
+			*/
+			if (ui_gameType.integer >= 0 && ui_gameType.integer < uiInfo.numGameTypes) { // ~Dimmskii - removal of confusion
+				trap_Cmd_ExecuteText( EXEC_APPEND, va("callvote g_gametype %i\n",uiInfo.gameTypes[ui_gameType.integer].gtEnum) );
 			}
 		} else if (Q_stricmp(name, "voteLeader") == 0) {
 			if (uiInfo.teamIndex >= 0 && uiInfo.teamIndex < uiInfo.myTeamCount) {
 				trap_Cmd_ExecuteText( EXEC_APPEND, va("callteamvote leader %s\n",uiInfo.teamNames[uiInfo.teamIndex]) );
 			}
 		} else if (Q_stricmp(name, "addBot") == 0) {
-#ifdef MISSIONPACK2
-			trap_Cmd_ExecuteText( EXEC_APPEND, va("addbot %s %i %s\n", UI_GetBotNameByNumber(uiInfo.botIndex), uiInfo.skillIndex+1, (uiInfo.redBlue == 0) ? "Red" : "Blue") );
-#else
+			trap_Cmd_ExecuteText( EXEC_APPEND, va("addbot %s %i %s\n", UI_GetBotNameByNumber(uiInfo.botIndex), uiInfo.skillIndex+1, (uiInfo.redBlue == 0) ? "Red" : "Blue") ); // ~Dimmskii
+/*
 			if (trap_Cvar_VariableValue("g_gametype") >= GT_TEAM) {
 				trap_Cmd_ExecuteText( EXEC_APPEND, va("addbot %s %i %s\n", uiInfo.characterList[uiInfo.botIndex].name, uiInfo.skillIndex+1, (uiInfo.redBlue == 0) ? "Red" : "Blue") );
 			} else {
 				trap_Cmd_ExecuteText( EXEC_APPEND, va("addbot %s %i %s\n", UI_GetBotNameByNumber(uiInfo.botIndex), uiInfo.skillIndex+1, (uiInfo.redBlue == 0) ? "Red" : "Blue") );
 			}
-#endif
+*/
 		} else if (Q_stricmp(name, "addFavorite") == 0) {
 			if (ui_netSource.integer != AS_FAVORITES) {
 				char name[MAX_NAME_LENGTH];
@@ -3700,6 +3940,78 @@ static void UI_RunMenuScript(char **args) {
 static void UI_GetTeamColor(vec4_t *color) {
 }
 
+
+// ~DIMMSKII
+/*
+==================
+UI_GameTypeName
+
+Safely gets gametype name from valid or invalid GT_ enum
+==================
+*/
+static const char *UI_GameTypeName(int gt) {
+	int i;
+
+	for (i = 0; i < uiInfo.numGameTypes; i++) {
+		if (uiInfo.gameTypes[i].gtEnum == gt) {
+			return uiInfo.gameTypes[i].gameType;
+		}
+	}
+
+	return "Unknown";
+}
+
+/*
+==================
+UI_GameTypeListForGamedir
+
+Returns gameTypeList_t with corresponding gamedir name
+==================
+*/
+static const gameTypeList_t *UI_GameTypeListForGamedir(const char *gamedir) {
+	int i;
+
+	for (i = 0; i < numGameTypeLists; i++) {
+		if (Q_stricmp(gamedir, gameTypeLists[i].gamedir) == 0) {
+			return &gameTypeLists[i];
+		}
+	}
+
+	return &gameTypeLists[0];
+}
+
+/*
+==================
+UI_GameTypeNameForGamedir
+
+Combined version which still outputs nice name of mod if actual gametype is not found or not mapped (-1)
+==================
+*/
+static const char *UI_GameTypeNameForGamedir(const char *gamedir, int gt) {
+	int i, j;
+
+	for (i = 0; i < numGameTypeLists; i++) {
+		if (Q_stricmp(gamedir, gameTypeLists[i].gamedir) == 0) {
+			if (gameTypeLists[i].numGameTypes <= gt) {
+				return gameTypeLists[i].name;		// No gametype translation. Just show the nice name, since we have it
+			}
+
+			// Baked-in version of UI_GameTypeName
+			for (j = 0; j < uiInfo.numGameTypes; j++) {
+				if (uiInfo.gameTypes[j].gtEnum == gameTypeLists[i].gameTypes[gt]) {
+					return uiInfo.gameTypes[j].gameType;
+				}
+			}
+
+			return gameTypeLists[i].name; // Just show nice name instead of 'Unknown', since we still have it
+		}
+	}
+	
+	return gamedir;		// No gamemode translation. Just show the mod folder name
+}
+// END DIMMSKII
+
+
 /*
 ==================
 UI_MapCountByGameType
@@ -3708,7 +4020,8 @@ UI_MapCountByGameType
 static int UI_MapCountByGameType(qboolean singlePlayer) {
 	int i, c, game;
 	c = 0;
-	game = singlePlayer ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : uiInfo.gameTypes[ui_netGameType.integer].gtEnum;
+	//game = singlePlayer ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : uiInfo.gameTypes[ui_netGameType.integer].gtEnum;
+	game = uiInfo.gameTypes[ui_gameType.integer].gtEnum; // ~Dimmskii
 	if (game == GT_SINGLE_PLAYER) {
 		game++;
 	} 
@@ -3908,6 +4221,7 @@ UI_BuildServerDisplayList
 static void UI_BuildServerDisplayList(qboolean force) {
 	int i, count, clients, maxClients, ping, game, len, visible;
 	char info[MAX_STRING_CHARS];
+	const char *gamedir; // ~DIMMSKII
 //	qboolean startRefresh = qtrue; TTimo: unused
 	static int numinvisible;
 
@@ -3983,8 +4297,16 @@ static void UI_BuildServerDisplayList(qboolean force) {
 				}
 			}
 
+			// ~Dimmskii
+			gamedir = Info_ValueForKey(info, "game");
+			if (!gamedir[0]) {
+				gamedir = "baseq3";
+			}
+			// End Dimmskii
+
 			if (uiInfo.joinGameTypes[ui_joinGameType.integer].gtEnum != -1) {
-				game = atoi(Info_ValueForKey(info, "gametype"));
+				//game = atoi(Info_ValueForKey(info, "gametype"));
+				game = UI_GameTypeListForGamedir(gamedir)->gameTypes[atoi(Info_ValueForKey(info, "gametype"))]; // ~DIMMSKII
 				if (game != uiInfo.joinGameTypes[ui_joinGameType.integer].gtEnum) {
 					trap_LAN_MarkServerVisible(ui_netSource.integer, i, qfalse);
 					continue;
@@ -3997,6 +4319,16 @@ static void UI_BuildServerDisplayList(qboolean force) {
 					continue;
 				}
 			}*/
+
+			// ~Dimmskii
+			if (ui_serverFilterType.integer > -1) {
+				if (Q_stricmp(gamedir, gameTypeLists[ui_serverFilterType.integer].gamedir) != 0) {
+					trap_LAN_MarkServerVisible(ui_netSource.integer, i, qfalse);
+					continue;
+				}
+			}
+			// End dimmskii
+
 			// make sure we never add a favorite server twice
 			if (ui_netSource.integer == AS_FAVORITES) {
 				UI_RemoveServerFromDisplayList(i);
@@ -4473,19 +4805,19 @@ static const char *UI_FeederItemText(float feederID, int index, int column, qhan
 	} else if (feederID == FEEDER_MAPS || feederID == FEEDER_ALLMAPS) {
 		int actual;
 		return UI_SelectedMap(index, &actual);
+	// ~Dimmskii
 	} else if ( feederID == FEEDER_MAPS_NEW ) {
 		int actual, gametype;
 		qboolean active = qfalse;
 		
-		gametype = uiInfo.gameTypes[ui_netGameType.integer].gtEnum; // The correct way ~Dimmskii
+		gametype = uiInfo.gameTypes[ui_gameType.integer].gtEnum; // The correct way ~Dimmskii
 		if ( gametype == GT_CTF ) {
 			if ( uiInfo.mapList[index].typeBits & (1 << GT_CTF) ) {
 				active = qtrue;
 			}
-#ifdef MISSIONPACK2
 		} else if (gametype == GT_ARENA || gametype == GT_TEAMARENA) {
 					active = uiInfo.mapList[index].typeBits & (1 << GT_TOURNAMENT ) || uiInfo.mapList[index].typeBits & (1 << GT_FFA );
-#endif
+// End Dimmskii
 		} else if (gametype == GT_1FCTF || gametype == GT_OBELISK || gametype == GT_HARVESTER ) {
 			active = uiInfo.mapList[index].typeBits & (1 << gametype);
 		} else if (gametype == GT_TOURNAMENT ) {
@@ -4502,6 +4834,7 @@ static const char *UI_FeederItemText(float feederID, int index, int column, qhan
 	} else if (feederID == FEEDER_SERVERS) {
 		if (index >= 0 && index < uiInfo.serverStatus.numDisplayServers) {
 			int ping, game, punkbuster;
+			const char *gamedir; // ~DIMMSKII
 			if (lastColumn != column || lastTime > uiInfo.uiDC.realTime + 5000) {
 				trap_LAN_GetServerInfo(ui_netSource.integer, uiInfo.serverStatus.displayServers[index], info, MAX_STRING_CHARS);
 				lastColumn = column;
@@ -4533,12 +4866,22 @@ static const char *UI_FeederItemText(float feederID, int index, int column, qhan
 					Com_sprintf( clientBuff, sizeof(clientBuff), "%s (%s)", Info_ValueForKey(info, "clients"), Info_ValueForKey(info, "sv_maxclients"));
 					return clientBuff;
 				case SORT_GAME : 
-					game = atoi(Info_ValueForKey(info, "gametype"));
-					if (game >= 0 && game < numTeamArenaGameTypes) {
-						return teamArenaGameTypes[game];
-					} else {
-						return "Unknown";
+					//game = atoi(Info_ValueForKey(info, "gametype"));
+					//if (game >= 0 && game < numTeamArenaGameTypes) {
+					//	return teamArenaGameTypes[game];
+					//} else {
+					//	return "Unknown";
+					//}
+					// ~DIMMSKII
+					gamedir = Info_ValueForKey(info, "game");
+					if (!gamedir[0]) {
+						gamedir = "baseq3";
 					}
+					
+					return UI_GameTypeNameForGamedir( gamedir, atoi(Info_ValueForKey(info, "gametype")) );
+					//return UI_GameTypeName(UI_GameTypeListForGamedir(gamedir)->gameTypes[atoi(Info_ValueForKey(info, "gametype"))]);
+					//return gamedir;
+					// END DIMMSKII
 				case SORT_PING : 
 					if (ping <= 0) {
 						return "...";
@@ -4626,7 +4969,7 @@ static qhandle_t UI_FeederItemImage(float feederID, int index) {
 static void UI_FeederSelection(float feederID, int index) {
 	static char info[MAX_STRING_CHARS];
   if (feederID == FEEDER_HEADS) {
-#ifndef MISSIONPACK2
+/*
 	int actual;
 	UI_SelectedHead(index, &actual);
 	index = actual;
@@ -4635,13 +4978,14 @@ static void UI_FeederSelection(float feederID, int index) {
 		trap_Cvar_Set( "team_headmodel", va("*%s", uiInfo.characterList[index].name)); 
 		updateModel = qtrue;
     }
-#else
+*/
+// ~Dimmskii
 	if (index >= 0 && index < uiInfo.q3HeadCount) {
       trap_Cvar_Set( "model", uiInfo.q3HeadNames[index]);
       trap_Cvar_Set( "headmodel", uiInfo.q3HeadNames[index]);
 			updateModel = qtrue;
 	}
-#endif
+// End Dimmskii
   } else if (feederID == FEEDER_Q3HEADS) {
     if (index >= 0 && index < uiInfo.q3HeadCount) {
       trap_Cvar_Set( "model", uiInfo.q3HeadNames[index]);
@@ -4940,7 +5284,8 @@ static void UI_ParseTeamInfo(const char *teamFile) {
 }
 
 
-static qboolean GameType_Parse(char **p, qboolean join) {
+//static qboolean GameType_Parse(char **p, qboolean join) {
+static qboolean GameType_Parse(char **p, qboolean join, qboolean host) { // ~Dimmskii
 	char *token;
 
 	token = COM_ParseExt(p, qtrue);
@@ -4949,6 +5294,11 @@ static qboolean GameType_Parse(char **p, qboolean join) {
 		return qfalse;
 	}
 
+	// ~Dimmskii
+	if (host) {
+		uiInfo.numHostGameTypes = 0;
+	} else
+	// End Dimmskii
 	if (join) {
 		uiInfo.numJoinGameTypes = 0;
 	} else {
@@ -4967,6 +5317,13 @@ static qboolean GameType_Parse(char **p, qboolean join) {
 		}
 
 		if (token[0] == '{') {
+			// ~Dimmskii
+			if (host) {
+				if (!String_Parse(p, &uiInfo.hostGameTypes[uiInfo.numHostGameTypes].gameType) || !Int_Parse(p, &uiInfo.hostGameTypes[uiInfo.numHostGameTypes].gtEnum)) {
+					return qfalse;
+				}
+			} else
+			// End Dimmskii
 			// two tokens per line, character name and sex
 			if (join) {
 				if (!String_Parse(p, &uiInfo.joinGameTypes[uiInfo.numJoinGameTypes].gameType) || !Int_Parse(p, &uiInfo.joinGameTypes[uiInfo.numJoinGameTypes].gtEnum)) {
@@ -4978,6 +5335,15 @@ static qboolean GameType_Parse(char **p, qboolean join) {
 				}
 			}
     
+			// ~Dimmskii
+			if (host) {
+				if (uiInfo.numHostGameTypes < MAX_GAMETYPES) {
+					uiInfo.numHostGameTypes++;
+				} else {
+					Com_Printf("Too many host game types, last one replace!\n");
+				}	
+			} else
+			// End Dimmskii
 			if (join) {
 				if (uiInfo.numJoinGameTypes < MAX_GAMETYPES) {
 					uiInfo.numJoinGameTypes++;
@@ -5090,16 +5456,30 @@ static void UI_ParseGameInfo(const char *teamFile) {
 
 		if (Q_stricmp(token, "gametypes") == 0) {
 
-			if (GameType_Parse(&p, qfalse)) {
+			//if (GameType_Parse(&p, qfalse)) {
+			if (GameType_Parse(&p, qfalse, qfalse)) {
 				continue;
 			} else {
 				break;
 			}
 		}
 
+		// ~Dimmskii
+		if (Q_stricmp(token, "hostgametypes") == 0) {
+
+			//if (GameType_Parse(&p, qtrue)) {
+			if (GameType_Parse(&p, qfalse, qtrue)) {
+				continue;
+			} else {
+				break;
+			}
+		}
+		// End Dimmskii
+
 		if (Q_stricmp(token, "joingametypes") == 0) {
 
-			if (GameType_Parse(&p, qtrue)) {
+			//if (GameType_Parse(&p, qtrue)) {
+			if (GameType_Parse(&p, qtrue, qfalse)) {
 				continue;
 			} else {
 				break;
@@ -5127,12 +5507,14 @@ static void UI_Pause(qboolean b) {
 	}
 }
 
+/*
 #ifndef MISSIONPACK // bk001206
 static int UI_OwnerDraw_Width(int ownerDraw) {
   // bk001205 - LCC missing return value
   return 0;
 }
 #endif
+*/
 
 static int UI_PlayCinematic(const char *name, float x, float y, float w, float h) {
   return trap_CIN_PlayCinematic(name, x, y, w, h, (CIN_loop | CIN_silent));
@@ -5383,7 +5765,9 @@ void _UI_Init( qboolean inGameLoad ) {
 
 	trap_Cvar_Register(NULL, "debug_protocol", "", 0 );
 
-	trap_Cvar_Set("ui_actualNetGameType", va("%d", ui_netGameType.integer));
+	//trap_Cvar_Set("ui_actualNetGameType", va("%d", ui_netGameType.integer));
+	trap_Cvar_Set( "ui_netGameType", va("%d", ui_gameType.integer)); // ~Dimmskii
+  	trap_Cvar_Set( "ui_actualnetGameType", va("%d", ui_gameType.integer)); // ~Dimmskii
 }
 
 

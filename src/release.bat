@@ -30,7 +30,9 @@ xcopy /S /E ..\..\ui .\
 cd ..
 xcopy /S /E ..\assets\* .\
 echo ...Done!
+GOTO PK3_MAIN
 
+:PK3_MAIN
 echo CREATE %PK3_NAME%.pk3
 powershell Compress-Archive .\* %PK3_NAME%.zip
 ren %PK3_NAME%.zip %PK3_NAME%.pk3
@@ -38,7 +40,10 @@ move %PK3_NAME%.pk3 ..\..\
 cd ..
 rd /S /Q _temp
 echo ...Done!
+::GOTO PK3_AUX
+GOTO QUIT
 
+:PK3_AUX
 echo CREATE CONTENT PK3 FILES
 md _temp
 cd _temp

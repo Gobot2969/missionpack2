@@ -9,7 +9,7 @@
     	visible 1
     	fullScreen 0
 	outOfBoundsClick			// this closes the window if it gets a click out of the rectangle
-    	rect 511 32 128 125
+		rect 475 32 128 125
 	focusColor 1 .75 0 1
 	onOpen { show grpMenu ; hide grpConfirm }
 

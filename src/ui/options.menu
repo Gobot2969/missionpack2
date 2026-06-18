@@ -9,11 +9,12 @@ menuDef {
     	fullscreen 0
 	rect 186 0 443 426
     	focusColor 1 .75 0 1
+		disableColor .5 .5 .5 1
     	style 1
     	border 1
 	onOpen { setitemcolor fadebox backcolor 0 0 0 1 ; 
-		fadeout fadebox }
-	onEsc { close options_menu ; close setup_menu ; open main }
+		fadeout fadebox ; hide grpOptions ; show hud }
+	onEsc { close options_menu ; close setup_menu }
 	
 
 
@@ -36,27 +37,58 @@ itemDef {
 
 
 
-	itemDef {
-      		name options
+
+// 	HUD		//
+
+itemDef {
+      	name hud
 		group grpOptions
-      		type ITEM_TYPE_YESNO
-		text "Simple Items:"
-		cvar "cg_simpleItems"
-		rect 99 15 256 20
-      		textalign ITEM_ALIGN_RIGHT
-      		textalignx 128
-      		textaligny 20
-		textscale .3
-      		forecolor 1 1 1 1
-      		visible 1 
-    		}
+		style WINDOW_STYLE_FILLED
+	backcolor 0 0 0 .25 
+ 	rect 56 6 100 26
+      	visible 1 
+	decoration  	  
+    	}
+
+itemDef {
+	name ctr_hud
+	text "HUD"
+	type 1
+	textscale .3
+	group grpOptionsbutton
+	style WINDOW_STYLE_FILLED
+	rect 56 6 100 26
+	textalign 1
+	textalignx 50
+	textaligny 20
+	forecolor 1 1 1 1
+	visible 1
+	action { play "sound/misc/menu1.wav" ; 
+	hide grpOptions ; show hud }
+	mouseEnter { show message_hud } 
+	mouseExit { hide message_hud } 
+	}
+
+
+itemDef {
+	name hud
+	group grpOptions
+	rect 2 30 439 396	
+	style WINDOW_STYLE_FILLED
+	border 1
+	bordercolor .5 .5 .5 .5
+	forecolor 1 1 1 1
+	backcolor 0 0 0 .25
+	visible 1
+	decoration
+}
 
 	itemDef {
-      		name options
+      		name hud
 		group grpOptions
       		type ITEM_TYPE_YESNO
-		text "Marks On Walls:"
-		cvar "cg_marks"
+		text "Identify Target:"
+		cvar "cg_drawCrosshairNames"
 		rect 99 35 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
@@ -67,7 +99,145 @@ itemDef {
     		}
 
 	itemDef {
-      		name options
+      		name hud
+		group grpOptions
+      		type ITEM_TYPE_YESNO
+		text "Draw Team Overlay:"
+		cvar "cg_drawTeamOverlay"
+		rect 99 55 256 20
+      		textalign ITEM_ALIGN_RIGHT
+      		textalignx 128
+      		textaligny 20
+		textscale .3
+      		forecolor 1 1 1 1
+      		visible 1 
+    		}
+	itemDef {
+      		name hud
+		group grpOptions
+      		type ITEM_TYPE_SLIDER
+		text "Screen Size:"
+		cvarfloat "cg_viewsize" 100 30 100
+		rect 99 75 256 20
+      		textalign ITEM_ALIGN_RIGHT
+      		textalignx 128
+      		textaligny 20
+		textscale .3   
+      		forecolor 1 1 1 1
+      		visible 1 
+    		}
+	itemDef {
+      		name hud
+		group grpOptions
+      		type ITEM_TYPE_YESNO
+		text "Show Time:"
+		cvar "cg_drawTimer"
+		rect 99 95 256 20
+      		textalign ITEM_ALIGN_RIGHT
+      		textalignx 128
+      		textaligny 20
+		textscale .3
+      		forecolor 1 1 1 1
+      		visible 1 
+    		}
+
+itemDef {
+      		name hud
+		group grpOptions
+      		type ITEM_TYPE_MULTI	
+		text "Statusbar:"
+		cvar "cg_hudfiles"
+	//	cvarStrList { Normal "ui/hud.txt" Small "ui/hud2.txt" }
+		cvarStrList { Normal "ui/hud.txt" }
+		rect 99 115 256 20
+      		textalign ITEM_ALIGN_RIGHT
+      		textalignx 128
+      		textaligny 20
+		textscale .3        
+      		forecolor 1 1 1 1
+      		visible 1  
+	}
+
+itemDef {
+      		name hud				
+		group grpOptions
+		text "Crosshair:"
+		rect 227 135 20 20
+		ownerdraw UI_CROSSHAIR
+      		textalign ITEM_ALIGN_RIGHT
+      		textalignx 0 
+      		textaligny 20
+		textscale .3        
+      		forecolor 1 1 1 1
+      		visible 1 
+    		}
+
+
+
+
+
+// 	DISPLAY		//
+
+itemDef {
+      	name display
+		group grpOptions
+		style WINDOW_STYLE_FILLED
+	backcolor 0 0 0 .25 
+ 	rect 181 6 100 26
+      	visible 0 
+	decoration  	  
+    	}
+
+itemDef {
+	name ctr_display
+	text "Display"
+	type 1
+	textscale .3
+	group grpOptionsbutton
+	style WINDOW_STYLE_FILLED
+	rect 181 6 100 26
+	textalign 1
+	textalignx 50
+	textaligny 20
+	forecolor 1 1 1 1
+	visible 1
+	action { play "sound/misc/menu1.wav" ; 
+	hide grpOptions ; show display }
+	mouseEnter { show message_display } 
+	mouseExit { hide message_display } 
+	}
+
+
+itemDef {
+	name display
+	group grpOptions
+	rect 2 30 439 396	
+	style WINDOW_STYLE_FILLED
+	border 1
+	bordercolor .5 .5 .5 .5
+	forecolor 1 1 1 1
+	backcolor 0 0 0 .25
+	visible 0
+	decoration
+}
+
+	itemDef {
+      		name display
+		group grpOptions
+      		type ITEM_TYPE_YESNO
+		text "Marks On Walls:"
+		cvar "cg_marks"
+		rect 99 35 256 20
+      		textalign ITEM_ALIGN_RIGHT
+      		textalignx 128
+      		textaligny 20
+		textscale .3
+      		forecolor 1 1 1 1
+      		visible 0
+    		}
+
+	itemDef {
+      		name display
 		group grpOptions
       		type ITEM_TYPE_YESNO
 		text "Show Floating Scores:"
@@ -78,11 +248,11 @@ itemDef {
       		textaligny 20
 		textscale .3
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0
     		}
 	
 	itemDef {
-      		name options
+      		name display
 		group grpOptions
 		text "Ejecting Brass:"
 		type ITEM_TYPE_MULTI	
@@ -94,241 +264,239 @@ itemDef {
       		textaligny 20
 		textscale .3
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0
     		}
 
 	itemDef {
-      		name options
+      		name display
 		group grpOptions
       		type ITEM_TYPE_YESNO
-		text "Dynamic Lights:"
-		cvar "r_dynamiclight"
+		text "Simple Items:"
+		cvar "cg_simpleItems"
 		rect 99 95 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
 		textscale .3
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0
     		}
 
 	itemDef {
-      		name options
+      		name display
 		group grpOptions
       		type ITEM_TYPE_YESNO
-		text "Identify Target:"
-		cvar "cg_drawCrosshairNames"
+		text "Draw Gun:"
+		cvar "cg_drawGun"
 		rect 99 115 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
 		textscale .3
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0
     		}
-
+	
 	itemDef {
-      		name options
+      		name display
 		group grpOptions
       		type ITEM_TYPE_YESNO
-		text "Draw Gun:"
-		cvar "cg_drawGun"
+		text "Force Player Models:"
+		cvar "cg_forceModel"
 		rect 99 135 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
 		textscale .3
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0 
     		}
 
 	itemDef {
-      		name options
+      		name display
 		group grpOptions
-      		type ITEM_TYPE_YESNO
-		text "Low Quality Sky:"
-		cvar "r_fastsky"
+      		type ITEM_TYPE_SLIDER
+		text "POI Background Alpha:"
+		cvarfloat "cg_poiTextBgAlpha" 0.3 0 1
 		rect 99 155 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
-		textscale .3
+		textscale .3   
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0
     		}
-
-	itemDef {
-      		name options
+itemDef {
+      		name display
 		group grpOptions
-      		type ITEM_TYPE_YESNO
-		text "Sync Every Frame:"
-		cvar "weapon 5"
+      		type ITEM_TYPE_MULTI
+		text "Friend Markers:"
+		cvar "cg_drawFriend"
+		cvarStrList { "Off", "0", "Classic Markers", "1", "QL Style", "2"  }
 		rect 99 175 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
-		textscale .3
+		textscale .3       
       		forecolor 1 1 1 1
-      		visible 1 
-    		}
-	
-	itemDef {
-      		name options
+      		visible 0
+		}
+
+itemDef {
+      		name display
 		group grpOptions
-      		type ITEM_TYPE_YESNO
-		text "Force Player Models:"
-		cvar "cg_forceModel"
+      		type ITEM_TYPE_MULTI
+		text "Friend Names Above Markers:"
+		cvar "cg_teammateNames"
+		cvarStrList { "None", "0", "Targeted", "1", "Always", "2"  }
 		rect 99 195 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
-		textscale .3
+		textscale .3       
       		forecolor 1 1 1 1
-      		visible 1 
-    		}
-
-	itemDef {
-      		name options
+      		visible 0
+		cvarTest "cg_drawFriend"
+		disableCvar { "0" ; "1" }
+		}
+itemDef {
+      		name display
 		group grpOptions
       		type ITEM_TYPE_YESNO
-		text "Draw Team Overlay:"
-		cvar "cg_drawTeamOverlay"
+		text "Item POIs:"
+		cvar "cg_itemPOIs"
 		rect 99 215 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
-		textscale .3
+		textscale .3       
       		forecolor 1 1 1 1
-      		visible 1 
-    		}
-	itemDef {
-      		name options
+      		visible 0
+		}
+
+itemDef {
+      		name display
 		group grpOptions
-      		type ITEM_TYPE_YESNO
-		text "Auto Download:"
-		cvar "cl_allowDownload"
+      		type ITEM_TYPE_MULTI
+		text "Item Timers Above POIs:"
+		cvar "cg_itemTimers"
+		cvarStrList { "None", "0", "Targeted", "1", "Always", "2"  }
 		rect 99 235 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
-		textscale .3
+		textscale .3       
       		forecolor 1 1 1 1
-      		visible 1 
-    		}
-	itemDef {
-      		name options
+      		visible 0
+		cvarTest "cg_itemPOIs"
+		disableCvar { "0" }
+		}
+
+
+
+
+
+
+// 	COMMS		//
+
+itemDef {
+      	name comms
 		group grpOptions
-      		type ITEM_TYPE_YESNO
-		text "Show Time:"
-		cvar "cg_drawTimer"
-		rect 99 255 256 20
-      		textalign ITEM_ALIGN_RIGHT
-      		textalignx 128
-      		textaligny 20
-		textscale .3
-      		forecolor 1 1 1 1
-      		visible 1 
-    		}
+		style WINDOW_STYLE_FILLED
+	backcolor 0 0 0 .25 
+ 	rect 306 6 100 26
+      	visible 0 
+	decoration  	  
+    	}
+
+itemDef {
+	name ctr_comms
+	text "Comms"
+	type 1
+	textscale .3
+	group grpOptionsbutton
+	style WINDOW_STYLE_FILLED
+	rect 306 6 100 26
+	textalign 1
+	textalignx 50
+	textaligny 20
+	forecolor 1 1 1 1
+	visible 1
+	action { play "sound/misc/menu1.wav" ; 
+	hide grpOptions ; show comms }
+	mouseEnter { show message_comms } 
+	mouseExit { hide message_comms } 
+	}
+
+
+itemDef {
+	name comms
+	group grpOptions
+	rect 2 30 439 396	
+	style WINDOW_STYLE_FILLED
+	border 1
+	bordercolor .5 .5 .5 .5
+	forecolor 1 1 1 1
+	backcolor 0 0 0 .25
+	visible 0
+	decoration
+}
+
 	itemDef {
-      		name options
+      		name comms
 		group grpOptions
       		type ITEM_TYPE_YESNO
 		text "Voices Off:"
 		cvar "cg_NoVoiceChats"
-		rect 99 275 256 20
+		rect 99 35 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
 		textscale .3       
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0 
     		}
 	itemDef {
-      		name options
+      		name comms
 		group grpOptions
       		type ITEM_TYPE_YESNO
 		text "Taunts Off:"
 		cvar "cg_noTaunt"
-		rect 99 295 256 20
+		rect 99 55 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
 		textscale .3       
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0 
     		}
 	itemDef {
-      		name options
+      		name comms
 		group grpOptions
       		type ITEM_TYPE_YESNO
 		text "Voice Text Off:"
 		cvar "cg_noVoiceText"
-		rect 99 315 256 20
+		rect 99 75 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
 		textscale .3       
       		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0
     		}
 	itemDef {
-      		name options
+      		name comms
 		group grpOptions
       		type ITEM_TYPE_YESNO
 		text "Team Chats Only:"
 		cvar "cg_teamChatsOnly"
-		rect 99 335 256 20
+		rect 99 95 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
 		textscale .3       
       		forecolor 1 1 1 1
-      		visible 1 
-    		}
-
-	itemDef {
-      		name options
-		group grpOptions
-      		type ITEM_TYPE_YESNO
-		text "In Game Video:"
-		cvar "r_inGameVideo"
-		rect 99 355 256 20
-      		textalign ITEM_ALIGN_RIGHT
-      		textalignx 128
-      		textaligny 20
-		textscale .3       
-      		forecolor 1 1 1 1
-      		visible 1 
-    		}
-
-itemDef {
-      		name options
-		group grpOptions
-      		type ITEM_TYPE_MULTI	
-		text "Statusbar:"
-		cvar "cg_hudfiles"
-		cvarStrList { Normal "ui/hud.txt" Small "ui/hud2.txt" }
-		rect 99 375 256 20
-      		textalign ITEM_ALIGN_RIGHT
-      		textalignx 128
-      		textaligny 20
-		textscale .3        
-      		forecolor 1 1 1 1
-      		visible 1  
-	}
-
-itemDef {
-      		name options				
-		group grpOptions
-		text "Crosshair:"
-		rect 227 395 20 20
-		ownerdraw UI_CROSSHAIR
-      		textalign ITEM_ALIGN_RIGHT
-      		textalignx 0 
-      		textaligny 20
-		textscale .3        
-      		forecolor 1 1 1 1
-      		visible 1 
+      		visible 0
     		}
 
 

@@ -11,6 +11,7 @@
 	background "menuback_b"
 	outOfBoundsClick	
 	focusColor 1 .75 0 1
+	disableColor .5 .5 .5 1
 	onEsc { close maps ; close createserver ; open main }
 	onOpen { setitemcolor fadebox backcolor 0 0 0 1 ; 
 	fadeout fadebox ;  
@@ -366,7 +367,7 @@ itemDef {
     	}
 		
 	itemDef {
-	name expert
+	name host
 	group grpsettings
       	type ITEM_TYPE_NUMERICFIELD
 	text "Maximum Ping:"
@@ -407,7 +408,6 @@ itemDef {
         type ITEM_TYPE_NUMERICFIELD
 	text "Capture Limit:"
 	cvar "capturelimit" 
-	ownerdrawflag  0x00004800 //UI_SHOW_NETANYTEAMGAME | UI_SHOW_NOTARENAGAME
  	rect 260 70 128 12 
 	textalign ITEM_ALIGN_RIGHT
 	textalignx 65
@@ -416,6 +416,8 @@ itemDef {
 	textscale .25        
 	forecolor 1 1 1 1
 	visible 1 
+	cvarTest "ui_actualNetGameType"
+	  showCvar { "7" ; "8" ; "9" ; "10" }
     	}
     itemDef {
       	name normal
@@ -423,7 +425,6 @@ itemDef {
 	type ITEM_TYPE_NUMERICFIELD
 	text "Frag Limit:"
 	cvar "fraglimit"
-	ownerdrawflag 0x00004400 //UI_SHOW_NETANYNONTEAMGAME | UI_SHOW_NOTARENAGAME
       	rect 260 70 128 12 
       	textalign ITEM_ALIGN_RIGHT
       	textalignx 65
@@ -432,6 +433,8 @@ itemDef {
 	textscale .25        
       	forecolor 1 1 1 1
       	visible 1  
+			cvarTest "ui_actualNetGameType"
+	  showCvar { "0" ; "1" ; "4" }
     }
     itemDef {
       	name normal
@@ -439,7 +442,6 @@ itemDef {
 	type ITEM_TYPE_NUMERICFIELD
 	text "Win Limit:"
 	cvar "winlimit"
-	ownerdrawflag UI_SHOW_ARENAGAME
       	rect 260 70 128 12 
       	textalign ITEM_ALIGN_RIGHT
       	textalignx 65
@@ -448,6 +450,8 @@ itemDef {
 	textscale .25        
       	forecolor 1 1 1 1
       	visible 1  
+	cvarTest "ui_actualNetGameType"
+	  showCvar { "3" ; "5" }
     }
 
     itemDef {
@@ -456,7 +460,6 @@ itemDef {
       	type ITEM_TYPE_NUMERICFIELD
 	text "Time Limit:"
 	cvar "timelimit"
-	ownerdrawflag UI_SHOW_NOTARENAGAME
       	rect 260 85 128 12 
       	textalign ITEM_ALIGN_RIGHT
       	textalignx 65
@@ -465,6 +468,8 @@ itemDef {
 	textscale .25        
       	forecolor 1 1 1 1
       	visible 1  
+	cvarTest "ui_actualNetGameType"
+	  showCvar { "0" ; "1" ; "2" ; "4" ; "7" ; "8" ; "9" ; "10" }
     }
 	
 	itemDef {
@@ -473,7 +478,6 @@ itemDef {
       	type ITEM_TYPE_NUMERICFIELD
 	text "Round Time:"
 	cvar "roundtime"
-	ownerdrawflag UI_SHOW_ARENAGAME
       	rect 260 85 128 12 
       	textalign ITEM_ALIGN_RIGHT
       	textalignx 65
@@ -482,6 +486,8 @@ itemDef {
 	textscale .25        
       	forecolor 1 1 1 1
       	visible 1  
+	cvarTest "ui_actualNetGameType"
+	  showCvar { "3" ; "5" }  
     }
 
 
@@ -498,6 +504,8 @@ itemDef {
 	textscale .25        
       	forecolor 1 1 1 1
       	visible 1  
+		cvarTest "ui_actualNetGameType"
+		disableCvar { "0" ; "1" ; "2" ; "3" }
     }
 
 
@@ -586,6 +594,23 @@ itemDef {
       	name expert
 	group grpsettings
       	type ITEM_TYPE_YESNO
+	text "Full Team Visibility:"
+	cvar "g_teamVisibility"
+      	rect 260 205 128 12 
+      	textalign ITEM_ALIGN_RIGHT
+      	textalignx 65
+      	textaligny 12
+	textscale .25        
+      	forecolor 1 1 1 1
+      	visible 1  
+		cvarTest "ui_actualNetGameType"
+		disableCvar { "0" ; "1" ; "2" ; "3" }
+    	}
+
+    itemDef {
+      	name expert
+	group grpsettings
+      	type ITEM_TYPE_YESNO
 	text "Enable Voting:"
 	cvar "g_allowvote"
       	rect 260 220 128 12 
@@ -613,11 +638,28 @@ itemDef {
     	}
 
 	itemDef {
-      	name normal
+      	name expert
 	group grpsettings
       	type ITEM_TYPE_YESNO
-	text "Grappling Hook:"
-	cvar "g_grapple"
+	text "Even Teams:"
+	cvar "g_teamforcebalance"
+      	rect 260 250 128 12 
+      	textalign ITEM_ALIGN_RIGHT
+      	textalignx 65
+      	textaligny 12
+	textscale .25        
+      	forecolor 1 1 1 1
+      	visible 1  
+		cvarTest "ui_actualNetGameType"
+		disableCvar { "0" ; "1" ; "2" ; "3" }
+    	}
+
+    itemDef {
+      	name expert
+	group grpsettings
+      	type ITEM_TYPE_YESNO
+	text "Synchronous Client:"
+	cvar "g_synchronousclients"
       	rect 260 265 128 12 
       	textalign ITEM_ALIGN_RIGHT
       	textalignx 65
@@ -625,14 +667,14 @@ itemDef {
 	textscale .25        
       	forecolor 1 1 1 1
       	visible 1  
-    }
+    	}
 
     itemDef {
       	name expert
 	group grpsettings
       	type ITEM_TYPE_YESNO
-	text "Even Teams:"
-	cvar "g_teamforcebalance"
+	text "Unlagged:"
+	cvar "g_unlagged"
       	rect 260 280 128 12 
       	textalign ITEM_ALIGN_RIGHT
       	textalignx 65
@@ -644,25 +686,75 @@ itemDef {
 
 
 
-    itemDef {
+
+
+	itemDef {
       	name expert
 	group grpsettings
       	type ITEM_TYPE_YESNO
-	text "Synchronous Client:"
-	cvar "g_synchronousclients"
-      	rect 260 295 128 12 
+	text "Grappling Hook:"
+	cvar "g_grapple"
+      	rect 260 310 128 12 
       	textalign ITEM_ALIGN_RIGHT
       	textalignx 65
       	textaligny 12
 	textscale .25        
       	forecolor 1 1 1 1
       	visible 1  
-    	}
+    }
+
+	itemDef {
+      	name expert
+		group grpsettings
+		type ITEM_TYPE_YESNO
+		text "Rail Jump:"
+		cvar "g_railJump"
+      	rect 260 325 128 12 
+      	textalign ITEM_ALIGN_RIGHT
+      	textalignx 65
+      	textaligny 12
+		textscale .25        
+      	forecolor 1 1 1 1
+      	visible 1  
+    }
+	
+	itemDef {
+    name expert
+		group grpsettings
+		type ITEM_TYPE_NUMERICFIELD
+		text "Rail Jump Damage:"
+		cvar "g_railJumpDamage"
+      	rect 260 340 128 12 
+      	textalign ITEM_ALIGN_RIGHT
+      	textalignx 65
+      	textaligny 12
+		textscale .25        
+      	forecolor 1 1 1 1
+      	visible 1  
+    }
+
+	itemDef {
+      	name expert
+		group grpsettings
+		type ITEM_TYPE_YESNO
+		text "Nail Bounce:"
+		cvar "g_nailBounce"
+      	rect 260 355 128 12 
+      	textalign ITEM_ALIGN_RIGHT
+      	textalignx 65
+      	textaligny 12
+		textscale .25        
+      	forecolor 1 1 1 1
+      	visible 1  
+    }
+
+
+
 
 
 
 // BOT LIST FOR TEAM GAMES
-
+/*
 itemDef {
       name gametypefield
       style 0	
@@ -679,6 +771,27 @@ itemDef {
 	  cvarTest "ui_actualNetGameType"
 	  hideCvar { "0" ; "1" ; "2" ; "3" }
     }
+*/
+
+itemDef {
+	name gametypefield
+	type ITEM_TYPE_EDITFIELD
+	text ""
+	cvar "ui_blueTeam"
+	maxChars 32
+	maxPaintChars 10
+	rect 450 46 128 28 
+      textalign ITEM_ALIGN_LEFT		
+      textalignx 0     
+      textaligny 26    
+	 textscale .333     
+      forecolor 0 0 1 1
+      border 0
+      bordercolor 0 0 0 0
+      visible 1  
+	  cvarTest "ui_actualNetGameType"
+	  hideCvar { "0" ; "1" ; "2" ; "3" }
+}
 
 
 
@@ -832,6 +945,7 @@ itemDef {
 
 
 
+/*
 itemDef {
       name gametypefield
       style 0	
@@ -848,6 +962,26 @@ itemDef {
 	  cvarTest "ui_actualNetGameType"
 	  hideCvar { "0" ; "1" ; "2" ; "3" }
     }
+*/
+itemDef {
+	name gametypefield
+	type ITEM_TYPE_EDITFIELD
+	text ""
+	cvar "ui_redTeam"
+	maxChars 32
+	maxPaintChars 10
+	      rect 450 230 128 28 
+      textalign ITEM_ALIGN_LEFT		
+      textalignx 0     
+      textaligny 26    
+	  textscale .333
+      forecolor 1 0 0 1
+      border 0
+      bordercolor 0 0 0 0
+       visible 1 
+	  cvarTest "ui_actualNetGameType"
+	  hideCvar { "0" ; "1" ; "2" ; "3" }
+}
 
 
 itemDef {

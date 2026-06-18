@@ -1133,7 +1133,9 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 
 	// if we are doing a chase cam or a remote view, grab the latest info
 	if ( ent->client->sess.spectatorState == SPECTATOR_FOLLOW ) {
-		int		clientNum, flags, savedScore, savedRoundWins, savedCaptures;
+		int		clientNum, flags, team;
+		int savedPersistant[MAX_PERSISTANT];
+		usercmd_t savedCmd;
 
 		clientNum = ent->client->sess.spectatorClient;
 
@@ -1147,15 +1149,32 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 			cl = &level.clients[ clientNum ];
 			if ( cl->pers.connected == CON_CONNECTED && cl->sess.sessionTeam != TEAM_SPECTATOR ) {
 				flags = (cl->ps.eFlags & ~(EF_VOTED | EF_TEAMVOTED)) | (ent->client->ps.eFlags & (EF_VOTED | EF_TEAMVOTED));
-				savedScore = ent->client->ps.persistant[PERS_SCORE];
-				savedRoundWins = ent->client->ps.persistant[PERS_ROUNDWINS];
-				savedCaptures = ent->client->ps.persistant[PERS_CAPTURES];
+
+				// ~DIMMSKII
+				memcpy(savedPersistant, ent->client->ps.persistant, sizeof(savedPersistant)); // Save persistant
+				savedCmd = ent->client->pers.cmd;
+				// END DIMMSKII
+
 				ent->client->ps = cl->ps;
 				ent->client->ps.pm_flags |= PMF_FOLLOW;
 				ent->client->ps.eFlags = flags;
-				ent->client->ps.persistant[PERS_SCORE] = savedScore;
-				ent->client->ps.persistant[PERS_ROUNDWINS] = savedRoundWins;
-				ent->client->ps.persistant[PERS_CAPTURES] = savedCaptures;
+				team = ent->client->ps.persistant[PERS_TEAM]; // Save spectatee team
+				memcpy(ent->client->ps.persistant, savedPersistant, sizeof(savedPersistant)); // Restore persistant
+				ent->client->ps.persistant[PERS_TEAM] = team; // Restore spectatee team (for hud color, pm/bright team color correctness, etc)
+				// ~DIMMSKII
+				// CRITICAL: Clear fields that could be used for command injection
+
+				// Restore savedCmd to prevent the spectator potentially getting commands stuffed by the spectatee
+				ent->client->pers.cmd = savedCmd;
+				ent->client->ps.commandTime = level.time; // Don't leak timing
+
+				// Don't copy generic1-3 or other fields that might be
+				// repurposed for client-side logic
+				ent->client->ps.generic1 = 0;
+				//ent->client->ps.generic2 = 0;
+				//ent->client->ps.generic3 = 0;
+				// END DIMMSKII
+
 				return;
 				} else {
 				// drop them to free spectators unless they are dedicated camera followers

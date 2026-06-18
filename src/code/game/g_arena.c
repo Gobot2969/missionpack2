@@ -28,6 +28,7 @@ void Arena_BeginRound( void ) {
 	trap_SetConfigstring( CS_WARMUP, va("%i", level.warmupTime) );
 
 	respawnAll();
+	CalculateRanks(); // Make sure scoreboard is sorted immediately? -- AKA Fix my scores please fresh out of spec mod
 }
 
 vec3_t zeroVec3 = {0, 0, 0};
@@ -35,9 +36,9 @@ void Arena_EndRound( team_t winningTeam ) {
 	
 	if ( winningTeam == TEAM_RED || winningTeam == TEAM_BLUE ) { // CA
 		AddTeamScore(zeroVec3, winningTeam, 1);
-		
 		trap_SetConfigstring( CS_SCORES1, va("%i", level.teamScores[TEAM_RED]) );
 		trap_SetConfigstring( CS_SCORES2, va("%i", level.teamScores[TEAM_BLUE]) );
+		CalculateRanks(); // Make sure clan arena scoreboard is sorted immediately
 	} else if ( winningTeam != TEAM_SPECTATOR ) { // FFA
 		int			i, aliveCount;
 		gentity_t	*clientEnt;

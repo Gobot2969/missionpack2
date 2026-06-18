@@ -2400,12 +2400,23 @@ static void G_RunFrame( int levelTime ) {
 		}
 	}
 	
+	// ~Dimmskii
 #ifdef MISSIONPACK2
 	if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
 		// see if Clan arena is
 		Arena_CheckRules();
+	} else {
+// TODO: Factory-ize the following code when gt enum Arena/CA alone will no longer prevent items from spawning.
+		// update the marker messages
+		CheckItemPositions();
 	}
+#else
+
+	// update the marker messages
+	CheckItemPositions();
+	
 #endif
+	// End Dimmskii
 
 	// see if it is time to end the level
 	CheckExitRules();
@@ -2436,3 +2447,122 @@ static void G_RunFrame( int levelTime ) {
 	// unlagged
 	level.frameStartTime = trap_Milliseconds();
 }
+
+// ~Dimmskii
+
+// Item position type lookup table
+// Maps entity classnames to itemPosType_t values
+static const itemPositionType_t itemPositionTypes[] = {
+    // Armor items
+    { "item_armor_body",        ITEMPOS_ARMOR_BODY },
+    
+    // Health items
+    { "item_health_mega",       ITEMPOS_HEALTH_MEGA },
+    
+    // Holdable items
+    { "holdable_teleporter",      ITEMPOS_TELEPORTER },
+    { "holdable_medkit",          ITEMPOS_MEDKIT },
+    { "holdable_kamikaze",        ITEMPOS_KAMIKAZE },
+    { "holdable_portal",          ITEMPOS_PORTAL },
+    { "holdable_invulnerability", ITEMPOS_INVULNERABILITY },
+    
+    // Powerup items (instant)
+    { "item_quad",              ITEMPOS_QUAD },
+    { "item_enviro",            ITEMPOS_BATTLESUIT },
+    { "item_haste",             ITEMPOS_HASTE },
+    { "item_invis",             ITEMPOS_INVIS },
+    { "item_regen",             ITEMPOS_REGEN },
+    { "item_flight",            ITEMPOS_FLIGHT },
+
+	// TA Persistent Powerups
+    // { "item_scout",             ITEMPOS_SCOUT },
+    // { "item_guard",             ITEMPOS_GUARD },
+    // { "item_doubler",           ITEMPOS_DOUBLER },
+    // { "item_ammoregen",         ITEMPOS_AMMOREGEN },
+    
+    // Objective/team items
+    { "team_CTF_redflag",       ITEMPOS_REDFLAG },   // red flag
+    { "team_CTF_blueflag",      ITEMPOS_BLUEFLAG },   // blue flag
+    { "team_CTF_neutralflag",   ITEMPOS_NEUTRALFLAG },   // neutral flag 
+    
+    { NULL, -1 }  // sentinel
+};
+
+static int ItemPos_GetType(gentity_t *ent) {
+    int i;
+    for (i = 0; itemPositionTypes[i].classname; i++) {
+        if (!strcmp(ent->classname, itemPositionTypes[i].classname)) {
+            return itemPositionTypes[i].type;
+        }
+    }
+    return -1;  // unknown item type
+}
+
+void CheckItemPositions( void ) {
+    int i, cnt, timer;
+    char entry[64], string[MAX_STRING_CHARS - 12];
+    int stringlength = 0;
+    gentity_t *item;
+    
+    if ( !g_itemVisibility.integer )
+        return;
+    
+    if ( level.time - level.lastItemPositionTime <= ITEM_POSITION_UPDATE_TIME )
+        return;
+    
+    level.lastItemPositionTime = level.time;
+    
+    string[0] = '\0';
+    cnt = 0;
+    
+    // scan all entities
+    for ( i = MAX_CLIENTS; i < level.num_entities; i++ ) {
+		int j, itemType;
+
+        item = &g_entities[i];
+        
+		// Filter out things that aren't classy enough
+        if ( !item->inuse || !item->classname ) {
+            continue;
+		}
+
+		// Filter out dropped items
+        if ( item->flags & FL_DROPPED_ITEM ) {
+            continue;
+		}
+        
+		// Filter out invalid itempos
+        itemType = ItemPos_GetType( item );
+        if ( itemType < 0 ) {
+            continue;
+		}
+        
+		// Timer calculation
+		if (itemType < ITEMPOS_POWERUP_MAX) {
+			timer = item->nextthink > level.time ? item->nextthink - level.time : 0;
+		} else if (itemType == ITEMPOS_REDFLAG || itemType == ITEMPOS_BLUEFLAG || itemType == ITEMPOS_NEUTRALFLAG) {
+			// item->s.frame == 1 indicates the flag is taken/carried by a player TODO: revise this
+            timer = (item->s.frame == 1) ? 1 : 0;
+		} else {
+			timer = 0; // ??
+		}
+		
+        j = BG_sprintf( entry, " %i %i %i %i %i %i",
+            i, itemType,
+            timer,
+            (int)item->r.currentOrigin[0],
+            (int)item->r.currentOrigin[1],
+            (int)item->r.currentOrigin[2] );
+        
+        if ( stringlength + j >= sizeof(string) )
+            break;
+        
+        strcpy( string + stringlength, entry );
+        stringlength += j;
+        cnt++;
+    }
+    
+    G_BroadcastServerCommand( -1, va( "ipos %i%s", cnt, string ) );
+}
+
+// End Dimmskii

@@ -296,6 +296,12 @@ void CG_DrawInformation( void ) {
 		UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, colorWhite );
 	y += PROP_HEIGHT;
 		
+// ~Dimmskii
+#ifdef MISSIONPACK2
+	if (cgs.gametype != GT_ARENA && cgs.gametype != GT_TEAMARENA && cgs.gametype != GT_FREEZETAG) { // ~Dimmskii // TODO: Shared function isRoundBased(int gt) or something
+#endif
+// END ~Dimmskii
+
 	value = atoi( Info_ValueForKey( info, "timelimit" ) );
 	if ( value ) {
 		UI_DrawProportionalString( 320, y, va( "timelimit %i", value ),
@@ -303,7 +309,14 @@ void CG_DrawInformation( void ) {
 		y += PROP_HEIGHT;
 	}
 
-	if (cgs.gametype < GT_CTF ) {
+// ~Dimmskii
+#ifdef MISSIONPACK2
+	}
+#endif
+// END ~Dimmskii
+
+	//if (cgs.gametype < GT_CTF ) {
+	if (cgs.gametype < GT_TEAMARENA && cgs.gametype != GT_ARENA) { // ~Dimmskii // TODO: Shared function isRoundBased(int gt) or something
 		value = atoi( Info_ValueForKey( info, "fraglimit" ) );
 		if ( value ) {
 			UI_DrawProportionalString( 320, y, va( "fraglimit %i", value ),
@@ -324,6 +337,14 @@ void CG_DrawInformation( void ) {
 // ~Dimmskii
 #ifdef MISSIONPACK2
 	if (cgs.gametype == GT_ARENA || cgs.gametype == GT_TEAMARENA || cgs.gametype == GT_FREEZETAG) {
+
+		value = atoi( Info_ValueForKey( info, "roundtime" ) );
+		if ( value ) {
+			UI_DrawProportionalString( 320, y, va( "roundtime %i", value ),
+				UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, colorWhite );
+			y += PROP_HEIGHT;
+		}
+
 		value = atoi( Info_ValueForKey( info, "winlimit" ) );
 		if ( value ) {
 			UI_DrawProportionalString( 320, y, va( "winlimit %i", value ),

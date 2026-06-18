@@ -104,7 +104,7 @@ CG_CVAR( cg_singlePlayerActive, "ui_singlePlayerActive", "0", CVAR_USERINFO )
 CG_CVAR( cg_recordSPDemo, "ui_recordSPDemo", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_recordSPDemoName, "ui_recordSPDemoName", "", CVAR_ARCHIVE )
 CG_CVAR( cg_obeliskRespawnDelay, "g_obeliskRespawnDelay", "10", CVAR_SERVERINFO )
-CG_CVAR( cg_hudFiles, "cg_hudFiles", "ui/mpp.txt", CVAR_ARCHIVE )
+CG_CVAR( cg_hudFiles, "cg_hudFiles", "ui/hud.txt", CVAR_ARCHIVE )
 #endif
 CG_CVAR( cg_cameraOrbit, "cg_cameraOrbit", "0", CVAR_CHEAT )
 CG_CVAR( cg_cameraOrbitDelay, "cg_cameraOrbitDelay", "50", CVAR_ARCHIVE )
@@ -131,5 +131,24 @@ CG_CVAR( cg_teamColors, "cg_teamColors", "", CVAR_ARCHIVE )
 CG_CVAR( cg_deadBodyDarken, "cg_deadBodyDarken", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_fovAdjust, "cg_fovAdjust", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_followKiller, "cg_followKiller", "0", CVAR_ARCHIVE )
+
+//  ~DIMMSKII
+// All POIs
+CG_CVAR( cg_poiTextBgAlpha, "cg_poiTextBgAlpha", "0.3", CVAR_ARCHIVE )
+CG_CVAR( cg_poiMaxDist, "cg_poiMaxDist", "4000", CVAR_ARCHIVE )
+
+// Teammate POIs
+CG_CVAR( cg_teammatePOIs, "cg_teammatePOIs", "1", CVAR_ROM ) // Read-only QL compat CG cvar cg_teammatePOIs = (cg_drawFriend.int>1)
+CG_CVAR( cg_teammateNames, "cg_teammateNames", "1", CVAR_ARCHIVE ) // 0=Off 1=Targeted 2=Always. No effect unless cg_drawFriend is 2 (cg_teammatePOIs is 1)
+CG_CVAR( cg_teammatePOIsIconSize, "cg_teammatePOIsIconSize", "8", CVAR_ARCHIVE ) // No effect unless cg_drawFriend is 2 (cg_teammatePOIs is 1)
+CG_CVAR( cg_teammatePOIsIconMaxSize, "cg_teammatePOIsIconMaxSize", "12", CVAR_ARCHIVE ) // No effect unless cg_drawFriend is 2 (cg_teammatePOIs is 1)
+
+// Item POIs
+CG_CVAR( cg_itemPOIs, "cg_itemPOIs", "1", CVAR_ARCHIVE )
+CG_CVAR( cg_itemTimers, "cg_itemTimers", "1", CVAR_ARCHIVE ) // No effect unless cg_itemPOIs is 1
+CG_CVAR( cg_itemPOIsIconSize, "cg_itemPOIsIconSize", "24", CVAR_ARCHIVE ) // No effect unless cg_itemPOIs is 1
+CG_CVAR( cg_itemPOIsIconMaxSize, "cg_itemPOIsIconMaxSize", "32", CVAR_ARCHIVE ) // No effect unless cg_itemPOIs is 1
+
+// END DIMMSKII
 
 #undef CG_CVAR

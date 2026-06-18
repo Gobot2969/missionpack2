@@ -576,7 +576,49 @@ typedef enum {
 } tag_t;
 
 // Time between location updates
-#define TEAM_LOCATION_UPDATE_TIME		1000
+//#define TEAM_LOCATION_UPDATE_TIME		1000
+#define TEAM_LOCATION_UPDATE_TIME		500	// ~Dimmskii
+
+// ~DIMMSKII
+#define TEAM_POSITION_UPDATE_TIME		250		// Time between team position updates (when g_teamVisibility is enabled)
+#define ITEM_POSITION_UPDATE_TIME		1000	// Time between item POI msgs
+
+// Item position types
+typedef enum {
+    ITEMPOS_ARMOR_BODY,
+    ITEMPOS_HEALTH_MEGA,
+	ITEMPOS_TELEPORTER,
+	ITEMPOS_MEDKIT,
+	ITEMPOS_QUAD,
+	ITEMPOS_BATTLESUIT,
+	ITEMPOS_HASTE,
+	ITEMPOS_INVIS,
+	ITEMPOS_REGEN,
+	ITEMPOS_FLIGHT,
+	ITEMPOS_KAMIKAZE,
+	ITEMPOS_PORTAL,
+	ITEMPOS_INVULNERABILITY,
+
+//	ITEMPOS_SCOUT,
+//	ITEMPOS_GUARD,
+//	ITEMPOS_DOUBLER,
+//	ITEMPOS_AMMOREGEN,
+
+	ITEMPOS_POWERUP_MAX, 		// Powerups come before this and special objective ones start immediately after
+	
+	ITEMPOS_REDFLAG,		// Server-sided catch-all to alias objective ent class names to. I.e. both "team_CTF_redflag" and "team_CTF_blueflag"
+    ITEMPOS_BLUEFLAG,		// Clients should end up with this
+    ITEMPOS_NEUTRALFLAG,	// Clients should end up with this
+    ITEMPOS_MAX,
+} itemPosType_t;
+
+// Item pos type to ent classname mapping struct
+typedef struct {
+    const char *classname;      // entity classname to match
+    int type;                   // itemPosType_t value
+} itemPositionType_t;
+
+// END DIMMSKII
 
 // How many players on the overlay
 #define TEAM_MAXOVERLAY		32

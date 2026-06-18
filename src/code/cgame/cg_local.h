@@ -870,9 +870,13 @@ typedef struct {
 	qhandle_t	medalAssist;
 	qhandle_t	medalCapture;
 	qhandle_t	medalVictory;
+
+// ~Dimmskii
 #ifdef MISSIONPACK2
 	qhandle_t	medalArena;
 #endif
+	qhandle_t	poiPics[ITEMPOS_POWERUP_MAX];
+// End Dimmskii
 
 	// sounds
 	sfxHandle_t	quadSound;
@@ -1076,6 +1080,8 @@ typedef struct {
 #ifdef MISSIONPACK2
 	int				winlimit;
 #endif
+	int				g_teamVisibility;
+	int				g_itemVisibility;
 // END ~Dimmskii
 	int				timelimit;
 	int				maxclients;
@@ -1169,6 +1175,23 @@ typedef struct {
 	float			cursorY;
 } cgs_t;
 
+// ~DIMMSKII
+typedef struct {
+    vec3_t      origin;
+    vec3_t      prevOrigin;
+    int         serverTime;
+    int         prevServerTime;
+    qboolean    valid;
+} teammatePos_t;
+
+typedef struct {
+	itemPosType_t 	type;
+	int 			timer;
+    vec3_t 			origin;
+    qboolean 		valid;
+} itemPos_t;
+// END DIMMSKII
+
 //==============================================================================
 
 extern	cgs_t			cgs;
@@ -1178,6 +1201,11 @@ extern	weaponInfo_t		cg_weapons[MAX_WEAPONS];
 extern	itemInfo_t		cg_items[MAX_ITEMS];
 extern	markPoly_t		cg_markPolys[MAX_MARK_POLYS];
 extern	int			cg_playback_follow;
+
+// ~DIMMSKII
+extern teammatePos_t cg_teammatePositions[MAX_CLIENTS];
+extern itemPos_t cg_itemPositions[MAX_GENTITIES];
+// END DIMMSKII
 
 #define EXTERN_CG_CVAR
 	#include "cg_cvar.h"

@@ -1290,11 +1290,83 @@ void Item_RunScript(itemDef_t *item, const char *s) {
 }
 
 
+// ~DIMMSKII
+// QL:
+// Our gametype -> QL gametype mapping
+// Our: 0=FFA, 1=TOURN, 2=SP, 3=ARENA, 4=TEAM, 5=TEAMARENA,
+//      6=FREEZETAG, 7=CTF, 8=1FCTF, 9=OBELISK, 10=HARVESTER
+static const int toQLGametypeMap[] = {
+	0,    // GT_FFA (0)          -> QL 0
+	1,    // GT_TOURNAMENT (1)   -> QL 1
+	-1,   // GT_SINGLE_PLAYER (2)-> no QL equivalent
+	14,   // GT_ARENA (3)        -> QL 14
+	3,    // GT_TEAM (4)         -> QL 3
+	4,    // GT_TEAMARENA (5)    -> QL 4
+	9,    // GT_FREEZETAG (6)    -> QL 9
+	5,    // GT_CTF (7)          -> QL 5
+	6,    // GT_1FCTF (8)        -> QL 6
+	7,    // GT_OBELISK (9)      -> QL 7
+	8,    // GT_HARVESTER (10)   -> QL 8
+};
+static const int toQLGametypeMapSize = ARRAY_LEN(toQLGametypeMap);
+
+static qboolean Item_EnableShowViaCvar_QL(itemDef_t *item, int flag) {
+	char script[1024], *p;
+	char buff[1024];
+	int ourType, qlType;
+
+	memset(script, 0, sizeof(script));
+
+	ourType = DC->getCVarValue("g_gametype");
+
+	if (ourType >= 0 && ourType < toQLGametypeMapSize) {
+		qlType = toQLGametypeMap[ourType];
+	} else {
+		qlType = -1;
+	}
+
+	Com_sprintf(buff, sizeof(buff), "%d", qlType);
+
+	Q_strcat(script, 1024, item->enableCvar);
+	p = script;
+	while (1) {
+		const char *val;
+		if (!String_Parse(&p, &val)) {
+			return (item->cvarFlags & flag) ? qfalse : qtrue;
+		}
+
+		if (val[0] == ';' && val[1] == '\0') {
+			continue;
+		}
+
+		if (item->cvarFlags & flag) {
+			if (Q_stricmp(buff, val) == 0) {
+				return qtrue;
+			}
+		} else {
+			if (Q_stricmp(buff, val) == 0) {
+				return qfalse;
+			}
+		}
+	}
+	return (item->cvarFlags & flag) ? qfalse : qtrue;
+}
+
+// END DIMMSKII
+
+
 qboolean Item_EnableShowViaCvar(itemDef_t *item, int flag) {
   char script[1024], *p;
   memset(script, 0, sizeof(script));
   if (item && item->enableCvar && *item->enableCvar && item->cvarTest && *item->cvarTest) {
 		char buff[1024];
+
+// ~DIMMSKII QL Compat - divert cg_gametype
+		if (Q_stricmp(item->cvarTest, "cg_gametype") == 0) {
+			return Item_EnableShowViaCvar_QL(item, flag);
+		}
+// END DIMMSKII
+
 	  DC->getCVarString(item->cvarTest, buff, sizeof(buff));
 
     Q_strcat(script, 1024, item->enableCvar);
@@ -3045,6 +3117,8 @@ void Item_TextField_Paint(itemDef_t *item) {
 		memcpy(&newColor, &item->window.foreColor, sizeof(vec4_t));
 	}
 
+	Item_TextColor(item, &newColor); // ~DIMMSKII - Fix value not being colored consistently for things like disableColor
+
 	offset = (item->text && *item->text) ? 8 : 0;
 	if (item->window.flags & WINDOW_HASFOCUS && g_editingField) {
 		char cursor = DC->getOverstrikeMode() ? '_' : '|';
@@ -3072,6 +3146,8 @@ void Item_YesNo_Paint(itemDef_t *item) {
 		memcpy(&newColor, &item->window.foreColor, sizeof(vec4_t));
 	}
 
+	Item_TextColor(item, &newColor); // ~DIMMSKII - Fix value not being colored consistently for things like disableColor
+
 	if (item->text) {
 		Item_Text_Paint(item);
 		DC->drawText(item->textRect.x + item->textRect.w + 8, item->textRect.y, item->textscale, newColor, (value != 0) ? "Yes" : "No", 0, 0, item->textStyle);
@@ -3095,6 +3171,7 @@ void Item_Multi_Paint(itemDef_t *item) {
 		memcpy(&newColor, &item->window.foreColor, sizeof(vec4_t));
 	}
 
+	Item_TextColor(item, &newColor); // ~DIMMSKII - Fix value not being colored consistently for things like disableColor
 	text = Item_Multi_Setting(item);
 
 	if (item->text) {
@@ -3155,6 +3232,7 @@ static bind_t g_bindings[] =
 	{"weapon 11",		 -1,					-1,		-1, -1},
 	{"weapon 12",		 -1,					-1,		-1, -1},
 	{"weapon 13",		 -1,					-1,		-1, -1},
+	{"weapon 14",		 -1,					-1,		-1, -1},
 	{"+attack", 		 K_CTRL,				-1,		-1, -1},
 	{"weapprev",		 '[',					-1,		-1, -1},
 	{"weapnext", 		 ']',					-1,		-1, -1},
@@ -3191,6 +3269,7 @@ static bind_t g_bindings[] =
 
 static const int g_bindCount = sizeof(g_bindings) / sizeof(bind_t);
 
+/*
 #ifndef MISSIONPACK // bk001206
 static configcvar_t g_configcvars[] =
 {
@@ -3205,6 +3284,7 @@ static configcvar_t g_configcvars[] =
 	{NULL,				0,					0}
 };
 #endif
+*/
 
 /*
 =================
@@ -4781,6 +4861,18 @@ qboolean ItemParse_doubleClick( itemDef_t *item, int handle ) {
 	return qtrue;
 }
 
+// ~DIMMSKII
+qboolean ItemParse_font( itemDef_t *item, int handle ) {
+	int i;
+
+	if (!PC_Int_Parse(handle, &i)) {
+		return qfalse;
+	}
+	// TODO: QL Stub. Implement this.
+	return qtrue;
+}
+// End DIMMSKII
+
 qboolean ItemParse_onFocus( itemDef_t *item, int handle ) {
 	if (!PC_Script_Parse(handle, &item->onFocus)) {
 		return qfalse;
@@ -5126,6 +5218,9 @@ keywordHash_t itemParseKeywords[] = {
 	{"hideCvar", ItemParse_hideCvar, NULL},
 	{"cinematic", ItemParse_cinematic, NULL},
 	{"doubleclick", ItemParse_doubleClick, NULL},
+	// ~DIMMSKII
+	{"font", ItemParse_font, NULL},
+	// End DIMMSKII
 	{NULL, NULL, NULL}
 };
 
@@ -5239,6 +5334,17 @@ qboolean MenuParse_fullscreen( itemDef_t *item, int handle ) {
 	}
 	return qtrue;
 }
+
+// ~DIMMSKII
+qboolean MenuParse_widescreen( itemDef_t *item, int handle ) {
+	int i;
+	if (!PC_Int_Parse(handle, &i)) {
+		return qfalse;
+	}
+	// TODO: QL Stub. Implement this.
+	return qtrue;
+}
+//END DIMM
 
 qboolean MenuParse_rect( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
@@ -5527,6 +5633,9 @@ keywordHash_t menuParseKeywords[] = {
 	{"fadeClamp", MenuParse_fadeClamp, NULL},
 	{"fadeCycle", MenuParse_fadeCycle, NULL},
 	{"fadeAmount", MenuParse_fadeAmount, NULL},
+	// ~DIMMSKII
+	{"widescreen", MenuParse_widescreen, NULL},
+	// END DIMM
 	{NULL, NULL, NULL}
 };
 
@@ -5631,10 +5740,12 @@ displayContextDef_t *Display_GetContext(void) {
 	return DC;
 }
  
+/*
 #ifndef MISSIONPACK // bk001206
 static float captureX;
 static float captureY;
 #endif
+*/
 
 void *Display_CaptureItem(int x, int y) {
 	int i;
