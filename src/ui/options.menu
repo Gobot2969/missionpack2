@@ -271,24 +271,9 @@ itemDef {
       		name display
 		group grpOptions
       		type ITEM_TYPE_YESNO
-		text "Dynamic Lights:"
-		cvar "r_dynamiclight"
-		rect 99 95 256 20
-      		textalign ITEM_ALIGN_RIGHT
-      		textalignx 128
-      		textaligny 20
-		textscale .3
-      		forecolor 1 1 1 1
-      		visible 0
-    		}
-
-	itemDef {
-      		name display
-		group grpOptions
-      		type ITEM_TYPE_YESNO
 		text "Simple Items:"
 		cvar "cg_simpleItems"
-		rect 99 115 256 20
+		rect 99 95 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
@@ -303,43 +288,13 @@ itemDef {
       		type ITEM_TYPE_YESNO
 		text "Draw Gun:"
 		cvar "cg_drawGun"
-		rect 99 135 256 20
+		rect 99 115 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
 		textscale .3
       		forecolor 1 1 1 1
       		visible 0
-    		}
-
-	itemDef {
-      		name display
-		group grpOptions
-      		type ITEM_TYPE_YESNO
-		text "Low Quality Sky:"
-		cvar "r_fastsky"
-		rect 99 155 256 20
-      		textalign ITEM_ALIGN_RIGHT
-      		textalignx 128
-      		textaligny 20
-		textscale .3
-      		forecolor 1 1 1 1
-      		visible 0 
-    		}
-
-	itemDef {
-      		name display
-		group grpOptions
-      		type ITEM_TYPE_YESNO
-		text "Sync Every Frame:"
-		cvar "weapon 5"
-		rect 99 175 256 20
-      		textalign ITEM_ALIGN_RIGHT
-      		textalignx 128
-      		textaligny 20
-		textscale .3
-      		forecolor 1 1 1 1
-      		visible 0 
     		}
 	
 	itemDef {
@@ -348,7 +303,7 @@ itemDef {
       		type ITEM_TYPE_YESNO
 		text "Force Player Models:"
 		cvar "cg_forceModel"
-		rect 99 195 256 20
+		rect 99 135 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
@@ -360,16 +315,16 @@ itemDef {
 	itemDef {
       		name display
 		group grpOptions
-      		type ITEM_TYPE_YESNO
-		text "In Game Video:"
-		cvar "r_inGameVideo"
-		rect 99 215 256 20
+      		type ITEM_TYPE_SLIDER
+		text "POI Background Alpha:"
+		cvarfloat "cg_poiTextBgAlpha" 0.3 0 1
+		rect 99 155 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
-		textscale .3       
+		textscale .3   
       		forecolor 1 1 1 1
-      		visible 0 
+      		visible 0
     		}
 itemDef {
       		name display
@@ -378,7 +333,7 @@ itemDef {
 		text "Friend Markers:"
 		cvar "cg_drawFriend"
 		cvarStrList { "Off", "0", "Classic Markers", "1", "QL Style", "2"  }
-		rect 99 235 256 20
+		rect 99 175 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
@@ -391,10 +346,10 @@ itemDef {
       		name display
 		group grpOptions
       		type ITEM_TYPE_MULTI
-		text "Friend Names:"
+		text "Friend Names Above Markers:"
 		cvar "cg_teammateNames"
 		cvarStrList { "None", "0", "Targeted", "1", "Always", "2"  }
-		rect 99 255 256 20
+		rect 99 195 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
@@ -404,21 +359,38 @@ itemDef {
 		cvarTest "cg_drawFriend"
 		disableCvar { "0" ; "1" }
 		}
-
-	itemDef {
+itemDef {
       		name display
 		group grpOptions
-      		type ITEM_TYPE_SLIDER
-		text "POI Background Alpha:"
-		cvarfloat "cg_poiTextBgAlpha" 0.3 0 1
-		rect 99 275 256 20
+      		type ITEM_TYPE_YESNO
+		text "Item POIs:"
+		cvar "cg_itemPOIs"
+		rect 99 215 256 20
       		textalign ITEM_ALIGN_RIGHT
       		textalignx 128
       		textaligny 20
-		textscale .3   
+		textscale .3       
       		forecolor 1 1 1 1
       		visible 0
-    		}
+		}
+
+itemDef {
+      		name display
+		group grpOptions
+      		type ITEM_TYPE_MULTI
+		text "Item Timers Above POIs:"
+		cvar "cg_itemTimers"
+		cvarStrList { "None", "0", "Targeted", "1", "Always", "2"  }
+		rect 99 235 256 20
+      		textalign ITEM_ALIGN_RIGHT
+      		textalignx 128
+      		textaligny 20
+		textscale .3       
+      		forecolor 1 1 1 1
+      		visible 0
+		cvarTest "cg_itemPOIs"
+		disableCvar { "0" }
+		}
 
 
 
