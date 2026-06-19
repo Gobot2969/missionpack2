@@ -1,6 +1,6 @@
 # Quake III Ultimate Arena Client Configuration
 
-## 1. From Missionpack+
+## 1. From Missionpackplus
 
 General config improvements upon vanilla Q3/TA:
 
