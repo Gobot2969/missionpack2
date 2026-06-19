@@ -56,7 +56,6 @@ The build system included should be completely portable provided that you are on
 ## To do
 * 0.58
    * Show dead players in round-based gamemodes (scoreboard and team info)
-   * Fix gaunthack exploit during pre-round
 * 0.60
    * Refactor source
    * undef `MISSIONPACK` and `MISSIONPACK2`
