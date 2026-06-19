@@ -36,10 +36,10 @@ These variables control the global behavior and rendering constraints for all ov
 | `cg_teammatePOIs` | `1` | Quake Live compatibility R/O cvar. Automatically enables/disables itself depending on whether or not `cg_drawFriend` is `2`. |
 | `cg_teammateNames` | `1` | Controls visibility behavior for player names above teammate POIs:<br>• `0`: Off<br>• `1`: Targeted (only when looking toward them)<br>• `2`: Always on.<br>*Requires `cg_drawFriend 2`.* |
 | `cg_teammatePOIsIconSize` | `8` | Sets the initial size for teammate POI pics. *Requires `cg_drawFriend 2`.* |
-| `cg_teammatePOIsIconMaxSize` | `12` | Sets the maximum size for teammate POI pics icons up close. *Requires `cg_itemPOIs 1`.* |
+| `cg_teammatePOIsIconMaxSize` | `12` | Sets the maximum size for teammate POI pics icons up close. *Requires `cg_drawFriend 2`.* |
 | --- | --- | --- |
 | `cg_itemPOIs` | `1` | Master toggle for rendering POIs over item spawners. |
-| `cg_itemTimers` | `1` | Controls visibility of timer texts above item POIs:<br>• `0`: Off<br>• `1`: Targeted (only when looking toward them)<br>• `2`: Always on.<br>*Requires `cg_drawFriend 2`.* |
+| `cg_itemTimers` | `1` | Controls visibility of timer texts above item POIs:<br>• `0`: Off<br>• `1`: Targeted (only when looking toward them)<br>• `2`: Always on.<br>*Requires `cg_itemPOIs 1`.* |
 | `cg_itemPOIsIconSize` | `24` | Sets the initial size of item POI pics. *Has no effect if `cg_itemPOIs` is set to `0`.* |
 | `cg_itemPOIsIconMaxSize` | `32` | Limit the scaling limit for item POI pics. *Has no effect if `cg_itemPOIs` is set to `0`.* |
 
