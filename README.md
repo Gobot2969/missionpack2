@@ -1,6 +1,6 @@
 # Quake III Ultimate Arena
 
-Mod based off of Kr3m's missionpack plus with QL features, gametypes, and more!
+Mod based off of Kr3m's [missionpackplus](https://github.com/Kr3m/missionpackplus) with QL features, gametypes, and more!
  
 **This is not a replacement for Team Arena! TA maps and virtually all their textures aren't included, meaning you'd still have to legally purchase Team Arena in order to enjoy all of its maps, along with most custom ones designed for TA!**
 
@@ -11,7 +11,7 @@ Mod based off of Kr3m's missionpack plus with QL features, gametypes, and more!
 * QL-Style Teammate POIs (`cg_drawFriend 2`)
 * Item POIs and timers
 * HUD files from QL parse without error. This project strives for near-total CG and UI scripts compatibility with both MPP and QL.
-* Unlagged, Instagib, and much more from MPP
+* Unlagged, Instagib, PM/FB skins and much more from missionpackplus
 
 ## Screenshots
 <img src="docs/screenshots/pm.png" alt="PM Skinned Enemy" width="360"> <img src="docs/screenshots/teammatepois.png" alt="QL-Styled Teammate POIs" width="360"> <img src="docs/screenshots/green.png" alt="Green Armor" width="360"> <img src="docs/screenshots/hmg.png" alt="QL HMG" width="360"> <img src="docs/screenshots/itempois.png" alt="Item POIs" width="360"> <img src="docs/screenshots/itemtimers.png" alt="Item Timers" width="360"> 
