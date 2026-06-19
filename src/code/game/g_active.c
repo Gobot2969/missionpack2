@@ -798,6 +798,12 @@ void ClientThink_real( gentity_t *ent ) {
 		ucmd->serverTime = level.time - 1000;
 //		G_Printf("serverTime >>>>>\n" );
 	}
+	
+// ~Dimmskii
+    if ( ent->client->ps.pm_flags & PMF_NOSHOOT ) {
+        ucmd->buttons &= ~BUTTON_ATTACK; // Server-sided gaunt hack fix: If one has the PMF_NOSHOOT flag, switching to gauntlet while holding +attack hits once
+    }
+// END Dimmskii
 
 	// unlagged
 	client->frameOffset = trap_Milliseconds() - level.frameStartTime;

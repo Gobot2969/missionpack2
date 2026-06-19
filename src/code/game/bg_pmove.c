@@ -1603,11 +1603,13 @@ static void PM_Weapon( void ) {
 		return;
 	}
 	
+// ~Dimmskii
 	// don't allow attack with PMF_NOSHOOT flag (usually for Arena gamemodes' round prep)
 	if ( pm->ps->pm_flags & PMF_NOSHOOT ) {
-		pm->ps->weaponTime = 1; // Pummel disable workaround
+		pm->cmd.buttons &= ~BUTTON_ATTACK; // Take away BUTTON_ATTACK flag
 		return;
 	}
+// END Dimmskii
 
 	// check for fire
 	if ( ! (pm->cmd.buttons & BUTTON_ATTACK) ) {
