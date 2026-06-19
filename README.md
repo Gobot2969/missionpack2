@@ -14,7 +14,7 @@ Mod based off of Kr3m's missionpack plus with QL features, gametypes, and more!
 * Unlagged, Instagib, and much more from MPP
 
 ## Screenshots
-<img src="docs/screenshots/pm.png" alt="PM Skinned Enemy" width="300"> <img src="docs/screenshots/teammatepois.png" alt="QL-Styled Teammate POIs" width="300"> <img src="docs/screenshots/green.png" alt="Green Armor" width="300"> <img src="docs/screenshots/hmg.png" alt="QL HMG" width="300">
+<img src="docs/screenshots/pm.png" alt="PM Skinned Enemy" width="360"> <img src="docs/screenshots/teammatepois.png" alt="QL-Styled Teammate POIs" width="360"> <img src="docs/screenshots/green.png" alt="Green Armor" width="360"> <img src="docs/screenshots/hmg.png" alt="QL HMG" width="360">
 
 ## Configuration Guides
 
