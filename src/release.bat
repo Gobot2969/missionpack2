@@ -6,7 +6,17 @@ set oldcd=%cd%
 set VERSION=057
 set PK3_NAME=pak%VERSION%
 
+:: Extract the first digit
+set MAJOR=%VERSION:~0,1%
+:: Extract the remaining digits
+set MINOR=%VERSION:~1%
+
 cd %~dp0
+
+:DESCRIPTION_TXT
+::echo Quake III Ultimate Arena %MAJOR%.%MINOR%>..\description.txt
+<nul set /p ="Quake III Ultimate Arena %MAJOR%.%MINOR%" > ..\description.txt
+GOTO MAKE_QVM
 
 :MAKE_QVM
 echo MAKE QVM
