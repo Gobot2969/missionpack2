@@ -8,7 +8,7 @@ Mod based off of Kr3m's missionpack plus with QL features, gametypes, and more!
 * FFA and Clan Arena gametypes. Eventually QL-compatible expanded factories with `g_freeze` for any GT_ enum within reason.
 * QL Heavy Machinegun
 * QL-Style Nail Bounce
-* QL-Style Teammate POIs (cg_drawFriend 2)
+* QL-Style Teammate POIs (`cg_drawFriend 2`)
 * Item POIs and timers
 * HUD files from QL parse without error. This project strives for near-total CG and UI scripts compatibility with both MPP and QL.
 * Unlagged, Instagib, and much more from MPP
