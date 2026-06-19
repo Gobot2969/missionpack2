@@ -54,22 +54,22 @@ The build system included should be completely portable provided that you are on
 7. FIGHT!
 
 ## To do
-* 0.50+
+* 0.58
    * Show dead players in round-based gamemodes (scoreboard and team info)
    * Fix gaunthack exploit during pre-round
-   * Fix scores still being weird pre-round and spectator
-   * ~~Credit screen~~
-   * Cvar to control settings for dead chat and team spec(?)
-* 0.60+
-   * Freeze Tag
-   * Implement arena last standing announcer like in QL
+* 0.60
+   * Refactor source
+   * undef `MISSIONPACK` and `MISSIONPACK2`
+   * Quake Live-ify thigs
+* 0.62+
+   * QL game factories, `g_freeze`
+   * Implement at least Freeze Tag
 * TBD
-   * At least one FFA gametype to replace GT_SINGLE_PLAYER
-   * At least one team-based gametype to replace GT_TEAMTOURNAMENT
    * New bot difficulty 'Competitive' overrides weapon preferences and bunnyhops at least(?)
    * Off-hand hook
    * Bots can use either type of hook
-   * Always-visible team markers like in QL/OSP
+   * Domination, Attack/Defend, Red Rover, Race
+   * Fix scores still being weird pre-round and spectator
 
  ## Credits
  - **Kevin "Kr3m" Remisoski** for missionpackplus and foundation mods (see <https://github.com/Kr3m/missionpackplus> for additional credits for unlagged code, etc)
