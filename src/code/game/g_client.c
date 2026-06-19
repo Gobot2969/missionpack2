@@ -1228,8 +1228,10 @@ void ClientSpawn(gentity_t *ent) {
 		startHealth = g_arenaHealth.integer;
 		startArmor = g_arenaArmor.integer;
 		
-		// Disable shooting upon respawn in Arena gamemodes (  re-enabled on G_WarmupEnd in g_main.c  )
-		client->ps.pm_flags |= PMF_NOSHOOT;
+		// Disable shooting upon respawn in Arena gamemodes if there is warmup time (  re-enabled on G_WarmupEnd in g_main.c  )
+		if (g_warmup.integer > 0) {
+			client->ps.pm_flags |= PMF_NOSHOOT;
+		}
 	} else {
 		startHealth = g_startHealth.integer;
 		startArmor = g_startArmor.integer;
