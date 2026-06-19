@@ -121,7 +121,7 @@ menuback_b
 	nomipmaps
 	{
 		map ui/assets/menuback_b.tga
-		blendfunc add
+		//blendfunc add
 		rgbgen wave sin .75 0 0 0
 		tcmod scroll 0 .2
 	}
