@@ -10,9 +10,9 @@ General config improvements upon vanilla Q3/TA:
 | `cg_kickScale` | `0` | Sets screen vibration scaling factors when sustaining damage. Set to `0` to completely disable screen shake during combat. |
 | `cg_hitSounds` | `0` | Hit sound mode |
 | `cg_enemyModel` | `pm` | Forces all enemy players to one explicit model/skin (e.g., `keel/pm`). Set to `pm` for promode skin and no model change. Set to empty string to disable. |
-| `cg_enemyColors` | `222` | Colors of enemy team PM models for head, torso, and bottom. |
-| `cg_teamModel` | `""` | Forces all friendly players to one explicit model/skin (e.g., `keel/pm`). Set to `pm` for promode skin and no model change. Set to empty string to disable. |
-| `cg_teamColors` | `""` | Colors of friendly team PM models for head, torso, and bottom. |
+| `cg_enemyColors` | `222` | Colors of enemy team PM models for head, torso, and bottom. Set to empty string to disable. |
+| `cg_teamModel` | ` ` | Forces all friendly players to one explicit model/skin (e.g., `keel/pm`). Set to `pm` for promode skin and no model change. Set to empty string to disable. |
+| `cg_teamColors` | ` ` | Colors of friendly team PM models for head, torso, and bottom. Set to empty string to disable. |
 | `cg_deadBodyDarken` | `1` | Automatically darkens dropped player corpses lying on the map floor to increase visibility contrast with combatants. |
 | `cg_fovAdjust` | `0` | Automatically scales focal viewing calculations to properly compensate for modern widescreen aspect ratio variations. |
 | `cg_followKiller` | `0` | Directs the spectator follow-cam system to automatically focus over the player who eliminated you. |
