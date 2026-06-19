@@ -72,7 +72,7 @@ The build system included should be completely portable provided that you are on
  ## Credits
  - **Kevin "Kr3m" Remisoski** for missionpackplus and foundation mods (see <https://github.com/Kr3m/missionpackplus> for additional credits for unlagged code, etc)
  - **Kevin "79DieselRabbit" Worrel** for Frozen Colors map (named as mp2team1 -- we needed at least one amazing custom map supporting 1FCTF, etc)
- - **Hubster** for his famous Aerowalk conversion (named as mp2tourney1 -- green armor!)
+ - **Mindi "Hubster" Burji** for his famous Aerowalk conversion (named as mp2tourney1 -- green armor!)
  - **Promode Team** PM and FB skins
  - **Dimmskii** for UI work and upscales, QL model conversions, coding, anything else I forgot to mention
  - **Id Software** for Almost Lost map, and everything else making all of this possible!
