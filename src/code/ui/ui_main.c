@@ -206,6 +206,8 @@ static const gameTypeList_t gameTypeLists[] = {
 
 static const int numGameTypeLists = ARRAY_LEN(gameTypeLists);
 
+static const char *UI_GetServerFilterTypeText( void );
+
 // END DIMMSKII
 
 
@@ -1516,7 +1518,7 @@ static void UI_DrawNetFilter(rectDef_t *rect, float scale, vec4_t color, int tex
 		ui_serverFilterType.integer = 0;
 	}*/
   //Text_Paint(rect->x, rect->y, scale, color, va("Filter: %s", serverFilters[0/*ui_serverFilterType.integer*/].description), 0, 0, textStyle);
-  Text_Paint(rect->x, rect->y, scale, color, va("Filter: %s", gameTypeLists[ui_serverFilterType.integer].name), 0, 0, textStyle); // ~dimmskii
+  Text_Paint(rect->x, rect->y, scale, color, UI_GetServerFilterTypeText(), 0, 0, textStyle); // ~dimmskii
 }
 
 
@@ -1940,16 +1942,7 @@ static int UI_OwnerDrawWidth(int ownerDraw, float scale) {
 			}*/
 			//s = va("Filter: %s", serverFilters[0/*ui_serverFilterType.integer*/].description );
 
-			// ~Dimmskii
-			if (ui_serverFilterType.integer < -1 || ui_serverFilterType.integer > numGameTypeLists) {
-				ui_serverFilterType.integer = -1;
-			}
-			if (ui_serverFilterType.integer < 0) {
-				s = va("Filter: %s", "All" ); // ~Dimmskii
-			} else {
-				s = va("Filter: %s", gameTypeLists[ui_serverFilterType.integer].name ); // ~dimmskii
-			}
-			// End Dimmskii
+			s = UI_GetServerFilterTypeText(); // ~dimmskii
 
 			break;
 		case UI_TIER:
@@ -6405,3 +6398,17 @@ static void UI_StartServerRefresh(qboolean full)
 	}
 }
 
+
+// ~DIMMSKII
+static const char *UI_GetServerFilterTypeText() {
+	
+	if (ui_serverFilterType.integer < -1 || ui_serverFilterType.integer > numGameTypeLists) {
+		ui_serverFilterType.integer = -1;
+	}
+	if (ui_serverFilterType.integer < 0) {
+		return va("Filter: %s", "All" );
+	}
+	
+	return va("Filter: %s", gameTypeLists[ui_serverFilterType.integer].name );
+}
+// END DIMMSKII
