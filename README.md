@@ -33,7 +33,7 @@ For detailed setup instructions based on your use case, please refer to the spec
       |-pak0.pk3
       |-...
    |-missionpack2\
-      |-pakXX.pk3
+      |-pakXXX.pk3
       |-...
  ```
 
