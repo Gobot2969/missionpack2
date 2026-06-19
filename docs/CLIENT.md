@@ -33,14 +33,14 @@ These variables control the global behavior and rendering constraints for all ov
 | `cg_poiTextBgAlpha` | `0.3` | Adjusts the background transparency of text elements attached to POI indicators. This includes the timer text above item POIs. |
 | `cg_poiMaxDist` | `4000` | Sets the maximum distance in game units at which POIs remain visible on the screen. A linear alpha fade is applied between zero distance and max. |
 | --- | --- | --- |
-| `cg_teammatePOIs` | `1` | Quake Live compatibility flag. Read-only tracker automatically driven by the engine state (`cg_drawFriend > 1`). |
-| `cg_teammateNames` | `1` | Controls visibility behavior for player names:<br>• `0`: Off<br>• `1`: Targeted (only when looking toward them)<br>• `2`: Always on.<br>*Requires `cg_drawFriend 2`.* |
-| `cg_teammatePOIsIconSize` | `8` | Sets the baseline display size for teammate overhead icons. *Requires `cg_drawFriend 2`.* |
-| `cg_teammatePOIsIconMaxSize` | `12` | Sets the maximum scale ceiling for teammate icons up close. *Requires `cg_drawFriend 2`.* |
+| `cg_teammatePOIs` | `1` | Quake Live compatibility R/O cvar. Automatically enables/disables itself depending on whether or not `cg_drawFriend` is `2`. |
+| `cg_teammateNames` | `1` | Controls visibility behavior for player names above teammate POIs:<br>• `0`: Off<br>• `1`: Targeted (only when looking toward them)<br>• `2`: Always on.<br>*Requires `cg_drawFriend 2`.* |
+| `cg_teammatePOIsIconSize` | `8` | Sets the initial size for teammate POI pics. *Requires `cg_drawFriend 2`.* |
+| `cg_teammatePOIsIconMaxSize` | `12` | Sets the maximum size for teammate POI pics icons up close. *Requires `cg_drawFriend 2`.* |
 | --- | --- | --- |
-| `cg_itemPOIs` | `1` | Master toggle for rendering world-space icons over item spawn nodes. |
-| `cg_itemTimers` | `1` | Toggles the overlay countdown timer showing accurate respawn pacing. *Has no effect if `cg_itemPOIs` is set to `0`.* |
-| `cg_itemPOIsIconSize` | `24` | Sets the default screen resolution footprint for item icons. *Has no effect if `cg_itemPOIs` is set to `0`.* |
-| `cg_itemPOIsIconMaxSize` | `32` | Caps the scaling limit for item icons when positioned near the player. *Has no effect if `cg_itemPOIs` is set to `0`.* |
+| `cg_itemPOIs` | `1` | Master toggle for rendering POIs over item spawners. |
+| `cg_itemTimers` | `1` | Controls visibility of timer texts above item POIs:<br>• `0`: Off<br>• `1`: Targeted (only when looking toward them)<br>• `2`: Always on.<br>*Requires `cg_drawFriend 2`.* |
+| `cg_itemPOIsIconSize` | `24` | Sets the initial size of item POI pics. *Has no effect if `cg_itemPOIs` is set to `0`.* |
+| `cg_itemPOIsIconMaxSize` | `32` | Limit the scaling limit for item POI pics. *Has no effect if `cg_itemPOIs` is set to `0`.* |
 
 ---
