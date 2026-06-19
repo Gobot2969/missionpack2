@@ -6,7 +6,7 @@ Mod based off of Kr3m's missionpack plus with QL features, gametypes, and more!
 
 ## Features
 * FFA and Clan Arena gametypes. Eventually QL-compatible expanded factories with `g_freeze` for any GT_ enum within reason.
-* QL Heavy Machinegun
+* Heavy Machinegun from Quake Live
 * QL-Style Nail Bounce
 * QL-Style Teammate POIs (`cg_drawFriend 2`)
 * Item POIs and timers
