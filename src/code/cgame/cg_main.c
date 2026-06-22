@@ -636,8 +636,10 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.hgrenb1aSound = trap_S_RegisterSound("sound/weapons/grenade/hgrenb1a.wav", qfalse);
 	cgs.media.hgrenb2aSound = trap_S_RegisterSound("sound/weapons/grenade/hgrenb2a.wav", qfalse);
 
+// ~DIMMSKII -- Remove TA model-specific stuff
+
+/*
 #ifdef MISSIONPACK
-	#ifndef MISSIONPACK2
 	trap_S_RegisterSound("sound/player/james/death1.wav", qfalse );
 	trap_S_RegisterSound("sound/player/james/death2.wav", qfalse );
 	trap_S_RegisterSound("sound/player/james/death3.wav", qfalse );
@@ -663,8 +665,8 @@ static void CG_RegisterSounds( void ) {
 	trap_S_RegisterSound("sound/player/janet/drown.wav", qfalse );
 	trap_S_RegisterSound("sound/player/janet/fall1.wav", qfalse );
 	trap_S_RegisterSound("sound/player/janet/taunt.wav", qfalse );
-	#endif
 #endif
+*/
 
 }
 

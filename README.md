@@ -47,7 +47,7 @@ The build system included should be completely portable provided that you are on
 2. Make a gamedir folder in the root of your Quake 3/ioquake3 install called `missionpack2`
 3. Extract the *contents* of the repository folder into `missionpack2`
 4. Navigate to `missionpack2\src`
-5. Run `make.bat` -- this will compile all 3 QVM modules with `-DMISSIONPACK` and `-DMISSIONPACK2`, copy assets and create core/map .pk3 files ready to go
+5. Run `make.bat` -- this will compile all 3 QVM modules, copy assets and create core/map .pk3 files ready to go
 6. Use the `missionpack2.bat` file in its place to run. Alternatively, as always, you can start the mod with any engine of your choice:
   `<ENGINE_BINARY>.exe +set fs_game missionpack2`
 7. FIGHT!
