@@ -799,7 +799,7 @@ void ClientThink_real( gentity_t *ent ) {
 	}
 	
 // ~Dimmskii
-    if ( ent->client->ps.pm_flags & PMF_NOSHOOT ) {
+    if ( ent->client->ps.pm_flags & PMF_NOSHOOT && ent->client->ps.stats[STAT_HEALTH] > 0 ) { // TODO: isDeadArenaPlayer helper method or something
         ucmd->buttons &= ~BUTTON_ATTACK; // Server-sided gaunt hack fix: If one has the PMF_NOSHOOT flag, switching to gauntlet while holding +attack hits once
     }
 // END Dimmskii
