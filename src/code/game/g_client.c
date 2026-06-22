@@ -440,13 +440,13 @@ respawn
 void respawn( gentity_t *ent ) {
 	gentity_t	*tent;
 
-#ifdef MISSIONPACK2
-	if ( ent->health <= 0
-		&& g_gametype.integer != GT_ARENA && g_gametype.integer != GT_TEAMARENA )
-#else
-	if ( ent->health <= 0 )
-#endif
+//	if ( ent->health <= 0 )
+//		CopyToBodyQue( ent );
+
+// ~DIMMSKII
+	if ( ent->health <= 0 && g_gametype.integer != GT_ARENA && g_gametype.integer != GT_TEAMARENA )
 		CopyToBodyQue( ent );
+// END DIMMSKII
 
 	ClientSpawn( ent );
 
@@ -464,12 +464,12 @@ void respawn( gentity_t *ent ) {
 		tent->r.singleClient = ent->s.clientNum;
 	}
 	
-// #ifdef MISSIONPACK2
+// ~DIMMSKII
 	// Disable shooting upon respawn in Arena gamemodes (  re-enabled on G_WarmupEnd in g_main.c  )
 	// if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
 		// ent->client->ps.pm_flags |= PMF_NOSHOOT;
 	// }
-// #endif
+// END DIMMSKII
 }
 
 /*
@@ -1058,15 +1058,17 @@ void ClientSpawn(gentity_t *ent) {
 	int		eventSequence;
 	char	userinfo[MAX_INFO_STRING];
 	qboolean isSpectator;
-	int startHealth, startArmor;
-	char *classname;
+	int startHealth, startArmor; 	// ~Dimmskii
+	char *classname;				// ~Dimmskii
 
 	index = ent - g_entities;
 	client = ent->client;
 
 	trap_UnlinkEntity( ent );
-	
-#ifdef MISSIONPACK2	
+
+	//isSpectator = client->sess.sessionTeam == TEAM_SPECTATOR;
+
+// ~DIMMSKII
 	if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
 		classname = "bodyque";
 		isSpectator = client->sess.sessionTeam == TEAM_SPECTATOR && !level.warmupTime;
@@ -1074,12 +1076,8 @@ void ClientSpawn(gentity_t *ent) {
 		classname = "player";
 		isSpectator = client->sess.sessionTeam == TEAM_SPECTATOR;
 	}
-#else
-	classname = "player";
-	isSpectator = client->sess.sessionTeam == TEAM_SPECTATOR;
-#endif
-	
-	
+// END DIMMSKII
+
 	// find a spawn point
 	// do it before setting health back up, so farthest
 	// ranging doesn't count this client
@@ -1175,7 +1173,8 @@ void ClientSpawn(gentity_t *ent) {
 	ent->s.groundEntityNum = ENTITYNUM_NONE;
 	ent->client = &level.clients[index];
 	ent->inuse = qtrue;
-	ent->classname = classname;
+	//ent->classname = "player";
+	ent->classname = classname; // ~Dimmskii
 	if ( isSpectator ) {
 		ent->takedamage = qfalse;
 		ent->r.contents = 0;
@@ -1222,8 +1221,26 @@ void ClientSpawn(gentity_t *ent) {
 
 	// health will count down towards max_health
 	ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] + 25;
+
+/*
+	if (g_startHealth.integer > 0) {
+		client->ps.stats[STAT_HEALTH] = g_startHealth.integer;
+		if (client->ps.stats[STAT_HEALTH] > client->ps.stats[STAT_MAX_HEALTH] * 2)
+			client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] * 2;
+		ent->health = client->ps.stats[STAT_HEALTH];
+	}
+
+
+
+	if (g_startArmor.integer > 0) {
+		client->ps.stats[STAT_ARMOR] = g_startArmor.integer;
+		if (client->ps.stats[STAT_ARMOR] > client->ps.stats[STAT_MAX_HEALTH] * 2) {
+			client->ps.stats[STAT_ARMOR] = client->ps.stats[STAT_MAX_HEALTH] * 2;
+		}
+	}
+*/
 	
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	if (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) {
 		startHealth = g_arenaHealth.integer;
 		startArmor = g_arenaArmor.integer;
@@ -1236,10 +1253,6 @@ void ClientSpawn(gentity_t *ent) {
 		startHealth = g_startHealth.integer;
 		startArmor = g_startArmor.integer;
 	}
-#else
-	startHealth = g_startHealth.integer;
-	startArmor = g_startArmor.integer;
-#endif
 
 	if (startHealth > 0) {
 		client->ps.stats[STAT_HEALTH] = startHealth;
@@ -1248,14 +1261,13 @@ void ClientSpawn(gentity_t *ent) {
 		ent->health = client->ps.stats[STAT_HEALTH];
 	}
 
-
-
 	if (startArmor > 0) {
 		client->ps.stats[STAT_ARMOR] = g_startArmor.integer;
 		if (client->ps.stats[STAT_ARMOR] > client->ps.stats[STAT_MAX_HEALTH] * 2) {
 			client->ps.stats[STAT_ARMOR] = client->ps.stats[STAT_MAX_HEALTH] * 2;
 		}
 	}
+// END Dimmskii
 
 	G_SetOrigin( ent, spawn_origin );
 	VectorCopy( spawn_origin, client->ps.origin );
@@ -1316,7 +1328,7 @@ void ClientSpawn(gentity_t *ent) {
 		}
 	}
 	
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	// Set the entity/client hp, etc back to zero (kill again) if spawned mid-round in an arena game
 	if (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) {
 		if (!level.warmupTime && !level.intermissiontime && client->sess.sessionTeam != TEAM_SPECTATOR) {
@@ -1333,7 +1345,7 @@ void ClientSpawn(gentity_t *ent) {
 			trap_UnlinkEntity( ent );
 		}
 	}
-#endif
+// END Dimmskii
 
 	// run a client frame to drop exactly to the floor,
 	// initialize animations and other things
@@ -1347,7 +1359,7 @@ void ClientSpawn(gentity_t *ent) {
 	// run the presend to set anything else
 	ClientEndFrame( ent );
 
-	#ifdef MISSIONPACK2
+// ~Dimmskii
 	// find someone to follow for mid-round arena spawns
 	if ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
 		&& !level.warmupTime
@@ -1355,7 +1367,7 @@ void ClientSpawn(gentity_t *ent) {
 		&& client->sess.spectatorState == SPECTATOR_FOLLOW ) {
 		Cmd_FollowCycle_f( ent, 1 );
 	}
-	#endif
+// END Dimmskii
 
 	// clear entity state values
 	BG_PlayerStateToEntityState( &client->ps, &ent->s, qtrue );
@@ -1388,22 +1400,32 @@ void ClientDisconnect( int clientNum ) {
 		return;
 	}
 
+/*
+	// stop any following clients
+	for ( i = 0 ; i < level.maxclients ; i++ ) {
+		if ( level.clients[i].sess.sessionTeam == TEAM_SPECTATOR
+			&& level.clients[i].sess.spectatorState == SPECTATOR_FOLLOW
+			&& level.clients[i].sess.spectatorClient == clientNum ) {
+			StopFollowing( &g_entities[i], qtrue );
+		}
+	}
+*/
+
+// ~DIMMSKII
 	// stop any following clients
 	for ( i = 0 ; i < level.maxclients ; i++ ) {
 		if ( level.clients[i].sess.spectatorState == SPECTATOR_FOLLOW
 			&& level.clients[i].sess.spectatorClient == clientNum ) {
-	#ifdef MISSIONPACK2
 			// dead arena players should cycle to next player, not become spectators
 			if ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
 				&& level.clients[i].sess.sessionTeam != TEAM_SPECTATOR ) {
 				Cmd_FollowCycle_f( &g_entities[i], 1 );
-			} else
-	#endif
-			if ( level.clients[i].sess.sessionTeam == TEAM_SPECTATOR ) {
+			} else if ( level.clients[i].sess.sessionTeam == TEAM_SPECTATOR ) {
 				StopFollowing( &g_entities[i], qtrue );
 			}
 		}
 	}
+// END DIMMSKII
 
 	// send effect if they were completely connected
 	if ( ent->client->pers.connected == CON_CONNECTED 

@@ -636,8 +636,10 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.hgrenb1aSound = trap_S_RegisterSound("sound/weapons/grenade/hgrenb1a.wav", qfalse);
 	cgs.media.hgrenb2aSound = trap_S_RegisterSound("sound/weapons/grenade/hgrenb2a.wav", qfalse);
 
+// ~DIMMSKII -- Remove TA model-specific stuff
+
+/*
 #ifdef MISSIONPACK
-	#ifndef MISSIONPACK2
 	trap_S_RegisterSound("sound/player/james/death1.wav", qfalse );
 	trap_S_RegisterSound("sound/player/james/death2.wav", qfalse );
 	trap_S_RegisterSound("sound/player/james/death3.wav", qfalse );
@@ -663,8 +665,8 @@ static void CG_RegisterSounds( void ) {
 	trap_S_RegisterSound("sound/player/janet/drown.wav", qfalse );
 	trap_S_RegisterSound("sound/player/janet/fall1.wav", qfalse );
 	trap_S_RegisterSound("sound/player/janet/taunt.wav", qfalse );
-	#endif
 #endif
+*/
 
 }
 
@@ -890,9 +892,7 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.medalVictory = trap_R_RegisterShaderNoMip( "medal_victory" );
 
 // ~Dimmskii
-#ifdef MISSIONPACK2
 	cgs.media.medalArena = trap_R_RegisterShaderNoMip( "medal_arena" );
-#endif
 	
 	// POI pics are raw tga to avoid shaders breaking trap_R_SetColor
 	cgs.media.poiPics[ITEMPOS_ARMOR_BODY]      = trap_R_RegisterShader("pois/items/redarmor");
@@ -1559,16 +1559,13 @@ static const char *CG_FeederItemText(float feederID, int index, int column, qhan
 			break;
 			case 4:
 // ~Dimmskii
-#ifdef MISSIONPACK2
-				if ( cgs.gametype == GT_ARENA ) {
-					return va("(%i) %i", sp->roundWins, info->score);
-				} else {
-					return va("%i", info->score);
-				}
-#else
+			if ( cgs.gametype == GT_ARENA ) {
+				return va("(%i) %i", sp->roundWins, info->score);
+			} else {
 				return va("%i", info->score);
-#endif //MISSIONPACK2
+			}
 // END ~Dimmskii
+			//return va("%i", info->score);
 			break;
 			case 5:
 				return va("%4i", sp->time);

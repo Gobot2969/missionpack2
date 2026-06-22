@@ -898,7 +898,6 @@ Only in One Flag CTF games
 
 
 // ~DIMMSKII
-#ifdef MISSIONPACK2
 /*QUAKED item_armor_jacket (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
 	{
@@ -946,7 +945,6 @@ Only in One Flag CTF games
 /* precache */ "",
 /* sounds */ ""
 	},
-#endif
 // END ~DIMMSKII
 
 	// end of list marker

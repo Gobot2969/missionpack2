@@ -425,9 +425,7 @@ typedef struct {
 	int			exitTime;
 	
 // ~DIMMSKII
-#ifdef MISSIONPACK2
 	int			arenaRoundQueued;		// Same as intermission time for ARENA_ROUND_DELAY_TIME (see g_team.c)
-#endif
 // END ~DIMMSKII
 	
 	vec3_t		intermission_origin;	// also used for spectator spawns
@@ -776,9 +774,7 @@ void Hook_Fire( gentity_t *ent );
 #include "g_team.h" // teamplay specific stuff
 
 // ~DIMMSKII
-#ifdef MISSIONPACK2
 	#include "g_arena.h" // arena/team arena specific stuff
-#endif //MISSIONPACK2
 //END ~DIMMSKII
 
 extern	level_locals_t	level;

@@ -435,36 +435,36 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			}
 #endif
 		} else {
-			
-#ifdef MISSIONPACK2
+//			// count down health when over max
+//			if ( ent->health > client->ps.stats[STAT_MAX_HEALTH] ) {
+//				ent->health--;
+//			}
+
+// ~DIMMSKII
 			// count down health when over max on any gametype except for arena ones
 			if ( g_gametype.integer != GT_ARENA && g_gametype.integer != GT_TEAMARENA && ent->health > client->ps.stats[STAT_MAX_HEALTH] ) {
 				ent->health--;
 			}
-#else
-			// count down health when over max
-			if ( ent->health > client->ps.stats[STAT_MAX_HEALTH] ) {
-				ent->health--;
-			}
-#endif
+// END DIMMSKII
 		}
 
-#ifdef MISSIONPACK2
+//		// count down armor when over max
+//		if ( client->ps.stats[STAT_ARMOR] > client->ps.stats[STAT_MAX_HEALTH] ) {
+//			client->ps.stats[STAT_ARMOR]--;
+//		}
+// ~DIMMSKII		
 		// count down armor when over max on any gametype except for arena ones
 		if ( g_gametype.integer != GT_ARENA && g_gametype.integer != GT_TEAMARENA && client->ps.stats[STAT_ARMOR] > client->ps.stats[STAT_MAX_HEALTH] ) {
 			client->ps.stats[STAT_ARMOR]--;
 		}
-#else
-		// count down armor when over max
-		if ( client->ps.stats[STAT_ARMOR] > client->ps.stats[STAT_MAX_HEALTH] ) {
-			client->ps.stats[STAT_ARMOR]--;
-		}
-#endif
+// END DIMMSKII
 	}
 #ifdef MISSIONPACK
 	if( bg_itemlist[client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_AMMOREGEN ) {
 		int w, max, inc, t, i;
-    int weapList[]={
+    //int weapList[]={WP_MACHINEGUN,WP_SHOTGUN,WP_GRENADE_LAUNCHER,WP_ROCKET_LAUNCHER,WP_LIGHTNING,WP_RAILGUN,WP_PLASMAGUN,WP_BFG,WP_NAILGUN,WP_PROX_LAUNCHER,WP_CHAINGUN};
+// ~Dimmskii
+	int weapList[]={
 		WP_MACHINEGUN,
 		WP_SHOTGUN,
 		WP_GRENADE_LAUNCHER,
@@ -476,10 +476,9 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		WP_NAILGUN,
 		WP_PROX_LAUNCHER,
 		WP_CHAINGUN,
-	#ifdef MISSIONPACK2
 		WP_HMG,
-	#endif
 		};
+//END Dimmskii
     int weapCount = ARRAY_LEN( weapList );
 		//
     for (i = 0; i < weapCount; i++) {
@@ -497,9 +496,9 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			  case WP_NAILGUN: max = 10; inc = 1; t = 1250; break;
 			  case WP_PROX_LAUNCHER: max = 5; inc = 1; t = 2000; break;
 			  case WP_CHAINGUN: max = 100; inc = 5; t = 1000; break;
-	#ifdef MISSIONPACK2
+// ~Dimmskii
 			  case WP_HMG: max = 50; inc = 4; t = 1000; break;
-	#endif
+//END Dimmskii
 			  default: max = 0; inc = 0; t = 1000; break;
 		  }
 		  client->ammoTimes[w] += msec;
@@ -575,12 +574,12 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			if ( g_dmflags.integer & DF_NO_FALLING ) {
 				break;
 			}
-#ifdef MISSIONPACK2
+// ~DIMMSKII
 			if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
 				// no fall damage in arena gamemodes
 				break;
 			}
-#endif
+// END DIMMSKII
 			if ( event == EV_FALL_FAR ) {
 				damage = 10;
 			} else {
@@ -851,7 +850,7 @@ void ClientThink_real( gentity_t *ent ) {
 		return;
 	}
 
-	#ifdef MISSIONPACK2
+// ~DIMMSKII
 	// dead players in arena modes act as spectators
 	if ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
 		&& !level.warmupTime
@@ -860,7 +859,7 @@ void ClientThink_real( gentity_t *ent ) {
 		SpectatorThink( ent, ucmd );
 		return;
 	}
-	#endif
+// END DIMMSKII
 
 	// check for inactivity timer, but never drop the local client of a non-dedicated server
 	if ( !ClientInactivityTimer( client ) ) {
@@ -966,12 +965,10 @@ void ClientThink_real( gentity_t *ent ) {
 	pm.pmove_msec = pmove_msec.integer;
 	pm.grapplePull = g_grapplePull.integer;
 	
+// ~DIMMSKII
 	// Set fast weapon switch on pmove
-#ifdef MISSIONPACK2
 	pm.fastWeapSwitch = ( g_fastWeaponSwitch.integer || g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) ? qtrue : qfalse;
-#else
-	pm.fastWeapSwitch = ( g_fastWeaponSwitch.integer ) ? qtrue : qfalse;
-#endif
+// END DIMMSKII
 
 	VectorCopy( client->ps.origin, client->oldOrigin );
 
@@ -1045,7 +1042,7 @@ void ClientThink_real( gentity_t *ent ) {
 
 	// check for respawning
 	if ( client->ps.stats[STAT_HEALTH] <= 0 ) {
-	#ifdef MISSIONPACK2
+// ~DIMMSKII
 		// in arena modes, transition to spectator follow after death anim plays
 		if ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
 			&& !level.warmupTime ) {
@@ -1063,7 +1060,7 @@ void ClientThink_real( gentity_t *ent ) {
 			}
 			return;
 		}
-	#endif
+// END DIMMSKII
 		// wait for the attack button to be pressed
 		if ( level.time > client->respawnTime ) {
 			// forcerespawn is to prevent users from waiting out powerups
@@ -1128,20 +1125,23 @@ SpectatorClientEndFrame
 */
 void SpectatorClientEndFrame( gentity_t *ent ) {
 	gclient_t	*cl;
-#ifdef MISSIONPACK2
+// ~DIMMSKII
 	qboolean	isDeadArenaPlayer;
 
 	isDeadArenaPlayer = ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
 		&& !level.warmupTime
 		&& ent->client->sess.sessionTeam != TEAM_SPECTATOR
 		&& ent->client->sess.spectatorState == SPECTATOR_FOLLOW );
-#endif
+// END DIMMSKII
 
 	// if we are doing a chase cam or a remote view, grab the latest info
 	if ( ent->client->sess.spectatorState == SPECTATOR_FOLLOW ) {
+		//int		clientNum, flags;
+// ~DIMMSKII
 		int		clientNum, flags, team;
 		int savedPersistant[MAX_PERSISTANT];
 		usercmd_t savedCmd;
+// END DIMMSKII
 
 		clientNum = ent->client->sess.spectatorClient;
 
@@ -1182,14 +1182,14 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 				// END DIMMSKII
 
 				return;
-				} else {
+			} else {
 				// drop them to free spectators unless they are dedicated camera followers
 				if ( ent->client->sess.spectatorClient >= 0 ) {
 					ent->client->sess.spectatorState = SPECTATOR_FREE;
-#ifdef MISSIONPACK2
+// ~DIMMSKII
 					// dead arena players should not respawn via ClientBegin
 					if ( !isDeadArenaPlayer )
-#endif
+// END DIMMSKII
 					ClientBegin( ent->client - level.clients );
 				}
 			}
@@ -1230,7 +1230,7 @@ void ClientEndFrame( gentity_t *ent ) {
 		return;
 	}
 
-	#ifdef MISSIONPACK2
+// ~DIMMSKII
 	// dead players in arena modes follow like spectators
 	if ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
 		&& !level.warmupTime
@@ -1239,7 +1239,7 @@ void ClientEndFrame( gentity_t *ent ) {
 		SpectatorClientEndFrame( ent );
 		return;
 	}
-	#endif
+// END DIMMSKII
 
 	client = ent->client;
 

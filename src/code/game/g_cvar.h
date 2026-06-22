@@ -30,10 +30,8 @@ G_CVAR( g_timelimit, "timelimit", "0", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NOR
 G_CVAR( g_capturelimit, "capturelimit", "8", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue, qfalse )
 
 // ~DIMMSKII
-#ifdef MISSIONPACK2
 G_CVAR( g_winlimit, "winlimit", "10", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue, qfalse )
 G_CVAR( g_roundtime, "roundtime", "300", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue, qfalse )
-#endif
 
 G_CVAR( g_teamVisibility, "g_teamVisibility", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )
 G_CVAR( g_itemVisibility, "g_itemVisibility", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )
@@ -181,7 +179,7 @@ G_CVAR( g_splashRadiusPL, "g_splashRadiusPL", "150", 0, 0, qfalse, qfalse )
 G_CVAR( g_damageCG, "g_damageCG", "7", 0, 0, qfalse, qfalse )
 #endif
 
-#ifdef MISSIONPACK2
+// ~Dimmskii
 G_CVAR( g_startAmmoHMG, "g_startAmmoHMG", "50", 0, 0, qfalse, qfalse ) // TODO: what is QL HMG starting ammo? ~Dimmskii
 G_CVAR( g_damageHMG, "g_damageHMG", "8", 0, 0, qfalse, qfalse )
 
@@ -196,15 +194,15 @@ G_CVAR( g_arenaAmmoLG, "g_arenaAmmoLG", "150", 0, 0, qfalse, qfalse )
 G_CVAR( g_arenaAmmoRG, "g_arenaAmmoRG", "30", 0, 0, qfalse, qfalse )
 G_CVAR( g_arenaAmmoPG, "g_arenaAmmoPG", "100", 0, 0, qfalse, qfalse )
 G_CVAR( g_arenaAmmoBFG, "g_arenaAmmoBFG", "5", 0, 0, qfalse, qfalse )
-	#ifdef MISSIONPACK
-	G_CVAR( g_arenaAmmoNG, "g_arenaAmmoNG", "40", 0, 0, qfalse, qfalse )
-	G_CVAR( g_arenaAmmoPL, "g_arenaAmmoPL", "5", 0, 0, qfalse, qfalse )
-	G_CVAR( g_arenaAmmoCG, "g_arenaAmmoCG", "100", 0, 0, qfalse, qfalse )
-	#endif
+#ifdef MISSIONPACK
+G_CVAR( g_arenaAmmoNG, "g_arenaAmmoNG", "40", 0, 0, qfalse, qfalse )
+G_CVAR( g_arenaAmmoPL, "g_arenaAmmoPL", "5", 0, 0, qfalse, qfalse )
+G_CVAR( g_arenaAmmoCG, "g_arenaAmmoCG", "100", 0, 0, qfalse, qfalse )
+#endif
 G_CVAR( g_arenaAmmoHMG, "g_arenaAmmoHMG", "150", 0, 150, qfalse, qfalse )
 
 G_CVAR( g_arenaWpflags, "arenaWpflags", "2175", 0, 0, qfalse, qfalse )
-#endif
+// END Dimmskii
 
 G_CVAR( g_tossWeapon, "g_tossWeapon", "1", CVAR_ARCHIVE, 0, qtrue, qtrue )
 G_CVAR( g_startingWeapon, "g_startingWeapon", "", 0, 0, qfalse, qfalse )

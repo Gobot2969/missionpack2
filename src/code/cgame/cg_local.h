@@ -304,9 +304,9 @@ typedef struct {
 	int				assistCount;
 	int				captures;
 	qboolean		perfect;
-	#ifdef MISSIONPACK2
+// ~Dimmskii
 	int				roundWins;
-	#endif
+// END Dimmskii
 	team_t			team;
 
 	int				minx, maxx;
@@ -872,9 +872,7 @@ typedef struct {
 	qhandle_t	medalVictory;
 
 // ~Dimmskii
-#ifdef MISSIONPACK2
 	qhandle_t	medalArena;
-#endif
 	qhandle_t	poiPics[ITEMPOS_POWERUP_MAX];
 // End Dimmskii
 
@@ -1077,9 +1075,7 @@ typedef struct {
 	int				fraglimit;
 	int				capturelimit;
 // ~Dimmskii
-#ifdef MISSIONPACK2
 	int				winlimit;
-#endif
 	int				g_teamVisibility;
 	int				g_itemVisibility;
 // END ~Dimmskii

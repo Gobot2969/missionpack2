@@ -191,11 +191,11 @@ qboolean EntityIsDead(aas_entityinfo_t *entinfo) {
 		//retrieve the current client state
 		BotAI_GetClientState( entinfo->number, &ps );
 		if (ps.pm_type != PM_NORMAL) return qtrue;
-#ifdef MISSIONPACK2
+// ~Dimmskii
 		// dead arena players in follow mode have PM_NORMAL copied from followed player
 		if ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
 			&& g_entities[entinfo->number].health <= 0 ) return qtrue;
-#endif
+// END Dimmskii
 	}
 	return qfalse;
 }
@@ -1754,9 +1754,9 @@ void BotUpdateInventory(bot_state_t *bs) {
 	bs->inventory[INVENTORY_PROXLAUNCHER] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_PROX_LAUNCHER)) != 0;;
 	bs->inventory[INVENTORY_CHAINGUN] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_CHAINGUN)) != 0;;
 #endif
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	//bs->inventory[INVENTORY_HMG] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_HMG)) != 0;
-#endif
+// END Dimmskii
 	//ammo
 	bs->inventory[INVENTORY_SHELLS] = bs->cur_ps.ammo[WP_SHOTGUN];
 	bs->inventory[INVENTORY_BULLETS] = bs->cur_ps.ammo[WP_MACHINEGUN];
@@ -1771,9 +1771,9 @@ void BotUpdateInventory(bot_state_t *bs) {
 	bs->inventory[INVENTORY_MINES] = bs->cur_ps.ammo[WP_PROX_LAUNCHER];
 	bs->inventory[INVENTORY_BELT] = bs->cur_ps.ammo[WP_CHAINGUN];
 #endif
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	//bs->inventory[INVENTORY_HMGAMMO] = bs->cur_ps.ammo[WP_HMG];
-#endif
+// END Dimmskii
 	//powerups
 	bs->inventory[INVENTORY_HEALTH] = bs->cur_ps.stats[STAT_HEALTH];
 	bs->inventory[INVENTORY_TELEPORTER] = bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_TELEPORTER;
@@ -2221,11 +2221,9 @@ BotAggression
 */
 float BotAggression(bot_state_t *bs) {
 // BEGIN ~DIMMSKII
-#ifdef MISSIONPACK2
 	if ( gametype == GT_ARENA || gametype == GT_TEAMARENA ) {
 		return 100; // Always agressive in arena gamemodes
 	}
-#endif
 // END ~DIMMSKII
 	//if the bot has quad
 	if (bs->inventory[INVENTORY_QUAD]) {
@@ -2276,11 +2274,9 @@ BotFeelingBad
 */
 float BotFeelingBad(bot_state_t *bs) {
 // BEGIN ~DIMMSKII
-#ifdef MISSIONPACK2
 	if ( gametype == GT_ARENA || gametype == GT_TEAMARENA ) {
 		return 0; // Bots never feel bad in arena gamemodes
 	}
-#endif
 // END ~DIMMSKII
 	if (bs->weaponnum == WP_GAUNTLET) {
 		return 100;
@@ -5505,7 +5501,6 @@ void BotShutdownDeathmatchAI(void) {
 
 
 // ~DIMMSKII
-#ifdef MISSIONPACK2
 /*
 ==================
 BotArenaPickEnemyToKill
@@ -5565,6 +5560,5 @@ void BotArenaPickEnemyToKill(bot_state_t *bs) {
 		bs->ltgtype = 0;
 	}
 }
-#endif
 // END ~DIMMSKII
 

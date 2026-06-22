@@ -15,7 +15,7 @@ set INCLUDE=
 mkdir vm
 cd vm
 
-set cc=q3lcc -DMISSIONPACK -DMISSIONPACK2 -DQ3_VM -S -Wf-target=bytecode -Wf-g -I..\..\cgame -I..\..\game -I..\..\ui %1
+set cc=q3lcc -DMISSIONPACK -DQ3_VM -S -Wf-target=bytecode -Wf-g -I..\..\cgame -I..\..\game -I..\..\ui %1
 
 %cc% ../ui_main.c
 @if errorlevel 1 goto errorquit

@@ -303,9 +303,9 @@ char	*modNames[] = {
 	"MOD_KAMIKAZE",
 	"MOD_JUICED",
 #endif
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	"MOD_HMG",
-#endif
+// END Dimmskii
 	"MOD_GRAPPLE"
 };
 
@@ -522,23 +522,21 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		attacker->client->lastkilled_client = self->s.number;
 
 		if ( attacker == self || OnSameTeam (self, attacker ) ) {
-#ifdef MISSIONPACK2
+//			AddScore( attacker, self->r.currentOrigin, -1 );
+// ~Dimmskii
 			if ( g_gametype.integer != GT_ARENA && g_gametype.integer != GT_TEAMARENA ) {  // Suicides don't subtract points in arena gamemodes.
 				AddScore( attacker, self->r.currentOrigin, -1 );
 			}
-#else
-			AddScore( attacker, self->r.currentOrigin, -1 );
-#endif
+// END Dimmskii
 		} else {
-#ifdef MISSIONPACK2
+//			AddScore( attacker, self->r.currentOrigin, 1 );
+// ~Dimmskii
 			if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
 				AddScore( attacker, self->r.currentOrigin, 100 );
 			} else {
 				AddScore( attacker, self->r.currentOrigin, 1 );
 			}
-#else
-			AddScore( attacker, self->r.currentOrigin, 1 );
-#endif
+// END Dimmskii
 
 			if( meansOfDeath == MOD_GAUNTLET ) {
 				
@@ -569,13 +567,13 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 
 		}
 	} else {
-#ifdef MISSIONPACK2
+		//AddScore( self, self->r.currentOrigin, -1 );
+
+		// ~Dimmskii
 		if ( g_gametype.integer != GT_ARENA && g_gametype.integer != GT_TEAMARENA ) {  // Suicides don't subtract points in arena gamemodes.
 			AddScore( attacker, self->r.currentOrigin, -1 );
 		}
-#else
-		AddScore( attacker, self->r.currentOrigin, -1 );
-#endif
+		// END Dimmskii
 	}
 
 	// Add team bonuses
@@ -974,14 +972,14 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 		}
 	}
 	
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	// check for arena/team arena and prevent self-damage
 	if (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) {
 		if (targ == attacker) {
 			return;
 		}
 	}
-#endif
+// END Dimmskii
 
 	// check for completely getting out of the damage
 	if ( !(dflags & DAMAGE_NO_PROTECTION) ) {
@@ -1053,37 +1051,46 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 	}
 
 	// add to the attacker's hit counter (if the target isn't a general entity like a prox mine)
+
+/*
 	if ( attacker->client && client && targ != attacker && targ->health > 0
 			&& targ->s.eType != ET_MISSILE
 			&& targ->s.eType != ET_GENERAL) {
-#ifdef MISSIONPACK2
+#ifdef MISSIONPACK
+		if ( OnSameTeam( targ, attacker ) ) {
+			attacker->client->ps.persistant[PERS_HITS]--;
+		} else {
+			attacker->client->ps.persistant[PERS_HITS]++;
+		}
+		attacker->client->ps.persistant[PERS_ATTACKEE_ARMOR] = (targ->health<<8)|(client->ps.stats[STAT_ARMOR]);
+#else
+		// we may hit multiple targets from different teams
+		// so usual PERS_HITS increments/decrements could result in ZERO delta
+		if ( OnSameTeam( targ, attacker ) ) {
+			attacker->client->damage.team++;
+		} else {
+			attacker->client->damage.enemy++;
+			// accumulate damage during server frame
+			attacker->client->damage.amount += take + asave;
+		}
+#endif
+	}
+*/
+
+// ~DIMMSKII
+	if ( attacker->client && client && targ != attacker && targ->health > 0
+			&& targ->s.eType != ET_MISSILE
+			&& targ->s.eType != ET_GENERAL) {
+
 			if ( OnSameTeam( targ, attacker ) ) {
 				attacker->client->ps.persistant[PERS_HITS]--;
 			} else {
 				attacker->client->ps.persistant[PERS_HITS]++;
 			}
 			attacker->client->ps.persistant[PERS_ATTACKEE_ARMOR] = targ->health;
-#else
-	#ifdef MISSIONPACK
-			if ( OnSameTeam( targ, attacker ) ) {
-				attacker->client->ps.persistant[PERS_HITS]--;
-			} else {
-				attacker->client->ps.persistant[PERS_HITS]++;
-			}
-			attacker->client->ps.persistant[PERS_ATTACKEE_ARMOR] = (targ->health<<8)|(client->ps.stats[STAT_ARMOR]);
-	#else
-			// we may hit multiple targets from different teams
-			// so usual PERS_HITS increments/decrements could result in ZERO delta
-			if ( OnSameTeam( targ, attacker ) ) {
-				attacker->client->damage.team++;
-			} else {
-				attacker->client->damage.enemy++;
-				// accumulate damage during server frame
-				attacker->client->damage.amount += take + asave;
-			}
-	#endif
-#endif
 	}
+// END DIMMSKII
+
 
 	// add to the damage inflicted on a player this frame
 	// the total will be turned into screen blends and view angle kicks
@@ -1142,12 +1149,12 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 			targ->pain (targ, attacker, take);
 		}
 		
-#ifdef MISSIONPACK2
+// ~Dimmskii
 		// add damage score in arenas
 		if (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) {
 			AddScore( attacker, targ->r.currentOrigin, damage ); // dimmsdale
 		}
-#endif
+// END Dimmskii
 	}
 
 }

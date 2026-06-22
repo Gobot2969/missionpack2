@@ -309,13 +309,19 @@ static void CG_OffsetFirstPersonView( void ) {
 
 	// if dead, fix the angle and don't add any kick
 	if ( cg.snap->ps.stats[STAT_HEALTH] <= 0 ) {
-	#ifdef MISSIONPACK2
+/*
+		angles[ROLL] = 40;
+		angles[PITCH] = -15;
+		angles[YAW] = cg.snap->ps.stats[STAT_DEAD_YAW];
+		origin[2] += cg.predictedPlayerState.viewheight;
+		return;
+*/
+// ~Dimmskii
 		// dead arena players following someone use the followed player's view
 		if ( ( cgs.gametype == GT_ARENA || cgs.gametype == GT_TEAMARENA )
 			&& ( cg.snap->ps.pm_flags & PMF_FOLLOW ) ) {
 			// don't apply death view, let normal follow view work
 		} else
-	#endif
 		{
 			angles[ROLL] = 40;
 			angles[PITCH] = -15;
@@ -323,6 +329,7 @@ static void CG_OffsetFirstPersonView( void ) {
 			origin[2] += cg.predictedPlayerState.viewheight;
 			return;
 		}
+// END Dimmskii
 	}
 
 	// add angles based on weapon kick
@@ -841,22 +848,20 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 	CG_PredictPlayerState();
 
 	// decide on third person view
-	
-	// ~Dimmskii
+
+	//cg.renderingThirdPerson = cg_thirdPerson.integer || (cg.snap->ps.stats[STAT_HEALTH] <= 0);
+
+// ~Dimmskii
 	// QL cg compat cvar to reflect whether or not cg_drawFriend is set to 2 -- the equivalent of setting cg_teammatePOIs to 1 in QL
 	trap_Cvar_Set("cg_teammatePOIs", va("%i", cg_drawFriend.integer > 1 ? 1 : 0));
 
-	#ifdef MISSIONPACK2
 	// dead arena players following someone should not force third person
 	if ( ( cgs.gametype == GT_ARENA || cgs.gametype == GT_TEAMARENA )
-		&& cg.snap->ps.stats[STAT_HEALTH] <= 0
-		&& ( cg.snap->ps.pm_flags & PMF_FOLLOW ) ) {
+		&& cg.snap->ps.stats[STAT_HEALTH] <= 0 && ( cg.snap->ps.pm_flags & PMF_FOLLOW ) ) { // Should be a bDeadArena shared method perhaps
 		cg.renderingThirdPerson = cg_thirdPerson.integer;
 	} else
-	#endif
-	// END Dimmskii
-
-	cg.renderingThirdPerson = cg_thirdPerson.integer || (cg.snap->ps.stats[STAT_HEALTH] <= 0);
+		cg.renderingThirdPerson = cg_thirdPerson.integer || (cg.snap->ps.stats[STAT_HEALTH] <= 0);
+// END Dimmskii
 
 	CG_TrackClientTeamChange();
 

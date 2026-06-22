@@ -13,7 +13,7 @@ DeathmatchScoreboardMessage
 ==================
 */
 void DeathmatchScoreboardMessage( gentity_t *ent ) {
-	char		entry[256]; // enough to hold 14 (or 15 with MISSIONPACK2) integers
+	char		entry[256]; // enough to hold 14 integers
 	char		string[MAX_STRING_CHARS-1];
 	int			stringlength;
 	int			i, j, ping, prefix;
@@ -48,40 +48,43 @@ void DeathmatchScoreboardMessage( gentity_t *ent ) {
 
 		perfect = ( cl->ps.persistant[PERS_RANK] == 0 && cl->ps.persistant[PERS_KILLED] == 0 ) ? 1 : 0;
 
-		#ifdef MISSIONPACK2
-				j = BG_sprintf( entry, " %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
-					level.sortedClients[i],
-					cl->ps.persistant[PERS_SCORE],
-					ping,
-					(level.time - cl->pers.enterTime)/60000,
-					scoreFlags,
-					g_entities[level.sortedClients[i]].s.powerups,
-					accuracy,
-					cl->ps.persistant[PERS_IMPRESSIVE_COUNT],
-					cl->ps.persistant[PERS_EXCELLENT_COUNT],
-					cl->ps.persistant[PERS_GAUNTLET_FRAG_COUNT],
-					cl->ps.persistant[PERS_DEFEND_COUNT],
-					cl->ps.persistant[PERS_ASSIST_COUNT],
-					perfect,
-					cl->ps.persistant[PERS_CAPTURES],
-					cl->ps.persistant[PERS_ROUNDWINS]);
-		#else
-				j = BG_sprintf( entry, " %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
-					level.sortedClients[i],
-					cl->ps.persistant[PERS_SCORE],
-					ping,
-					(level.time - cl->pers.enterTime)/60000,
-					scoreFlags,
-					g_entities[level.sortedClients[i]].s.powerups,
-					accuracy,
-					cl->ps.persistant[PERS_IMPRESSIVE_COUNT],
-					cl->ps.persistant[PERS_EXCELLENT_COUNT],
-					cl->ps.persistant[PERS_GAUNTLET_FRAG_COUNT],
-					cl->ps.persistant[PERS_DEFEND_COUNT],
-					cl->ps.persistant[PERS_ASSIST_COUNT],
-					perfect,
-					cl->ps.persistant[PERS_CAPTURES]);
-		#endif
+/*
+		j = BG_sprintf( entry, " %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
+			level.sortedClients[i],
+			cl->ps.persistant[PERS_SCORE],
+			ping,
+			(level.time - cl->pers.enterTime)/60000,
+			scoreFlags,
+			g_entities[level.sortedClients[i]].s.powerups,
+			accuracy, 
+			cl->ps.persistant[PERS_IMPRESSIVE_COUNT],
+			cl->ps.persistant[PERS_EXCELLENT_COUNT],
+			cl->ps.persistant[PERS_GAUNTLET_FRAG_COUNT], 
+			cl->ps.persistant[PERS_DEFEND_COUNT], 
+			cl->ps.persistant[PERS_ASSIST_COUNT], 
+			perfect,
+			cl->ps.persistant[PERS_CAPTURES]);
+
+*/
+// ~Dimmskii
+		j = BG_sprintf( entry, " %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
+			level.sortedClients[i],
+			cl->ps.persistant[PERS_SCORE],
+			ping,
+			(level.time - cl->pers.enterTime)/60000,
+			scoreFlags,
+			g_entities[level.sortedClients[i]].s.powerups,
+			accuracy,
+			cl->ps.persistant[PERS_IMPRESSIVE_COUNT],
+			cl->ps.persistant[PERS_EXCELLENT_COUNT],
+			cl->ps.persistant[PERS_GAUNTLET_FRAG_COUNT],
+			cl->ps.persistant[PERS_DEFEND_COUNT],
+			cl->ps.persistant[PERS_ASSIST_COUNT],
+			perfect,
+			cl->ps.persistant[PERS_CAPTURES],
+			cl->ps.persistant[PERS_ROUNDWINS]);
+			// TODO: A PERS_DAMAGE stat instead of misusing score
+// END Dimmskii
 
 		if ( stringlength + j + prefix >= sizeof( string ) )
 			break;
@@ -910,13 +913,12 @@ static void Cmd_Follow_f( gentity_t *ent ) {
 Cmd_FollowCycle_f
 =================
 */
+
+/*
 void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
 	int		clientnum;
 	int		original;
 	gclient_t	*client;
-#ifdef MISSIONPACK2
-	qboolean	isDeadArenaPlayer;
-#endif
 
 	// if they are playing a tournement game, count as a loss
 	if ( (g_gametype.integer == GT_TOURNAMENT )
@@ -926,22 +928,10 @@ void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
 
 	client = ent->client;
 
-#ifdef MISSIONPACK2
-	isDeadArenaPlayer = ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
-		&& !level.warmupTime
-		&& client->sess.sessionTeam != TEAM_SPECTATOR
-		&& ( client->sess.spectatorState == SPECTATOR_FOLLOW
-			|| client->ps.stats[STAT_HEALTH] <= 0 ) );
-
-	if ( !isDeadArenaPlayer ) {
-#endif
 	// first set them to spectator
 	if ( client->sess.spectatorState == SPECTATOR_NOT ) {
 		SetTeam( ent, "spectator" );
 	}
-#ifdef MISSIONPACK2
-	}
-#endif
 
 	if ( dir != 1 && dir != -1 ) {
 		G_Error( "Cmd_FollowCycle_f: bad dir %i", dir );
@@ -968,7 +958,69 @@ void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
 			continue;
 		}
 
-		#ifdef MISSIONPACK2
+		// this is good, we can use it
+		ent->client->sess.spectatorClient = clientnum;
+		ent->client->sess.spectatorState = SPECTATOR_FOLLOW;
+		return;
+	} while ( clientnum != original );
+
+	// leave it where it was
+}
+*/
+
+// ~Dimmskii
+void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
+	int		clientnum;
+	int		original;
+	gclient_t	*client;
+	qboolean	isDeadArenaPlayer;
+
+	// if they are playing a tournement game, count as a loss
+	if ( (g_gametype.integer == GT_TOURNAMENT )
+		&& ent->client->sess.sessionTeam == TEAM_FREE ) {
+		ent->client->sess.losses++;
+	}
+
+	client = ent->client;
+
+	isDeadArenaPlayer = ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
+		&& !level.warmupTime
+		&& client->sess.sessionTeam != TEAM_SPECTATOR
+		&& ( client->sess.spectatorState == SPECTATOR_FOLLOW
+			|| client->ps.stats[STAT_HEALTH] <= 0 ) );
+
+	if ( !isDeadArenaPlayer ) {
+		// first set them to spectator
+		if ( client->sess.spectatorState == SPECTATOR_NOT ) {
+			SetTeam( ent, "spectator" );
+		}
+	}
+
+	if ( dir != 1 && dir != -1 ) {
+		G_Error( "Cmd_FollowCycle_f: bad dir %i", dir );
+	}
+
+	clientnum = client->sess.spectatorClient;
+	original = clientnum;
+	do {
+		clientnum += dir;
+		if ( clientnum >= level.maxclients ) {
+			clientnum = 0;
+		}
+		if ( clientnum < 0 ) {
+			clientnum = level.maxclients - 1;
+		}
+
+		// can only follow connected clients
+		if ( level.clients[ clientnum ].pers.connected != CON_CONNECTED ) {
+			continue;
+		}
+
+		// can't follow another spectator
+		if ( level.clients[ clientnum ].sess.sessionTeam == TEAM_SPECTATOR ) {
+			continue;
+		}
+
 		if ( isDeadArenaPlayer ) {
 			// dead arena players should only follow alive players
 			if ( g_entities[ clientnum ].health <= 0 ) {
@@ -979,7 +1031,6 @@ void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
 				continue;
 			}
 		}
-		#endif
 
 		// this is good, we can use it
 		ent->client->sess.spectatorClient = clientnum;
@@ -989,6 +1040,7 @@ void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
 
 	// leave it where it was
 }
+// END Dimmskii
 
 
 /*

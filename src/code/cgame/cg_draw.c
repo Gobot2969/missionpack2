@@ -2290,15 +2290,14 @@ static qboolean CG_DrawScoreboard( void ) {
 		return qfalse;
 	}
 
+//	if ( cg.showScores || cg.predictedPlayerState.pm_type == PM_DEAD || cg.predictedPlayerState.pm_type == PM_INTERMISSION ) {
+// ~Dimmskii
+// As always, TODO: implement some sort of cg isDeadArenaPlayer canned method and/or use a shared method isArenaGame(int gt)
 	if ( cg.showScores || cg.predictedPlayerState.pm_type == PM_INTERMISSION
-	#ifdef MISSIONPACK2
 		|| ( cg.predictedPlayerState.pm_type == PM_DEAD
 			&& !( ( cgs.gametype == GT_ARENA || cgs.gametype == GT_TEAMARENA )
-				&& ( cg.snap->ps.pm_flags & PMF_FOLLOW ) ) )
-	#else
-		|| cg.predictedPlayerState.pm_type == PM_DEAD
-	#endif
-	) {
+				&& ( cg.snap->ps.pm_flags & PMF_FOLLOW ) ) ) ) {
+// END Dimmskii
 		fade = 1.0;
 		fadeColor = colorWhite;
 	} else {
@@ -2523,12 +2522,12 @@ static void CG_DrawWarmup( void ) {
 		} else if ( cgs.gametype == GT_HARVESTER ) {
 			s = "Harvester";
 #endif
-#ifdef MISSIONPACK2
+// ~Dimmskii
 		} else if ( cgs.gametype == GT_ARENA ) {
 			s = "Arena";
 		} else if ( cgs.gametype == GT_TEAMARENA ) {
 			s = "Team Arena";
-#endif
+//END Dimmskii
 		} else {
 			s = "";
 		}
@@ -2642,13 +2641,13 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 		CG_DrawSpectator();
 		CG_DrawCrosshair();
 		CG_DrawCrosshairNames();
-	#ifdef MISSIONPACK2
+// ~Dimmskii
 	} else if ( ( cgs.gametype == GT_ARENA || cgs.gametype == GT_TEAMARENA )
 		&& cg.snap->ps.stats[STAT_HEALTH] <= 0
 		&& ( cg.snap->ps.pm_flags & PMF_FOLLOW ) ) {
 		CG_DrawCrosshair();
 		CG_DrawCrosshairNames();
-	#endif
+//END Dimmskii
 	} else {
 		// don't draw any status if dead or the scoreboard is being explicitly shown
 		if ( !cg.showScores && cg.snap->ps.stats[STAT_HEALTH] > 0 ) {

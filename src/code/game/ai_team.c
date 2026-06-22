@@ -2046,9 +2046,7 @@ void BotTeamAI(bot_state_t *bs) {
 	switch(gametype) {
 		case GT_TEAM:
 // ~DIMMSKII
-#ifdef MISSIONPACK2
 		case GT_TEAMARENA:
-#endif
 // END ~DIMMSKII
 		{
 			if (bs->numteammates != numteammates || bs->forceorders) {

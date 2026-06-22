@@ -715,7 +715,7 @@ void CG_RegisterWeapon( int weaponNum ) {
 		break;
 #endif
 
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	case WP_HMG:
 		MAKERGB( weaponInfo->flashDlightColor, 1, 1, 0 );
 		weaponInfo->flashSound[0] = trap_S_RegisterSound( "sound/weapons/hmg/machgf1b.wav", qfalse );
@@ -725,7 +725,7 @@ void CG_RegisterWeapon( int weaponNum ) {
 		weaponInfo->ejectBrassFunc = CG_MachineGunEjectBrass;
 		cgs.media.bulletExplosionShader = trap_R_RegisterShader( "bulletExplosion" );
 		break;
-#endif
+// END Dimmskii
 
 	case WP_MACHINEGUN:
 		MAKERGB( weaponInfo->flashDlightColor, 1, 1, 0 );

@@ -464,7 +464,6 @@ static void CG_DrawPlayerScore( rectDef_t *rect, float scale, vec4_t color, qhan
 }
 
 // ~Dimmskii
-#ifdef MISSIONPACK2
 static void CG_DrawPlayerRoundWins( rectDef_t *rect, float scale, vec4_t color, qhandle_t shader, int textStyle ) {
   char num[16];
   int value = CG_GetValue(CG_PLAYER_ROUNDWINS); // ~DIMMSKII - needed for HUD shows spectatee scores mod
@@ -479,7 +478,6 @@ static void CG_DrawPlayerRoundWins( rectDef_t *rect, float scale, vec4_t color, 
 	  CG_Text_Paint(rect->x + (rect->w - value) / 2, rect->y + rect->h, scale, color, num, 0, 0, textStyle);
 	}
 }
-#endif
 // END ~Dimmskii
 
 static void CG_DrawPlayerItem( rectDef_t *rect, float scale, qboolean draw2D) {
@@ -959,7 +957,6 @@ float CG_GetValue(int ownerDraw) {
 		return cgs.scores2;
     break;
 // ~Dimmskii
-#ifdef MISSIONPACK2
   case CG_PLAYER_ROUNDWINS: 	// Arena wins
   // HUD shows spectatee scores mod
   if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR || (cg.snap->ps.pm_flags & PMF_FOLLOW) ) { // Deadspec check TODO: Add proper method to check dead
@@ -973,7 +970,6 @@ float CG_GetValue(int ownerDraw) {
   }
 	  return cg.snap->ps.persistant[PERS_ROUNDWINS];
     break;
-#endif
 // END ~Dimmskii
   default:
     break;
@@ -1207,9 +1203,8 @@ static void CG_DrawKiller(rectDef_t *rect, float scale, vec4_t color, qhandle_t 
 
 static void CG_DrawCapFragLimit(rectDef_t *rect, float scale, vec4_t color, qhandle_t shader, int textStyle) {
 	//int limit = (cgs.gametype >= GT_CTF) ? cgs.capturelimit : cgs.fraglimit;
-	int limit;
 // ~Dimmskii
-#ifdef MISSIONPACK2
+	int limit;
 	if (cgs.gametype == GT_ARENA || cgs.gametype == GT_TEAMARENA) {
 		limit = cgs.winlimit;
 	} else if (cgs.gametype >= GT_CTF) {
@@ -1217,9 +1212,6 @@ static void CG_DrawCapFragLimit(rectDef_t *rect, float scale, vec4_t color, qhan
 	} else {
 		limit = cgs.fraglimit;
 	}
-#else
-	int limit = (cgs.gametype >= GT_CTF) ? cgs.capturelimit : cgs.fraglimit;
-#endif
 // END ~Dimmskii
 	CG_Text_Paint(rect->x, rect->y, scale, color, va("%2i", limit),0, 0, textStyle); 
 }
@@ -1283,14 +1275,14 @@ const char *CG_GameTypeString() {
 	} else if ( cgs.gametype == GT_HARVESTER ) {
 		return "Harvester";
 	}
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	else if ( cgs.gametype == GT_ARENA ) { // Arener
 		return "Arena";
 	}
 	else if ( cgs.gametype == GT_TEAMARENA ) { // Clan arener
 		return "Team Arena";
 	}
-#endif
+// END Dimmskii
 	return "";
 }
 static void CG_DrawGameType(rectDef_t *rect, float scale, vec4_t color, qhandle_t shader, int textStyle ) {
@@ -1686,11 +1678,9 @@ void CG_OwnerDraw(float x, float y, float w, float h, float text_x, float text_y
     CG_DrawBlueScore(&rect, scale, color, shader, textStyle);
     break;
 // ~Dimmskii
-#ifdef MISSIONPACK2
   case CG_PLAYER_ROUNDWINS: 	// Arena wins
     CG_DrawPlayerRoundWins(&rect, scale, color, shader, textStyle);
     break;
-#endif
 // END ~Dimmskii
   case CG_RED_NAME:
     CG_DrawRedName(&rect, scale, color, textStyle);

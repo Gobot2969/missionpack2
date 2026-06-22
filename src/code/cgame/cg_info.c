@@ -252,11 +252,6 @@ void CG_DrawInformation( void ) {
 	case GT_TOURNAMENT:
 		s = "Tournament";
 		break;
-// #ifdef MISSIONPACK2
-	// case GT_ARENA:
-		// s = "Arena";
-		// break;
-// #endif
 	case GT_TEAM:
 		s = "Team Deathmatch";
 		break;
@@ -275,7 +270,6 @@ void CG_DrawInformation( void ) {
 		break;
 #endif
 // ~Dimmskii
-#ifdef MISSIONPACK2
 	case GT_ARENA:
 		s = "Arena";
 		break;
@@ -285,7 +279,6 @@ void CG_DrawInformation( void ) {
 	case GT_FREEZETAG:
 		s = "Freeze Tag";
 		break;
-#endif
 // END ~Dimmskii
 	default:
 		BG_sprintf( buf, "Gametype #%i", cgs.gametype );
@@ -297,9 +290,7 @@ void CG_DrawInformation( void ) {
 	y += PROP_HEIGHT;
 		
 // ~Dimmskii
-#ifdef MISSIONPACK2
 	if (cgs.gametype != GT_ARENA && cgs.gametype != GT_TEAMARENA && cgs.gametype != GT_FREEZETAG) { // ~Dimmskii // TODO: Shared function isRoundBased(int gt) or something
-#endif
 // END ~Dimmskii
 
 	value = atoi( Info_ValueForKey( info, "timelimit" ) );
@@ -310,9 +301,7 @@ void CG_DrawInformation( void ) {
 	}
 
 // ~Dimmskii
-#ifdef MISSIONPACK2
 	}
-#endif
 // END ~Dimmskii
 
 	//if (cgs.gametype < GT_CTF ) {
@@ -335,7 +324,6 @@ void CG_DrawInformation( void ) {
 	}
 	
 // ~Dimmskii
-#ifdef MISSIONPACK2
 	if (cgs.gametype == GT_ARENA || cgs.gametype == GT_TEAMARENA || cgs.gametype == GT_FREEZETAG) {
 
 		value = atoi( Info_ValueForKey( info, "roundtime" ) );
@@ -352,7 +340,6 @@ void CG_DrawInformation( void ) {
 			y += PROP_HEIGHT;
 		}
 	}
-#endif
 // END ~Dimmskii
 }
 
