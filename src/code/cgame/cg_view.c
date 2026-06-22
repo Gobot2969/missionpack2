@@ -859,9 +859,8 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 	if ( ( cgs.gametype == GT_ARENA || cgs.gametype == GT_TEAMARENA )
 		&& cg.snap->ps.stats[STAT_HEALTH] <= 0 && ( cg.snap->ps.pm_flags & PMF_FOLLOW ) ) { // Should be a bDeadArena shared method perhaps
 		cg.renderingThirdPerson = cg_thirdPerson.integer;
-	} else {
+	} else
 		cg.renderingThirdPerson = cg_thirdPerson.integer || (cg.snap->ps.stats[STAT_HEALTH] <= 0);
-	}
 // END Dimmskii
 
 	CG_TrackClientTeamChange();
