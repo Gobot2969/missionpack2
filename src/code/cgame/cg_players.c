@@ -660,9 +660,9 @@ static qboolean CG_IsKnownModel( const char *modelName ) {
 		 Q_stricmp(modelName, "uriel") &&
 		 Q_stricmp(modelName, "visor") &&
 		 Q_stricmp(modelName, "xaero")
-#ifdef MISSIONPACK2
+// ~Dimmskii
 		 && Q_stricmp(modelName, "callisto")
-#endif
+// END Dimmskii
 		 )
 		 
 		return qfalse;

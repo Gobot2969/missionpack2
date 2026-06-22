@@ -890,9 +890,7 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.medalVictory = trap_R_RegisterShaderNoMip( "medal_victory" );
 
 // ~Dimmskii
-#ifdef MISSIONPACK2
 	cgs.media.medalArena = trap_R_RegisterShaderNoMip( "medal_arena" );
-#endif
 	
 	// POI pics are raw tga to avoid shaders breaking trap_R_SetColor
 	cgs.media.poiPics[ITEMPOS_ARMOR_BODY]      = trap_R_RegisterShader("pois/items/redarmor");
@@ -1559,16 +1557,13 @@ static const char *CG_FeederItemText(float feederID, int index, int column, qhan
 			break;
 			case 4:
 // ~Dimmskii
-#ifdef MISSIONPACK2
-				if ( cgs.gametype == GT_ARENA ) {
-					return va("(%i) %i", sp->roundWins, info->score);
-				} else {
-					return va("%i", info->score);
-				}
-#else
+			if ( cgs.gametype == GT_ARENA ) {
+				return va("(%i) %i", sp->roundWins, info->score);
+			} else {
 				return va("%i", info->score);
-#endif //MISSIONPACK2
+			}
 // END ~Dimmskii
+			//return va("%i", info->score);
 			break;
 			case 5:
 				return va("%4i", sp->time);

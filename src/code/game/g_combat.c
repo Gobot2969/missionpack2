@@ -303,9 +303,9 @@ char	*modNames[] = {
 	"MOD_KAMIKAZE",
 	"MOD_JUICED",
 #endif
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	"MOD_HMG",
-#endif
+// END Dimmskii
 	"MOD_GRAPPLE"
 };
 
@@ -974,14 +974,14 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 		}
 	}
 	
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	// check for arena/team arena and prevent self-damage
 	if (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) {
 		if (targ == attacker) {
 			return;
 		}
 	}
-#endif
+// END Dimmskii
 
 	// check for completely getting out of the damage
 	if ( !(dflags & DAMAGE_NO_PROTECTION) ) {
@@ -1142,12 +1142,12 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 			targ->pain (targ, attacker, take);
 		}
 		
-#ifdef MISSIONPACK2
+// ~Dimmskii
 		// add damage score in arenas
 		if (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) {
 			AddScore( attacker, targ->r.currentOrigin, damage ); // dimmsdale
 		}
-#endif
+// END Dimmskii
 	}
 
 }

@@ -343,13 +343,11 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
 	reward = qfalse;
 
 // ~Dimmskii
-#ifdef MISSIONPACK2
 	if (ps->persistant[PERS_ROUNDWINS] != ops->persistant[PERS_ROUNDWINS]) {
 		pushReward(cgs.media.winnerSound, cgs.media.medalArena, ps->persistant[PERS_ROUNDWINS]);
 		reward = qtrue;
 		//Com_Printf("roundwin\n");
 	}
-#endif
 // END ~Dimmskii
 
 	if (ps->persistant[PERS_CAPTURES] != ops->persistant[PERS_CAPTURES]) {
@@ -445,11 +443,7 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
 			if ( ps->persistant[PERS_RANK] != ops->persistant[PERS_RANK] ) {
 //				if ( cgs.gametype < GT_TEAM) {
 // ~Dimmskii
-#ifdef MISSIONPACK2
-				if ( cgs.gametype < GT_ARENA) { // Only play on non-team gametypes < 3 (0=ffa, 1=tourney, 2=ffa)
-#else
-				if ( cgs.gametype < GT_TEAM) {
-#endif
+				if ( cgs.gametype < GT_ARENA) { // Only play on non-team gametypes < 3 (0=ffa, 1=tourney, 2=ffa) TODO: factories, and firstly, GT_ enum helper methods you know it
 // END ~Dimmskii
 					if (  ps->persistant[PERS_RANK] == 0 ) {
 						CG_AddBufferedSound(cgs.media.takenLeadSound);

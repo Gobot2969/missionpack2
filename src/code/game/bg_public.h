@@ -332,9 +332,7 @@ typedef enum {
 	WP_CHAINGUN,
 #endif
 // ~DIMMSKII
-#ifdef MISSIONPACK2
 	WP_HMG,
-#endif
 // END ~DIMMSKII
 
 	WP_NUM_WEAPONS,

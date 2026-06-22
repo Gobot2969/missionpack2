@@ -280,11 +280,11 @@ G_RegisterWeapon
 void G_RegisterWeapon(void) {
 	int wpflags = g_wpflags.integer;
 	
-#ifdef MISSIONPACK2
+ // ~Dimmskii
 	if (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) {
 		wpflags = g_arenaWpflags.integer;
 	}
-#endif
+// END Dimmskii
 	
 	if ( wpflags & 2 ) {
 		// the machinegun might already be registered
@@ -312,10 +312,10 @@ void G_RegisterWeapon(void) {
 	if ( wpflags & 1024 )
 		RegisterItem( BG_FindItemForWeapon( WP_CHAINGUN ) );
 #endif
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	if ( wpflags & 2048 )
 		RegisterItem( BG_FindItemForWeapon( WP_HMG ) );
-#endif
+// END Dimmskii
 	if ( g_grapple.integer > 0 )
 		RegisterItem( BG_FindItemForWeapon( WP_GRAPPLING_HOOK ) );
 }
@@ -352,11 +352,11 @@ void G_SpawnWeapon ( gclient_t *client ) {
 	
 	client->ps.ammo[ WP_MACHINEGUN ] = getAmmoValue ( "MG" );
 		
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	if (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) {
 		wpflags = g_arenaWpflags.integer;
 	}
-#endif
+// END Dimmskii
 
 	if( g_instagib.integer ) {
 		wpflags = 32;
@@ -409,12 +409,12 @@ void G_SpawnWeapon ( gclient_t *client ) {
 			client->ps.ammo[ WP_CHAINGUN ] = getAmmoValue ( "CG" );
 		}
 #endif
-#ifdef MISSIONPACK2
+// ~Dimmskii
 		if ( wpflags & 2048 ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_HMG;
 			client->ps.ammo[ WP_HMG ] = getAmmoValue ( "HMG" );
 		}
-#endif
+// END Dimmskii
 		if ( g_grapple.integer > 0 ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_GRAPPLING_HOOK;
 		}
@@ -442,10 +442,10 @@ qboolean G_RemoveWeapon ( gitem_t *item ) {
 		|| ( ( g_removeweapon.integer & 1024 ) && ( !Q_stricmp( item->classname, "weapon_chaingun" ) ) ) )
 			return qtrue;
 #endif
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	if ( ( ( g_removeweapon.integer & 2048 ) && ( !Q_stricmp( item->classname, "weapon_hmg" ) ) ) )
 			return qtrue;
-#endif
+// END Dimmskii
 	return qfalse;
 }
 
@@ -470,10 +470,10 @@ qboolean G_RemoveAmmo ( gitem_t *item ) {
 		|| ( ( g_removeammo.integer & 1024 ) && ( !Q_stricmp( item->classname, "ammo_belt" ) ) ) )
 			return qtrue;
 #endif
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	if ( ( ( g_removeammo.integer & 2048 ) && ( !Q_stricmp( item->classname, "ammo_hmg" ) ) ) )
 			return qtrue;
-#endif
+// END Dimmskii
 	return qfalse;
 }
 
@@ -499,10 +499,10 @@ qboolean G_RemoveItem ( gitem_t *item ) {
 		|| ( ( g_removeitem.integer & 2048 ) && ( !Q_stricmp( item->classname, "holdable_invulnerability" ) ) ) )
 			return qtrue;
 #endif
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	if ( ( g_removeitem.integer & 4096 ) && ( !Q_stricmp( item->classname, "item_armor_jacket" ) ) )
 			return qtrue;
-#endif
+// END Dimmskii
 	return qfalse;
 }
 
@@ -1026,7 +1026,6 @@ static int QDECL SortRanks( const void *a, const void *b ) {
 	}
 	
 // ~Dimmskii
-#ifdef MISSIONPACK2
 	if ( g_gametype.integer == GT_ARENA ) {
 		// sort by wins higher priority
 		if ( ca->ps.persistant[PERS_ROUNDWINS]
@@ -1038,7 +1037,6 @@ static int QDECL SortRanks( const void *a, const void *b ) {
 			return 1;
 		}
 	}
-#endif //MISSIONPACK2
 // END ~Dimmskii
 
 	// then sort by score
@@ -1656,7 +1654,7 @@ static void CheckExitRules( void ) {
 		return;
 	}
 	
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	if ( (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) && g_roundtime.integer && !level.warmupTime && !level.arenaRoundQueued ) {
 		if ( level.time - level.startTime >= g_roundtime.integer*1000 ) {
 			G_BroadcastServerCommand( -1, "print \"Round timelimit hit.\n\"");
@@ -1664,7 +1662,7 @@ static void CheckExitRules( void ) {
 			return;
 		}
 	}
-#endif //MISSIONPACK2
+// END Dimmskii
 
 	// check for sudden death
 	if ( ScoreIsTied() ) {
@@ -1674,11 +1672,11 @@ static void CheckExitRules( void ) {
 
 	if ( g_timelimit.integer && !level.warmupTime ) {
 		if ( level.time - level.startTime >= g_timelimit.integer*60000 ) {
-#ifdef MISSIONPACK2
+// ~Dimmskii
 			if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
 				return;
 			}
-#endif //MISSIONPACK2
+// END Dimmskii
 			G_BroadcastServerCommand( -1, "print \"Timelimit hit.\n\"");
 			LogExit( "Timelimit hit." );
 			return;
@@ -1797,11 +1795,11 @@ static void G_WarmupEnd( void )
 	int i, t;
 	qboolean isArena = qfalse;
 	
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
 		isArena = qtrue;
 	}
-#endif
+// END Dimmskii
 
 	// remove corpses
 	ClearBodyQue();

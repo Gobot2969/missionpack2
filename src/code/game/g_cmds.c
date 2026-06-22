@@ -914,9 +914,9 @@ void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
 	int		clientnum;
 	int		original;
 	gclient_t	*client;
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	qboolean	isDeadArenaPlayer;
-#endif
+// END Dimmskii
 
 	// if they are playing a tournement game, count as a loss
 	if ( (g_gametype.integer == GT_TOURNAMENT )
@@ -968,7 +968,7 @@ void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
 			continue;
 		}
 
-		#ifdef MISSIONPACK2
+		// ~Dimmskii
 		if ( isDeadArenaPlayer ) {
 			// dead arena players should only follow alive players
 			if ( g_entities[ clientnum ].health <= 0 ) {
@@ -979,7 +979,7 @@ void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
 				continue;
 			}
 		}
-		#endif
+		// END Dimmskii
 
 		// this is good, we can use it
 		ent->client->sess.spectatorClient = clientnum;

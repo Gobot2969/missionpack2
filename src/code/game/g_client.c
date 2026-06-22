@@ -1347,7 +1347,7 @@ void ClientSpawn(gentity_t *ent) {
 	// run the presend to set anything else
 	ClientEndFrame( ent );
 
-	#ifdef MISSIONPACK2
+// ~Dimmskii
 	// find someone to follow for mid-round arena spawns
 	if ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
 		&& !level.warmupTime
@@ -1355,7 +1355,7 @@ void ClientSpawn(gentity_t *ent) {
 		&& client->sess.spectatorState == SPECTATOR_FOLLOW ) {
 		Cmd_FollowCycle_f( ent, 1 );
 	}
-	#endif
+// END Dimmskii
 
 	// clear entity state values
 	BG_PlayerStateToEntityState( &client->ps, &ent->s, qtrue );
