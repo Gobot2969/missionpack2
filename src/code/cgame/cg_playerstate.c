@@ -277,18 +277,8 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
 
 	// hit changes
 	if ( ps->persistant[PERS_HITS] > ops->persistant[PERS_HITS] ) {
-#ifdef MISSIONPACK2
-		int index;
-		health = ps->persistant[PERS_ATTACKEE_ARMOR];
-		
-		if ( health > 100 ) index = 0;
-			else if ( health > 75 ) index = 1;
-			else if ( health > 25 ) index = 2;
-			else index = 3;
-		
-		trap_S_StartLocalSound( cgs.media.hitSounds[ index ], CHAN_LOCAL_SOUND );
-#else
-	#ifdef MISSIONPACK
+/*
+#ifdef MISSIONPACK
 		armor  = ps->persistant[PERS_ATTACKEE_ARMOR] & 0xff;
 		health = ps->persistant[PERS_ATTACKEE_ARMOR] >> 8;
 		if (armor > 50 ) {
@@ -298,7 +288,7 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
 		} else {
 			trap_S_StartLocalSound( cgs.media.hitSound, CHAN_LOCAL_SOUND );
 		}
-	#else
+#else
 		if ( cg_hitSounds.integer > 0 && (ps->persistant[PERS_ATTACKEE_ARMOR] & 0xFF00) == 0 )
 		{
 			// high byte of PERS_ATTACKEE_ARMOR is target->health in vq3/ta i.e. it is always non-zero
@@ -321,8 +311,20 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
 		{
 			trap_S_StartLocalSound( cgs.media.hitSound, CHAN_LOCAL_SOUND );
 		}
-	#endif
 #endif
+*/
+// ~Dimmskii
+// TODO: RESTORE cg_hitSounds functionality from MPP!!!!!!!!!!!!
+		int index;
+		health = ps->persistant[PERS_ATTACKEE_ARMOR];
+		
+		if ( health > 100 ) index = 0;
+			else if ( health > 75 ) index = 1;
+			else if ( health > 25 ) index = 2;
+			else index = 3;
+		
+		trap_S_StartLocalSound( cgs.media.hitSounds[ index ], CHAN_LOCAL_SOUND );
+// END Dimmskii
 	} else if ( ps->persistant[PERS_HITS] < ops->persistant[PERS_HITS] ) {
 		trap_S_StartLocalSound( cgs.media.hitTeamSound, CHAN_LOCAL_SOUND );
 	}
@@ -458,11 +460,10 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
 	}
 
 	// timelimit warnings
-#ifdef MISSIONPACK2
+//	if ( cgs.timelimit > 0 && !cg.warmup && cg.warmupFightSound < cg.time ) {
+// ~Dimmskii
 	if ( cgs.gametype != GT_ARENA && cgs.gametype != GT_TEAMARENA && cgs.timelimit > 0 && !cg.warmup && cg.warmupFightSound < cg.time ) {
-#else
-	if ( cgs.timelimit > 0 && !cg.warmup && cg.warmupFightSound < cg.time ) {
-#endif
+// END Dimmskii
 		int		msec;
 
 		msec = cg.time - cgs.levelStartTime;

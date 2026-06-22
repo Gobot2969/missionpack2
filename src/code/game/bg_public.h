@@ -81,29 +81,43 @@
 #error overflow: (CS_MAX) > MAX_CONFIGSTRINGS
 #endif
 
+/*
 typedef enum {
 	GT_FFA,				// free for all
 	GT_TOURNAMENT,		// one on one tournament
 	GT_SINGLE_PLAYER,	// single player ffa
-#ifdef MISSIONPACK2
-	GT_ARENA,			// free for all arena AKA clanless arena AKA last man standing
-#endif
 
-	//-- team games go after this BUT NOT BEFORE GT_TEAM --
+	//-- team games go after this --
 
 	GT_TEAM,			// team deathmatch
-#ifdef MISSIONPACK2
-	GT_TEAMARENA,		// team arena AKA clan arena AKA team last man standing
-	GT_FREEZETAG,			// freeze tag
-#endif
 	GT_CTF,				// capture the flag
 #ifdef MISSIONPACK
-	GT_1FCTF,			// one flag ctf
-	GT_OBELISK,			// overload
-	GT_HARVESTER,		// harvester weinstein
+	GT_1FCTF,
+	GT_OBELISK,
+	GT_HARVESTER,
 #endif
 	GT_MAX_GAME_TYPE
 } gametype_t;
+*/
+
+// ~DIMMSKII
+typedef enum {
+	GT_FFA,				// free for all
+	GT_TOURNAMENT,		// one on one tournament
+	GT_SINGLE_PLAYER,	// single player ffa
+	GT_ARENA,			// free for all arena AKA clanless arena AKA last man standing
+	GT_TEAM,			// team deathmatch
+	GT_TEAMARENA,		// team arena AKA clan arena AKA team last man standing
+	GT_FREEZETAG,		// freeze tag
+#ifdef MISSIONPACK
+	GT_CTF,				// capture the flag
+	GT_1FCTF,			// one flag ctf
+	GT_OBELISK,			// overload
+	GT_HARVESTER,		// harvester
+#endif
+	GT_MAX_GAME_TYPE
+} gametype_t;
+// END DIMMSKII
 
 typedef enum { GENDER_MALE, GENDER_FEMALE, GENDER_NEUTER } gender_t;
 
@@ -236,9 +250,7 @@ typedef enum {
 	PERS_GAUNTLET_FRAG_COUNT,		// kills with the gauntlet
 	PERS_CAPTURES					// captures
 // ~Dimmskii
-#ifdef MISSIONPACK2
 	,PERS_ROUNDWINS					// arena wins
-#endif
 // END ~Dimmskii
 } persEnum_t;
 
@@ -665,9 +677,9 @@ typedef enum {
 	MOD_KAMIKAZE,
 	MOD_JUICED,
 #endif
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	MOD_HMG,
-#endif
+// END Dimmskii
 	MOD_GRAPPLE
 } meansOfDeath_t;
 

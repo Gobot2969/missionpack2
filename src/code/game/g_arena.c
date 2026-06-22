@@ -1,10 +1,7 @@
 // By Dimmskii
-// Only for if MISSIONPACK2 is defined
-//
 
 #include "g_local.h"
 
-#ifdef MISSIONPACK2
 void Arena_BeginRound( void ) {
 	int			i;
 	gclient_t	*client;
@@ -129,4 +126,4 @@ void Arena_CheckRules( void ) {
 		}
 	} 
 }
-#endif //MISSIONPACK2
+

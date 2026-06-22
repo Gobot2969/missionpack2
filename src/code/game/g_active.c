@@ -476,9 +476,9 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		WP_NAILGUN,
 		WP_PROX_LAUNCHER,
 		WP_CHAINGUN,
-	#ifdef MISSIONPACK2
+// ~Dimmskii
 		WP_HMG,
-	#endif
+//END Dimmskii
 		};
     int weapCount = ARRAY_LEN( weapList );
 		//
@@ -497,9 +497,9 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			  case WP_NAILGUN: max = 10; inc = 1; t = 1250; break;
 			  case WP_PROX_LAUNCHER: max = 5; inc = 1; t = 2000; break;
 			  case WP_CHAINGUN: max = 100; inc = 5; t = 1000; break;
-	#ifdef MISSIONPACK2
+// ~Dimmskii
 			  case WP_HMG: max = 50; inc = 4; t = 1000; break;
-	#endif
+//END Dimmskii
 			  default: max = 0; inc = 0; t = 1000; break;
 		  }
 		  client->ammoTimes[w] += msec;

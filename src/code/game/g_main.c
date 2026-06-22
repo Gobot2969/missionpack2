@@ -320,19 +320,28 @@ void G_RegisterWeapon(void) {
 		RegisterItem( BG_FindItemForWeapon( WP_GRAPPLING_HOOK ) );
 }
 
+/*
+static int getAmmoValue( const char *ammocvar ) {
+	int ammo = 0;
+	ammo = trap_Cvar_VariableIntegerValue(ammocvar);
+	if (ammo < 0)
+		return 0;
+	if (ammo > 999)
+		return 200;
+	return ammo;
+}
+*/
+
+// ~Dimmskii -- TODO: *Arena* cvars should be obseleted (removed, actually) when QL-style factories are implemented. We will be able to at least revert getAmmoValue to its original MPP form
 static int getAmmoValue( const char *cvarSuffix ) {
 	int ammo = 0;
 	const char	*cvarPrefix;
 	
-#ifdef MISSIONPACK2
 	if (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) {
 		cvarPrefix = "g_arenaAmmo";
 	} else {
 		cvarPrefix = "g_startAmmo";
 	}
-#else
-	cvarPrefix = "g_startAmmo";
-#endif
 	
 	ammo = trap_Cvar_VariableIntegerValue( va("%s%s", cvarPrefix, cvarSuffix) );
 	if (ammo < 0)
@@ -341,22 +350,82 @@ static int getAmmoValue( const char *cvarSuffix ) {
 		return 200;
 	return ammo;
 }
+// END Dimmskii
 
 /*
 =================
 G_SpawnWeapon
 =================
 */
+/*
+void G_SpawnWeapon ( gclient_t *client ) {
+	client->ps.ammo[ WP_MACHINEGUN ] = getAmmoValue ( "g_startAmmoMG" );
+
+	if( g_instagib.integer ) {
+		g_wpflags.integer = 32;
+	}
+
+	else {
+		if ( g_removeweapon.integer & 1 && !( g_wpflags.integer & 1 ) ) {
+			client->ps.stats[ STAT_WEAPONS ] &= ~( 1 << WP_MACHINEGUN );
+			client->ps.ammo[ WP_MACHINEGUN ] = 0;
+		}
+		if ( g_wpflags.integer & 2 ) {
+			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_SHOTGUN;
+			client->ps.ammo[ WP_SHOTGUN ] = getAmmoValue ( "g_startAmmoSG" );
+		}
+		if ( g_wpflags.integer & 4 ) {
+			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_GRENADE_LAUNCHER;
+			client->ps.ammo[ WP_GRENADE_LAUNCHER ] = getAmmoValue ( "g_startAmmoGL" );
+		}
+		if ( g_wpflags.integer & 8 ) {
+			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_ROCKET_LAUNCHER;
+			client->ps.ammo[ WP_ROCKET_LAUNCHER ] = getAmmoValue ( "g_startAmmoRL" );
+		}
+		if ( g_wpflags.integer & 16 ) {
+			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_LIGHTNING;
+			client->ps.ammo[ WP_LIGHTNING ] = getAmmoValue ( "g_startAmmoLG" );
+		}
+		if ( g_wpflags.integer & 32 ) {
+			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_RAILGUN;
+			client->ps.ammo[ WP_RAILGUN ] = getAmmoValue ( "g_startAmmoRG" );
+		}
+		if ( g_wpflags.integer & 64 ) {
+			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_PLASMAGUN;
+			client->ps.ammo[ WP_PLASMAGUN ] = getAmmoValue ( "g_startAmmoPG" );
+		}
+		if ( g_wpflags.integer & 128 ) {
+			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_BFG;
+			client->ps.ammo[ WP_BFG ] = getAmmoValue ( "g_startAmmoBFG" );
+		}
+#ifdef MISSIONPACK
+		if ( g_wpflags.integer & 256 ) {
+			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_NAILGUN;
+			client->ps.ammo[ WP_NAILGUN ] = getAmmoValue ( "g_startAmmoNG" );
+		}
+		if ( g_wpflags.integer & 512 ) {
+			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_PROX_LAUNCHER;
+			client->ps.ammo[ WP_PROX_LAUNCHER ] = getAmmoValue ( "g_startAmmoPL" );
+		}
+		if ( g_wpflags.integer & 1024 ) {
+			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_CHAINGUN;
+			client->ps.ammo[ WP_CHAINGUN ] = getAmmoValue ( "g_startAmmoCG" );
+		}
+#endif
+	}
+}
+*/
+
+// ~Dimmskii
 void G_SpawnWeapon ( gclient_t *client ) {
 	int wpflags = g_wpflags.integer;
 	
 	client->ps.ammo[ WP_MACHINEGUN ] = getAmmoValue ( "MG" );
 		
-// ~Dimmskii
+
 	if (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) {
 		wpflags = g_arenaWpflags.integer;
 	}
-// END Dimmskii
 
 	if( g_instagib.integer ) {
 		wpflags = 32;
@@ -409,17 +478,16 @@ void G_SpawnWeapon ( gclient_t *client ) {
 			client->ps.ammo[ WP_CHAINGUN ] = getAmmoValue ( "CG" );
 		}
 #endif
-// ~Dimmskii
 		if ( wpflags & 2048 ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_HMG;
 			client->ps.ammo[ WP_HMG ] = getAmmoValue ( "HMG" );
 		}
-// END Dimmskii
 		if ( g_grapple.integer > 0 ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_GRAPPLING_HOOK;
 		}
 	}
 }
+// END Dimmskii
 
 /*
 =================
@@ -1687,7 +1755,7 @@ static void CheckExitRules( void ) {
 		return;
 	}
 	
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	if ( g_gametype.integer == GT_ARENA && g_winlimit.integer ) {
 		for ( i = 0 ; i < level.maxclients ; i++ ) {
 			cl = level.clients + i;
@@ -1724,7 +1792,7 @@ static void CheckExitRules( void ) {
 	if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
 		return;
 	}
-#endif //MISSIONPACK2
+// END Dimmskii
 
 	if ( g_gametype.integer < GT_CTF && g_fraglimit.integer ) {
 		if ( level.teamScores[TEAM_RED] >= g_fraglimit.integer ) {
@@ -2397,30 +2465,30 @@ static void G_RunFrame( int levelTime ) {
 			ClientEndFrame( ent );
 		}
 	}
+
+/*
+	// see if it is time to do a tournement restart
+	CheckTournament();
+
+	// see if it is time to end the level
+	CheckExitRules();
+*/
 	
-	// ~Dimmskii
-#ifdef MISSIONPACK2
+// ~Dimmskii
 	if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
 		// see if Clan arena is
 		Arena_CheckRules();
 	} else {
-// TODO: Factory-ize the following code when gt enum Arena/CA alone will no longer prevent items from spawning.
+		// TODO: Factory-ize the following code when gt enum Arena/CA alone will no longer prevent items from spawning.
 		// update the marker messages
 		CheckItemPositions();
 	}
-#else
-
-	// update the marker messages
-	CheckItemPositions();
-	
-#endif
-	// End Dimmskii
-
 	// see if it is time to end the level
 	CheckExitRules();
-	
 	// see if it is time to do a tournement round restart
 	CheckTournament();
+// End Dimmskii
+
 
 	// update to team status?
 	CheckTeamStatus();
