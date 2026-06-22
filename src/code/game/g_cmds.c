@@ -13,7 +13,7 @@ DeathmatchScoreboardMessage
 ==================
 */
 void DeathmatchScoreboardMessage( gentity_t *ent ) {
-	char		entry[256]; // enough to hold 14 (or 15 with MISSIONPACK2) integers
+	char		entry[256]; // enough to hold 14 integers
 	char		string[MAX_STRING_CHARS-1];
 	int			stringlength;
 	int			i, j, ping, prefix;
