@@ -4042,6 +4042,7 @@ static int UI_MapCountByGameType(qboolean singlePlayer) {
 UI_MapCountTotal
 ==================
 */
+// ~Dimmskii
 static int UI_MapCountTotal( void ) {
 	int i, c;
 	c = 0;
@@ -4053,6 +4054,7 @@ static int UI_MapCountTotal( void ) {
 	}
 	return c;
 }
+// END Dimmskii
 
 qboolean UI_hasSkinForBase(const char *base, const char *team) {
 	char	test[1024];
