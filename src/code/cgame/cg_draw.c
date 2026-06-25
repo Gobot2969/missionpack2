@@ -2926,6 +2926,7 @@ void CG_TrackClientTeamChange( void )
 	}
 }
 
+
 /*
 =====================
 CG_DrawActive
