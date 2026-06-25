@@ -480,11 +480,12 @@ Iterates through every (in-use) client entity and respawns them unless on TEAM_S
 Added mainly for GT_ARENA and GT_TEAMARENA
 ================
 */
+// ~Dimmskii
 void respawnAll( void ) {
 	int			i;
 	gentity_t	*clientEnt;
 	int count = 0;
-	
+
 	// Loop through all clients
 	for ( i = 0 ; i < level.maxclients ; i++ ) {
 		clientEnt = g_entities + i;
@@ -492,6 +493,7 @@ void respawnAll( void ) {
 			respawn( clientEnt ); // Spawn
 	}
 }
+// END Dimmskii
 
 
 /*
