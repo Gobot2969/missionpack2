@@ -1244,9 +1244,9 @@ void BotHarvesterSeekGoals(bot_state_t *bs) {
 			//no arrive message
 			bs->arrive_time = 1;
 			//
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 			BotVoiceChat(bs, bs->teammate, VOICECHAT_ONFOLLOW);
-#endif
+//#endif
 			//get the team goal time
 			bs->teamgoal_time = FloatTime() + TEAM_ACCOMPANY_TIME;
 			bs->ltgtype = LTG_TEAMACCOMPANY;
@@ -1668,9 +1668,9 @@ void BotCheckItemPickup(bot_state_t *bs, int *oldinventory) {
 				// if we have a bot team leader
 				if (BotTeamLeader(bs)) {
 					// tell the leader we want to be on offence
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 					BotVoiceChat(bs, leader, VOICECHAT_WANTONOFFENSE);
-#endif
+//#endif
 					//BotAI_BotInitialChat(bs, "wantoffence", NULL);
 					//trap_BotEnterChat(bs->cs, leader, CHAT_TELL);
 				}
@@ -1682,9 +1682,9 @@ void BotCheckItemPickup(bot_state_t *bs, int *oldinventory) {
 						if ((gametype != GT_CTF || (bs->redflagstatus == 0 && bs->blueflagstatus == 0)) &&
 							(gametype != GT_1FCTF || bs->neutralflagstatus == 0) ) {
 							// tell the leader we want to be on offence
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 							BotVoiceChat(bs, leader, VOICECHAT_WANTONOFFENSE);
-#endif
+//#endif
 							//BotAI_BotInitialChat(bs, "wantoffence", NULL);
 							//trap_BotEnterChat(bs->cs, leader, CHAT_TELL);
 						}
@@ -1699,9 +1699,9 @@ void BotCheckItemPickup(bot_state_t *bs, int *oldinventory) {
 				// if we have a bot team leader
 				if (BotTeamLeader(bs)) {
 					// tell the leader we want to be on defense
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 					BotVoiceChat(bs, -1, VOICECHAT_WANTONDEFENSE);
-#endif
+//#endif
 					//BotAI_BotInitialChat(bs, "wantdefence", NULL);
 					//trap_BotEnterChat(bs->cs, leader, CHAT_TELL);
 				}
@@ -1711,9 +1711,9 @@ void BotCheckItemPickup(bot_state_t *bs, int *oldinventory) {
 						if ((gametype != GT_CTF || (bs->redflagstatus == 0 && bs->blueflagstatus == 0)) &&
 							(gametype != GT_1FCTF || bs->neutralflagstatus == 0) ) {
 							// tell the leader we want to be on defense
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 							BotVoiceChat(bs, -1, VOICECHAT_WANTONDEFENSE);
-#endif
+//#endif
 							//BotAI_BotInitialChat(bs, "wantdefence", NULL);
 							//trap_BotEnterChat(bs->cs, leader, CHAT_TELL);
 						}
