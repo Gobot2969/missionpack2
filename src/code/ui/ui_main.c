@@ -4037,12 +4037,12 @@ static int UI_MapCountByGameType(qboolean singlePlayer) {
 	return c;
 }
 
+// ~Dimmskii
 /*
 ==================
 UI_MapCountTotal
 ==================
 */
-// ~Dimmskii
 static int UI_MapCountTotal( void ) {
 	int i, c;
 	c = 0;
