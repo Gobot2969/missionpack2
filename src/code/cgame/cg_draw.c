@@ -3017,7 +3017,8 @@ static qboolean CG_ShouldDrawTeammatePOIs( void ) {
 	team_t	myTeam;
 
 	// Make sure it's a team game
-	if ( !cg.snap || cgs.gametype < GT_TEAM ) {
+	//if ( !cg.snap || cgs.gametype < GT_TEAM ) {
+	if ( !cg.snap || !GT_IsTeam(cgs.gametype) ) {
 		return qfalse;
 	}
 
