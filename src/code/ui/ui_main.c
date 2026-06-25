@@ -3644,7 +3644,7 @@ static void UI_RunMenuScript(char **args) {
 			UI_LoadArenas();
 			UI_MapCountByGameType(qfalse);
 			Menu_SetFeederSelection(NULL, FEEDER_ALLMAPS, 0, "createserver");
-		} else if (Q_stricmp(name, "loadArenas_new") == 0) {
+		} else if (Q_stricmp(name, "loadArenas_new") == 0) { // ~Dimmskii
 			UI_LoadArenas();
 			UI_MapCountTotal(qfalse);
 			Menu_SetFeederSelection(NULL, FEEDER_MAPS_NEW, ui_currentMap.integer, "maps");
@@ -4698,7 +4698,7 @@ static int UI_FeederCount(float feederID) {
 		return uiInfo.movieCount;
 	} else if (feederID == FEEDER_MAPS || feederID == FEEDER_ALLMAPS) {
 		return UI_MapCountByGameType(feederID == FEEDER_MAPS ? qtrue : qfalse);
-	} else if (feederID == FEEDER_MAPS_NEW) {
+	} else if (feederID == FEEDER_MAPS_NEW) { // ~Dimmskii
 		return UI_MapCountTotal();
 	} else if (feederID == FEEDER_SERVERS) {
 		return uiInfo.serverStatus.numDisplayServers;
@@ -4945,7 +4945,8 @@ static qhandle_t UI_FeederItemImage(float feederID, int index) {
     if (index >= 0 && index < uiInfo.q3HeadCount) {
       return uiInfo.q3HeadIcons[index];
     }
-	} else if (feederID == FEEDER_ALLMAPS || feederID == FEEDER_MAPS || feederID == FEEDER_MAPS_NEW ) {
+	//} else if (feederID == FEEDER_ALLMAPS || feederID == FEEDER_MAPS) {
+	} else if (feederID == FEEDER_ALLMAPS || feederID == FEEDER_MAPS || feederID == FEEDER_MAPS_NEW ) { // ~Dimmskii
 		int actual;
 		UI_SelectedMap(index, &actual);
 		index = actual;
@@ -5009,7 +5010,7 @@ static void UI_FeederSelection(float feederID, int index) {
 	  	uiInfo.mapList[ui_currentNetMap.integer].cinematic = trap_CIN_PlayCinematic(va("%s.roq", uiInfo.mapList[ui_currentNetMap.integer].mapLoadName), 0, 0, 0, 0, (CIN_loop | CIN_silent) );
 		}
 
-  } else if (feederID == FEEDER_MAPS_NEW) {
+  } else if (feederID == FEEDER_MAPS_NEW) { // ~Dimmskii
 	  	int actual, map;
 		map = ui_currentNetMap.integer;
 		if (uiInfo.mapList[map].cinematic >= 0) {
@@ -5450,7 +5451,7 @@ static void UI_ParseGameInfo(const char *teamFile) {
 		if (Q_stricmp(token, "gametypes") == 0) {
 
 			//if (GameType_Parse(&p, qfalse)) {
-			if (GameType_Parse(&p, qfalse, qfalse)) {
+			if (GameType_Parse(&p, qfalse, qfalse)) { // ~Dimmskii
 				continue;
 			} else {
 				break;
@@ -5472,7 +5473,7 @@ static void UI_ParseGameInfo(const char *teamFile) {
 		if (Q_stricmp(token, "joingametypes") == 0) {
 
 			//if (GameType_Parse(&p, qtrue)) {
-			if (GameType_Parse(&p, qtrue, qfalse)) {
+			if (GameType_Parse(&p, qtrue, qfalse)) { // ~Dimmskii
 				continue;
 			} else {
 				break;
