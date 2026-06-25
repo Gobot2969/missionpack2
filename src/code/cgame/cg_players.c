@@ -954,14 +954,16 @@ static void CG_SetDeferredClientInfo( clientInfo_t *ci ) {
 	}
 
 	// if we are in teamplay, only grab a model if the skin is correct
-	if ( cgs.gametype >= GT_TEAM ) {
+//	if ( cgs.gametype >= GT_TEAM ) {
+	if ( GT_IsTeam(cgs.gametype) ) { // ~Dimmskii
 		for ( i = 0 ; i < cgs.maxclients ; i++ ) {
 			match = &cgs.clientinfo[ i ];
 			if ( !match->infoValid || match->deferred ) {
 				continue;
 			}
 			if ( Q_stricmp( ci->skinName, match->skinName ) ||
-				(cgs.gametype >= GT_TEAM && ci->team != match->team) ) {
+//				(cgs.gametype >= GT_TEAM && ci->team != match->team) ) {
+				(GT_IsTeam(cgs.gametype) && ci->team != match->team) ) { // ~Dimmskii
 				continue;
 			}
 			ci->deferred = qtrue;
@@ -1018,7 +1020,8 @@ static void CG_SetSkinAndModel( clientInfo_t *newInfo,
 
 	if ( cg_forceModel.integer || cg_enemyModel.string[0] || cg_teamModel.string[0] )
 	{
-		if ( cgs.gametype >= GT_TEAM )
+//		if ( cgs.gametype >= GT_TEAM )
+		if ( GT_IsTeam(cgs.gametype) ) // ~Dimmskii
 		{
 			// enemy model
 			if ( cg_enemyModel.string[0] && team != myTeam && team != TEAM_SPECTATOR ) {
@@ -2293,7 +2296,8 @@ static void CG_PlayerSprites( centity_t *cent ) {
 		return;
 	} */
 	if ((!cg.demoPlayback) || (cg_playback_follow == -1)) {
-		if ( !(cent->currentState.eFlags & EF_DEAD) && cg.snap->ps.persistant[PERS_TEAM] == team && cgs.gametype >= GT_TEAM) {
+//		if ( !(cent->currentState.eFlags & EF_DEAD) && cg.snap->ps.persistant[PERS_TEAM] == team && cgs.gametype >= GT_TEAM) {
+		if ( !(cent->currentState.eFlags & EF_DEAD) && cg.snap->ps.persistant[PERS_TEAM] == team && GT_IsTeam(cgs.gametype) ) { // ~Dimmskii
 			//if (cg_drawFriend.integer) {
 			if (cg_drawFriend.integer == 1) { // ~Dimmskii a value greater than 1 enables modern "team POIs"
 				CG_PlayerFloatSprite( cent, cgs.media.friendShader );
@@ -2301,7 +2305,8 @@ static void CG_PlayerSprites( centity_t *cent ) {
 			return;
 		}
 	} else {
-		if ( !(cent->currentState.eFlags & EF_DEAD) &&  cgs.clientinfo[cg_playback_follow].team == team && cgs.gametype >= GT_TEAM) {
+//		if ( !(cent->currentState.eFlags & EF_DEAD) &&  cgs.clientinfo[cg_playback_follow].team == team && cgs.gametype >= GT_TEAM) {
+		if ( !(cent->currentState.eFlags & EF_DEAD) &&  cgs.clientinfo[cg_playback_follow].team == team && GT_IsTeam(cgs.gametype) ) { // ~Dimmskii
 			//if (cg_drawFriend.integer) {
 			if (cg_drawFriend.integer == 1) { // ~Dimmskii a value greater than 1 enables modern "team POIs"
 				CG_PlayerFloatSprite( cent, cgs.media.friendShader );

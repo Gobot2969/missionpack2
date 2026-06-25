@@ -444,7 +444,7 @@ void respawn( gentity_t *ent ) {
 //		CopyToBodyQue( ent );
 
 // ~DIMMSKII
-	if ( ent->health <= 0 && g_gametype.integer != GT_ARENA && g_gametype.integer != GT_TEAMARENA )
+	if ( ent->health <= 0 && !GT_IsArenaGame(g_gametype.integer) )
 		CopyToBodyQue( ent );
 // END DIMMSKII
 
@@ -466,7 +466,7 @@ void respawn( gentity_t *ent ) {
 	
 // ~DIMMSKII
 	// Disable shooting upon respawn in Arena gamemodes (  re-enabled on G_WarmupEnd in g_main.c  )
-	// if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
+	// if ( GT_IsArenaGame(g_gametype.integer) ) {
 		// ent->client->ps.pm_flags |= PMF_NOSHOOT;
 	// }
 // END DIMMSKII
@@ -1072,7 +1072,7 @@ void ClientSpawn(gentity_t *ent) {
 	//isSpectator = client->sess.sessionTeam == TEAM_SPECTATOR;
 
 // ~DIMMSKII
-	if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
+	if ( GT_IsArenaGame(g_gametype.integer) ) {
 		classname = "bodyque";
 		isSpectator = client->sess.sessionTeam == TEAM_SPECTATOR && !level.warmupTime;
 	} else {
@@ -1245,7 +1245,7 @@ void ClientSpawn(gentity_t *ent) {
 */
 	
 // ~Dimmskii
-	if (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) {
+	if ( GT_IsArenaGame(g_gametype.integer) ) {
 		startHealth = g_arenaHealth.integer;
 		startArmor = g_arenaArmor.integer;
 		
@@ -1334,7 +1334,7 @@ void ClientSpawn(gentity_t *ent) {
 	
 // ~Dimmskii
 	// Set the entity/client hp, etc back to zero (kill again) if spawned mid-round in an arena game
-	if (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) {
+	if ( GT_IsArenaGame(g_gametype.integer) ) {
 		if (!level.warmupTime && !level.intermissiontime && client->sess.sessionTeam != TEAM_SPECTATOR) {
 			ent->health = -500;
 			client->ps.stats[STAT_HEALTH] = -500;
@@ -1365,7 +1365,7 @@ void ClientSpawn(gentity_t *ent) {
 
 // ~Dimmskii
 	// find someone to follow for mid-round arena spawns
-	if ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
+	if ( GT_IsArenaGame(g_gametype.integer)
 		&& !level.warmupTime
 		&& client->sess.sessionTeam != TEAM_SPECTATOR
 		&& client->sess.spectatorState == SPECTATOR_FOLLOW ) {
@@ -1421,7 +1421,7 @@ void ClientDisconnect( int clientNum ) {
 		if ( level.clients[i].sess.spectatorState == SPECTATOR_FOLLOW
 			&& level.clients[i].sess.spectatorClient == clientNum ) {
 			// dead arena players should cycle to next player, not become spectators
-			if ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
+			if ( GT_IsArenaGame(g_gametype.integer)
 				&& level.clients[i].sess.sessionTeam != TEAM_SPECTATOR ) {
 				Cmd_FollowCycle_f( &g_entities[i], 1 );
 			} else if ( level.clients[i].sess.sessionTeam == TEAM_SPECTATOR ) {

@@ -1070,26 +1070,28 @@ qboolean CG_OwnerDrawVisible(int flags) {
 
 // ~Dimmskii
 	if (flags & CG_SHOW_ANYARENAGAME) {
-		if( cgs.gametype != GT_ARENA && cgs.gametype != GT_TEAMARENA ) {
+		if( !GT_IsArenaGame(cgs.gametype) ) {
 			return qfalse;
 		}
 	}
 
 	if (flags & CG_SHOW_ANYNONARENAGAME) {
-		if( cgs.gametype == GT_ARENA || cgs.gametype == GT_TEAMARENA ) {
+		if( GT_IsArenaGame(cgs.gametype)  ) {
 			return qfalse;
 		}
 	}
 // END ~Dimmskii
 
 	if (flags & CG_SHOW_ANYTEAMGAME) {
-		if( cgs.gametype >= GT_TEAM) {
+//		if( cgs.gametype >= GT_TEAM) {
+		if( GT_IsTeam(cgs.gametype) ) { // ~Dimmskii
 			return qtrue;
 		}
 	}
 
 	if (flags & CG_SHOW_ANYNONTEAMGAME) {
-		if( cgs.gametype < GT_TEAM) {
+//		if( cgs.gametype < GT_TEAM) {
+		if( !GT_IsTeam(cgs.gametype) ) { // ~Dimmskii
 			return qtrue;
 		}
 	}

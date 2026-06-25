@@ -2446,13 +2446,13 @@ static qboolean UI_OwnerDrawVisible(int flags) {
 			flags &= ~UI_SHOW_NOTFAVORITESERVERS;
 		} 
 		if (flags & UI_SHOW_ANYTEAMGAME) {
-			if (uiInfo.gameTypes[ui_gameType.integer].gtEnum <= GT_TEAM ) {
+			if ( GT_IsDMGame(uiInfo.gameTypes[ui_gameType.integer].gtEnum) ) {
 				vis = qfalse;
 			}
 			flags &= ~UI_SHOW_ANYTEAMGAME;
 		} 
 		if (flags & UI_SHOW_ANYNONTEAMGAME) {
-			if (uiInfo.gameTypes[ui_gameType.integer].gtEnum > GT_TEAM ) {
+			if ( !GT_IsDMGame(uiInfo.gameTypes[ui_gameType.integer].gtEnum) ) {
 				vis = qfalse;
 			}
 			flags &= ~UI_SHOW_ANYNONTEAMGAME;
@@ -3390,7 +3390,8 @@ static void UI_StartSkirmish(qboolean next) {
 			delay += 500;
 		}
 	}
-	if (g >= GT_TEAM ) {
+//	if (g >= GT_TEAM ) {
+	if ( GT_IsTeam(g) ) { // ~Dimmskii
 		trap_Cmd_ExecuteText( EXEC_APPEND, "wait 5; team Red\n" );
 	}
 }

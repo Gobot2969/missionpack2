@@ -2528,7 +2528,7 @@ static void CG_DrawWarmup( void ) {
 		} else if ( cgs.gametype == GT_ARENA ) {
 			s = "Arena";
 		} else if ( cgs.gametype == GT_TEAMARENA ) {
-			s = "Team Arena";
+			s = "Clan Arena";
 //END Dimmskii
 		} else {
 			s = "";
@@ -2644,7 +2644,7 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 		CG_DrawCrosshair();
 		CG_DrawCrosshairNames();
 // ~Dimmskii
-	} else if ( ( cgs.gametype == GT_ARENA || cgs.gametype == GT_TEAMARENA )
+	} else if ( GT_IsArenaGame(cgs.gametype)
 		&& cg.snap->ps.stats[STAT_HEALTH] <= 0
 		&& ( cg.snap->ps.pm_flags & PMF_FOLLOW ) ) {
 		CG_DrawCrosshair();
