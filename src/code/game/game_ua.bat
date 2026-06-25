@@ -4,9 +4,9 @@ setlocal
 set oldcd=%cd%
 
 cd %~dp0
-cd ..\..\bin
+cd ..\..\bin\windows
 set PATH=%cd%;%PATH%
-cd ..\code\game
+cd ..\..\code\game
 
 rem make sure we have a safe environement
 set LIBRARY=
