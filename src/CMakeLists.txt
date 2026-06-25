@@ -38,6 +38,11 @@ add_subdirectory(code/ui)
 
 add_custom_target(vm ALL DEPENDS qagame cgame ui)
 
+# Always-debug build (-DDEBUG unconditional, like debug.bat itself did -
+# independent of the Q3_DEBUG_VM option above, which only affects the
+# regular `vm` target). Not part of ALL; build explicitly when needed.
+add_custom_target(vm_debug DEPENDS qagame_debug cgame_debug ui_debug)
+
 # --- release: replicates release.bat (stage vm+ui+assets, zip to .pk3,
 # drop at gamedir root) ---
 set(MOD_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/..")
@@ -93,17 +98,22 @@ foreach(aux_dir ${PK3_AUX_DIRS})
 endforeach()
 
 # --- debug: replicates debug.bat's loose-file deploy (no .pk3, no
-# launching the engine - that part is host/GUI specific) ---
+# launching the engine - that part is host/GUI specific). Always uses
+# the -DDEBUG build (vm_debug), matching debug.bat's unconditional flag. ---
 add_custom_target(debug_deploy
   COMMAND ${CMAKE_COMMAND} -E make_directory "${MOD_ROOT}/vm"
   COMMAND ${CMAKE_COMMAND} -E copy
-          "${CMAKE_CURRENT_SOURCE_DIR}/code/game/vm/qagame.qvm"
-          "${CMAKE_CURRENT_SOURCE_DIR}/code/cgame/vm/cgame.qvm"
-          "${CMAKE_CURRENT_SOURCE_DIR}/code/ui/vm/ui.qvm"
-          "${MOD_ROOT}/vm/"
+          "${CMAKE_CURRENT_SOURCE_DIR}/code/game/vm/debug/qagame.qvm"
+          "${MOD_ROOT}/vm/qagame.qvm"
+  COMMAND ${CMAKE_COMMAND} -E copy
+          "${CMAKE_CURRENT_SOURCE_DIR}/code/cgame/vm/debug/cgame.qvm"
+          "${MOD_ROOT}/vm/cgame.qvm"
+  COMMAND ${CMAKE_COMMAND} -E copy
+          "${CMAKE_CURRENT_SOURCE_DIR}/code/ui/vm/debug/ui.qvm"
+          "${MOD_ROOT}/vm/ui.qvm"
   COMMAND ${CMAKE_COMMAND} -E rm -rf "${MOD_ROOT}/ui"
   COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/ui" "${MOD_ROOT}/ui"
-  DEPENDS vm
-  COMMENT "Deploying loose vm/ + ui/ to gamedir root (debug.bat equivalent, minus launching the engine)"
+  DEPENDS vm_debug
+  COMMENT "Deploying loose -DDEBUG vm/ + ui/ to gamedir root (debug.bat equivalent, minus launching the engine)"
   VERBATIM
 )

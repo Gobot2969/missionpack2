@@ -71,3 +71,44 @@ add_custom_command(
 )
 
 add_custom_target(cgame DEPENDS "${CGAME_VM_DIR}/cgame.qvm")
+
+# --- always-debug build, mirrors cgame_ua.bat -DDEBUG passed
+# unconditionally by debug.bat. Nested under the already-ignored vm/. ---
+set(CGAME_VM_DEBUG_DIR "${CGAME_VM_DIR}/debug")
+file(MAKE_DIRECTORY "${CGAME_VM_DEBUG_DIR}")
+
+set(CGAME_DEBUG_ASM_FILES "")
+foreach(src ${CGAME_SOURCES})
+  get_filename_component(name "${src}" NAME_WE)
+  if(IS_ABSOLUTE "${src}")
+    set(src_path "${src}")
+  else()
+    set(src_path "${CMAKE_CURRENT_SOURCE_DIR}/${src}")
+  endif()
+  set(asm_out "${CGAME_VM_DEBUG_DIR}/${name}.asm")
+  add_custom_command(
+    OUTPUT "${asm_out}"
+    COMMAND "${Q3LCC}" -DQ3_VM -DMISSIONPACK -DCGAME -DDEBUG
+            -S -Wf-target=bytecode -Wf-g ${Q3_INCLUDE_FLAGS}
+            "${src_path}"
+    WORKING_DIRECTORY "${CGAME_VM_DEBUG_DIR}"
+    DEPENDS "${src_path}"
+    COMMENT "q3lcc -DDEBUG cgame/${name}.c"
+    VERBATIM
+  )
+  list(APPEND CGAME_DEBUG_ASM_FILES "${asm_out}")
+endforeach()
+
+add_custom_command(
+  OUTPUT "${CGAME_VM_DEBUG_DIR}/cgame.qvm"
+  COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/cg_syscalls.asm" "${CGAME_VM_DIR}/cg_syscalls.asm"
+  COMMAND "${Q3ASM}" -vq3 -r -m -v -f "${CMAKE_CURRENT_SOURCE_DIR}/cgame_ta"
+  WORKING_DIRECTORY "${CGAME_VM_DEBUG_DIR}"
+  DEPENDS ${CGAME_DEBUG_ASM_FILES}
+          "${CMAKE_CURRENT_SOURCE_DIR}/cgame_ta.q3asm"
+          "${CMAKE_CURRENT_SOURCE_DIR}/cg_syscalls.asm"
+  COMMENT "q3asm -> debug/cgame.qvm"
+  VERBATIM
+)
+
+add_custom_target(cgame_debug DEPENDS "${CGAME_VM_DEBUG_DIR}/cgame.qvm")

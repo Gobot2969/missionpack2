@@ -53,3 +53,44 @@ add_custom_command(
 )
 
 add_custom_target(ui DEPENDS "${UI_VM_DIR}/ui.qvm")
+
+# --- always-debug build, mirrors ui.bat -DDEBUG passed unconditionally
+# by debug.bat. Nested under the already-ignored vm/. ---
+set(UI_VM_DEBUG_DIR "${UI_VM_DIR}/debug")
+file(MAKE_DIRECTORY "${UI_VM_DEBUG_DIR}")
+
+set(UI_DEBUG_ASM_FILES "")
+foreach(src ${UI_SOURCES})
+  get_filename_component(name "${src}" NAME_WE)
+  if(IS_ABSOLUTE "${src}")
+    set(src_path "${src}")
+  else()
+    set(src_path "${CMAKE_CURRENT_SOURCE_DIR}/${src}")
+  endif()
+  set(asm_out "${UI_VM_DEBUG_DIR}/${name}.asm")
+  add_custom_command(
+    OUTPUT "${asm_out}"
+    COMMAND "${Q3LCC}" -DMISSIONPACK -DQ3_VM -DDEBUG
+            -S -Wf-target=bytecode -Wf-g ${Q3_INCLUDE_FLAGS}
+            "${src_path}"
+    WORKING_DIRECTORY "${UI_VM_DEBUG_DIR}"
+    DEPENDS "${src_path}"
+    COMMENT "q3lcc -DDEBUG ui/${name}.c"
+    VERBATIM
+  )
+  list(APPEND UI_DEBUG_ASM_FILES "${asm_out}")
+endforeach()
+
+add_custom_command(
+  OUTPUT "${UI_VM_DEBUG_DIR}/ui.qvm"
+  COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/ui_syscalls.asm" "${UI_VM_DIR}/ui_syscalls.asm"
+  COMMAND "${Q3ASM}" -vq3 -r -m -v -f "${CMAKE_CURRENT_SOURCE_DIR}/ui"
+  WORKING_DIRECTORY "${UI_VM_DEBUG_DIR}"
+  DEPENDS ${UI_DEBUG_ASM_FILES}
+          "${CMAKE_CURRENT_SOURCE_DIR}/ui.q3asm"
+          "${CMAKE_CURRENT_SOURCE_DIR}/ui_syscalls.asm"
+  COMMENT "q3asm -> debug/ui.qvm"
+  VERBATIM
+)
+
+add_custom_target(ui_debug DEPENDS "${UI_VM_DEBUG_DIR}/ui.qvm")
