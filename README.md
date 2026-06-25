@@ -52,35 +52,28 @@ The build system included should be completely portable provided that you are on
   `<ENGINE_BINARY>.exe +set fs_game missionpack2`
 7. FIGHT!
 
-## CMake Build (Linux)
-The build system included should be completely portable provided that you are on Linux (the native `bin/linux` QVM toolchain is used automatically, no Wine required).
+## CMake Build
+The build system included should be completely portable on both Windows (the original `bin/windows` QVM toolchain `.exe`s are used automatically) and Linux (the native `bin/linux` QVM toolchain is used automatically, no Wine required).
 1. Download the repository in zip file
 2. Make a gamedir folder in the root of your Quake 3/ioquake3 install called `missionpack2`
 3. Extract the *contents* of the repository folder into `missionpack2`
-4. Navigate to `missionpack2/src`
+4. Navigate to `missionpack2/src` (`missionpack2\src` on Windows)
 5. Run:
+
+   Linux:
    ```
    cmake -B ~/.cmakebuild .
    cmake --build ~/.cmakebuild --target release
    cmake --build ~/.cmakebuild --target release_aux
    ```
-   This will compile all 3 QVM modules, copy assets and create core/map .pk3 files ready to go (use `--target debug_deploy` for a loose, always-`-DDEBUG` deploy instead)
-6. Use the `missionpack2.bat` file in its place to run. Alternatively, as always, you can start the mod with any engine of your choice:
-  `<ENGINE_BINARY>.exe +set fs_game missionpack2`
-7. FIGHT!
 
-## CMake Build (Windows)
-The build system included should be completely portable provided that you are on Windows (the original `bin/windows` QVM toolchain `.exe`s are used automatically).
-1. Download the repository in zip file
-2. Make a gamedir folder in the root of your Quake 3/ioquake3 install called `missionpack2`
-3. Extract the *contents* of the repository folder into `missionpack2`
-4. Navigate to `missionpack2\src`
-5. Run:
+   Windows:
    ```
    cmake -B %temp%\cmakebuild .
    cmake --build %temp%\cmakebuild --target release
    cmake --build %temp%\cmakebuild --target release_aux
    ```
+
    This will compile all 3 QVM modules, copy assets and create core/map .pk3 files ready to go (use `--target debug_deploy` for a loose, always-`-DDEBUG` deploy instead)
 6. Use the `missionpack2.bat` file in its place to run. Alternatively, as always, you can start the mod with any engine of your choice:
   `<ENGINE_BINARY>.exe +set fs_game missionpack2`
