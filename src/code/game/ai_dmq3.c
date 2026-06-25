@@ -810,9 +810,9 @@ void Bot1FCTFSeekGoals(bot_state_t *bs) {
 			BotGetAlternateRouteGoal(bs, BotOppositeTeam(bs));
 			//
 			BotSetTeamStatus(bs);
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 			BotVoiceChat(bs, -1, VOICECHAT_IHAVEFLAG);
-#endif
+//#endif
 		}
 		return;
 	}
@@ -845,9 +845,9 @@ void Bot1FCTFSeekGoals(bot_state_t *bs) {
 					//no arrive message
 					bs->arrive_time = 1;
 					//
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 					BotVoiceChat(bs, bs->teammate, VOICECHAT_ONFOLLOW);
-#endif
+//#endif
 					//get the team goal time
 					bs->teamgoal_time = FloatTime() + TEAM_ACCOMPANY_TIME;
 					bs->ltgtype = LTG_TEAMACCOMPANY;
