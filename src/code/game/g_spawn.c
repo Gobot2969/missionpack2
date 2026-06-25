@@ -450,7 +450,8 @@ void G_SpawnGEntityFromSpawnVars( void ) {
 		}
 	}
 	// check for "notteam" flag (GT_FFA, GT_TOURNAMENT, GT_SINGLE_PLAYER)
-	if ( g_gametype.integer >= GT_TEAM ) {
+//	if ( g_gametype.integer >= GT_TEAM ) {
+	if ( GT_IsTeam(g_gametype.integer) && !GT_IsArenaGame(g_gametype.integer) ) { // ~Dimmskii -- and don't limit CA/LMS spawns while we're at it
 		G_SpawnInt( "notteam", "0", &i );
 		if ( i ) {
 			G_FreeEntity( ent );

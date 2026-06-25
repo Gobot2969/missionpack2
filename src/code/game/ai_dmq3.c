@@ -2211,7 +2211,8 @@ TeamPlayIsOn
 ==================
 */
 int TeamPlayIsOn(void) {
-	return ( gametype >= GT_TEAM );
+//	return ( gametype >= GT_TEAM );
+	return GT_IsTeam(gametype); // ~Dimmskii
 }
 
 /*
@@ -2810,7 +2811,8 @@ int BotSameTeam(bot_state_t *bs, int entnum) {
 		//BotAI_Print(PRT_ERROR, "BotSameTeam: client out of range\n");
 		return qfalse;
 	}
-	if ( gametype >= GT_TEAM ) {
+//	if ( gametype >= GT_TEAM ) {
+	if ( GT_IsTeam(gametype) ) { // ~Dimmskii
 		if ( g_clients[bs->client].sess.sessionTeam == g_clients[entnum].sess.sessionTeam )
 			return qtrue;
 	}
@@ -5522,7 +5524,8 @@ void BotArenaPickEnemyToKill(bot_state_t *bs) {
 			continue;
 		
 		// If on specified team and alive (health > 0), add to alive count
-		if ( gametype < GT_TEAM || clientEnt->client->sess.sessionTeam != BotTeam(bs) ) {
+//		if ( gametype < GT_TEAM || clientEnt->client->sess.sessionTeam != BotTeam(bs) ) {
+		if ( !GT_IsTeam(gametype) || clientEnt->client->sess.sessionTeam != BotTeam(bs) ) { // ~Dimmskii
 			if ( bs->client != clientEnt->client->ps.clientNum && clientEnt->client->sess.sessionTeam != TEAM_SPECTATOR && clientEnt->health > 0 ) {
 	#ifdef DEBUG
 				ClientName(bs->client, botname, sizeof(botname));

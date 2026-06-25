@@ -1101,7 +1101,8 @@ static void CG_DrawUpperRight(stereoFrame_t stereoFrame)
 
 	y = cgs.screenYmin;
 
-	if ( cgs.gametype >= GT_TEAM && cg_drawTeamOverlay.integer == 1 ) {
+//	if ( cgs.gametype >= GT_TEAM && cg_drawTeamOverlay.integer == 1 ) {
+	if ( GT_IsTeam(cgs.gametype) && cg_drawTeamOverlay.integer == 1 ) { // ~Dimmskii
 		y = CG_DrawTeamOverlay( y, qtrue, qtrue );
 	} 
 	if ( cg_drawSnapshot.integer ) {
@@ -2314,7 +2315,8 @@ static qboolean CG_DrawScoreboard( void ) {
 
 
 	if (menuScoreboard == NULL) {
-		if ( cgs.gametype >= GT_TEAM ) {
+//		if ( cgs.gametype >= GT_TEAM ) {
+		if ( GT_IsTeam(cgs.gametype) ) { // ~Dimmskii
 			menuScoreboard = Menus_FindByName("teamscore_menu");
 		} else {
 			menuScoreboard = Menus_FindByName("score_menu");
@@ -2682,8 +2684,9 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 		CG_DrawItemPOIs();
 		// END DIMMSKII
 		
-		if ( cgs.gametype >= GT_TEAM ) {
+//		if ( cgs.gametype >= GT_TEAM ) {
 			// ~DIMMSKII
+		if ( GT_IsTeam(cgs.gametype) ) {
 			CG_DrawTeammatePOIs();
 			// END DIMMSKII
 //		#ifndef MISSIONPACK
@@ -2905,7 +2908,8 @@ void CG_TrackClientTeamChange( void )
 			return;
 		}
 
-		if ( cgs.gametype >= GT_TEAM ) 
+//		if ( cgs.gametype >= GT_TEAM ) 
+		if ( GT_IsTeam(cgs.gametype) ) 
 		{
 			spec_client = cg.snap->ps.clientNum;
 			return;

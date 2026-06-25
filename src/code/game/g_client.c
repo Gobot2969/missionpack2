@@ -697,7 +697,8 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 	client->ps.stats[STAT_MAX_HEALTH] = client->pers.maxHealth;
 
 //#ifdef MISSIONPACK
-	if (g_gametype.integer >= GT_TEAM) {
+//	if (g_gametype.integer >= GT_TEAM) {
+	if (GT_IsTeam(g_gametype.integer)) { // ~Dimmskii
 		client->pers.teamInfo = qtrue;
 	} else {
 		s = Info_ValueForKey( userinfo, "teamoverlay" );
