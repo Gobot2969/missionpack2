@@ -73,27 +73,27 @@ CG_CVAR( cg_teamChatTime, "cg_teamChatTime", "3000", CVAR_ARCHIVE  )
 CG_CVAR( cg_teamChatHeight, "cg_teamChatHeight", "0", CVAR_ARCHIVE  )
 CG_CVAR( cg_forceModel, "cg_forceModel", "0", CVAR_ARCHIVE  )
 CG_CVAR( cg_predictItems, "cg_predictItems", "1", CVAR_ARCHIVE )
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 CG_CVAR( cg_deferPlayers, "cg_deferPlayers", "0", CVAR_ARCHIVE )
-#else
-CG_CVAR( cg_deferPlayers, "cg_deferPlayers", "1", CVAR_ARCHIVE )
-#endif
+//#else
+//CG_CVAR( cg_deferPlayers, "cg_deferPlayers", "1", CVAR_ARCHIVE )
+//#endif
 //CG_CVAR( cg_drawTeamOverlay, "cg_drawTeamOverlay", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_drawTeamOverlay, "cg_drawTeamOverlay", "1", CVAR_ARCHIVE ) // ~Dimmskii
 CG_CVAR( cg_teamOverlayUserinfo, "teamoverlay", "0", CVAR_ROM | CVAR_USERINFO )
 CG_CVAR( cg_stats, "cg_stats", "0", 0 )
 CG_CVAR( cg_drawFriend, "cg_drawFriend", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_teamChatsOnly, "cg_teamChatsOnly", "0", CVAR_ARCHIVE )
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 CG_CVAR( cg_noVoiceChats, "cg_noVoiceChats", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_noVoiceText, "cg_noVoiceText", "0", CVAR_ARCHIVE )
-#endif
+//#endif
 // the following variables are created in other parts of the system,
 // but we also reference them here
 CG_CVAR( cg_buildScript, "com_buildScript", "0", 0 )	// force loading of all possible data amd error on failures
 CG_CVAR( cg_paused, "cl_paused", "0", CVAR_ROM )
 CG_CVAR( cg_blood, "com_blood", "1", CVAR_ARCHIVE )
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 CG_CVAR( cg_redTeamName, "g_redteam", "", CVAR_SERVERINFO | CVAR_USERINFO )
 CG_CVAR( cg_blueTeamName, "g_blueteam", "", CVAR_SERVERINFO | CVAR_USERINFO )
 CG_CVAR( cg_currentSelectedPlayer, "cg_currentSelectedPlayer", "0", CVAR_ARCHIVE )
@@ -107,7 +107,7 @@ CG_CVAR( cg_recordSPDemoName, "ui_recordSPDemoName", "", CVAR_ARCHIVE )
 CG_CVAR( cg_obeliskRespawnDelay, "g_obeliskRespawnDelay", "10", CVAR_SERVERINFO )
 //CG_CVAR( cg_hudFiles, "cg_hudFiles", "ui/mpp.txt", CVAR_ARCHIVE )
 CG_CVAR( cg_hudFiles, "cg_hudFiles", "ui/hud.txt", CVAR_ARCHIVE ) // ~Dimmskii
-#endif
+//#endif
 CG_CVAR( cg_cameraOrbit, "cg_cameraOrbit", "0", CVAR_CHEAT )
 CG_CVAR( cg_cameraOrbitDelay, "cg_cameraOrbitDelay", "50", CVAR_ARCHIVE )
 CG_CVAR( cg_timescaleFadeEnd, "cg_timescaleFadeEnd", "1", 0 )

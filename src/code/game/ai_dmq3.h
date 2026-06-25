@@ -42,10 +42,10 @@ qboolean EntityIsDead(aas_entityinfo_t *entinfo);
 qboolean EntityIsInvisible(aas_entityinfo_t *entinfo);
 //returns true if the entity is shooting
 qboolean EntityIsShooting(aas_entityinfo_t *entinfo);
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 //returns true if this entity has the kamikaze
 qboolean EntityHasKamikaze(aas_entityinfo_t *entinfo);
-#endif
+//#endif
 // set the team status (offense, defense etc.)
 void BotSetTeamStatus(bot_state_t *bs);
 //returns the name of the client
@@ -130,7 +130,7 @@ void BotArenaPickEnemyToKill(bot_state_t *bs);
 // END ~DIMMSKII
 
 //
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 int Bot1FCTFCarryingFlag(bot_state_t *bs);
 int BotHarvesterCarryingCubes(bot_state_t *bs);
 void Bot1FCTFSeekGoals(bot_state_t *bs);
@@ -142,7 +142,7 @@ void BotHarvesterSeekGoals(bot_state_t *bs);
 void BotHarvesterRetreatGoals(bot_state_t *bs);
 int BotTeamCubeCarrierVisible(bot_state_t *bs);
 int BotEnemyCubeCarrierVisible(bot_state_t *bs);
-#endif
+//#endif
 //get a random alternate route goal towards the given base
 int BotGetAlternateRouteGoal(bot_state_t *bs, int base);
 //returns either the alternate route goal or the given goal
@@ -181,9 +181,9 @@ extern vmCvar_t bot_challenge;
 
 extern bot_goal_t ctf_redflag;
 extern bot_goal_t ctf_blueflag;
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 extern bot_goal_t ctf_neutralflag;
 extern bot_goal_t redobelisk;
 extern bot_goal_t blueobelisk;
 extern bot_goal_t neutralobelisk;
-#endif
+//#endif

@@ -91,11 +91,11 @@ typedef enum {
 
 	GT_TEAM,			// team deathmatch
 	GT_CTF,				// capture the flag
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	GT_1FCTF,
 	GT_OBELISK,
 	GT_HARVESTER,
-#endif
+//#endif
 	GT_MAX_GAME_TYPE
 } gametype_t;
 */
@@ -109,12 +109,12 @@ typedef enum {
 	GT_TEAM,			// team deathmatch
 	GT_TEAMARENA,		// team arena AKA clan arena AKA team last man standing
 	GT_FREEZETAG,		// freeze tag
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	GT_CTF,				// capture the flag
 	GT_1FCTF,			// one flag ctf
 	GT_OBELISK,			// overload
 	GT_HARVESTER,		// harvester
-#endif
+//#endif
 	GT_MAX_GAME_TYPE
 } gametype_t;
 // END DIMMSKII
@@ -217,9 +217,9 @@ void Pmove (pmove_t *pmove);
 typedef enum {
 	STAT_HEALTH,
 	STAT_HOLDABLE_ITEM,
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	STAT_PERSISTANT_POWERUP,
-#endif
+//#endif
 	STAT_WEAPONS,					// 16 bit fields
 	STAT_ARMOR,				
 	STAT_DEAD_YAW,					// look this direction when dead (FIXME: get rid of?)
@@ -257,9 +257,9 @@ typedef enum {
 
 // entityState_t->eFlags
 #define	EF_DEAD				0x00000001		// don't draw a foe marker over players with EF_DEAD
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 #define EF_TICKING			0x00000002		// used to make players play the prox mine ticking sound
-#endif
+//#endif
 #define	EF_TELEPORT_BIT		0x00000004		// toggled every time the origin abruptly changes
 #define	EF_AWARD_EXCELLENT	0x00000008		// draw an excellent sprite
 #define EF_PLAYER_EVENT		0x00000010
@@ -268,9 +268,9 @@ typedef enum {
 #define	EF_AWARD_GAUNTLET	0x00000040		// draw a gauntlet sprite
 #define	EF_NODRAW			0x00000080		// may have an event, but no model (unspawned items)
 #define	EF_FIRING			0x00000100		// for lightning gun
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 #define	EF_KAMIKAZE			0x00000200
-#endif
+//#endif
 #define	EF_MOVER_STOP		0x00000400		// will push otherwise
 #define EF_AWARD_CAP		0x00000800		// draw the capture sprite
 #define	EF_TALK				0x00001000		// draw a talk balloon
@@ -338,11 +338,11 @@ typedef enum {
 	WP_PLASMAGUN,
 	WP_BFG,
 	WP_GRAPPLING_HOOK,
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	WP_NAILGUN,
 	WP_PROX_LAUNCHER,
 	WP_CHAINGUN,
-#endif
+//#endif
 // ~DIMMSKII
 	WP_HMG,
 // END ~DIMMSKII
@@ -670,13 +670,13 @@ typedef enum {
 	MOD_SUICIDE,
 	MOD_TARGET_LASER,
 	MOD_TRIGGER_HURT,
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	MOD_NAIL,
 	MOD_CHAINGUN,
 	MOD_PROXIMITY_MINE,
 	MOD_KAMIKAZE,
 	MOD_JUICED,
-#endif
+//#endif
 // ~Dimmskii
 	MOD_HMG,
 // END Dimmskii

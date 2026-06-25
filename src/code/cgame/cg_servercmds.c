@@ -6,7 +6,7 @@
 
 #include "cg_local.h"
 
-#ifdef MISSIONPACK // bk001204
+//#ifdef MISSIONPACK // bk001204
 #include "../../ui/menudef.h" // bk001205 - for Q3_ui as well
 
 typedef struct {
@@ -37,7 +37,7 @@ static int CG_ValidOrder(const char *p) {
 	}
 	return -1;
 }
-#endif
+//#endif
 
 /*
 =================
@@ -83,9 +83,9 @@ static void CG_ParseScores( void ) {
 
 		cg.scores[i].team = cgs.clientinfo[cg.scores[i].client].team;
 	}
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	CG_SetScoreSelection(NULL);
-#endif
+//#endif
 }
 */
 
@@ -130,9 +130,9 @@ static void CG_ParseScores( void ) {
 
 		cg.scores[i].team = cgs.clientinfo[cg.scores[i].client].team;
 	}
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	CG_SetScoreSelection(NULL);
-#endif
+//#endif
 }
 // END Dimmskii
 
@@ -263,11 +263,11 @@ static void CG_ParseWarmup( void ) {
 	if ( warmup == 0 && cg.warmup ) {
 
 	} else if ( warmup > 0 && cg.warmup <= 0 ) {
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 		if (cgs.gametype >= GT_CTF && cgs.gametype <= GT_HARVESTER) {
 			trap_S_StartLocalSound( cgs.media.countPrepareTeamSound, CHAN_ANNOUNCER );
 		} else
-#endif
+//#endif
 		{
 			if ( cg.soundPlaying != cgs.media.countPrepareSound ) {
 				CG_AddBufferedSound( -1 );
@@ -299,12 +299,12 @@ void CG_SetConfigValues( void ) {
 		cgs.redflag = s[0] - '0';
 		cgs.blueflag = s[1] - '0';
 	}
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	else if( cgs.gametype == GT_1FCTF ) {
 		s = CG_ConfigString( CS_FLAGSTATUS );
 		cgs.flagStatus = s[0] - '0';
 	}
-#endif
+//#endif
 	CG_ParseWarmup();
 }
 
@@ -395,9 +395,9 @@ static void CG_ConfigStringModified( void ) {
 		cgs.voteModified = qtrue;
 	} else if ( num == CS_VOTE_STRING ) {
 		Q_strncpyz( cgs.voteString, str, sizeof( cgs.voteString ) );
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 		trap_S_StartLocalSound( cgs.media.voteNow, CHAN_ANNOUNCER );
-#endif //MISSIONPACK
+//#endif //MISSIONPACK
 	} else if ( num >= CS_TEAMVOTE_TIME && num <= CS_TEAMVOTE_TIME + 1) {
 		cgs.teamVoteTime[num-CS_TEAMVOTE_TIME] = atoi( str );
 		cgs.teamVoteModified[num-CS_TEAMVOTE_TIME] = qtrue;
@@ -409,9 +409,9 @@ static void CG_ConfigStringModified( void ) {
 		cgs.teamVoteModified[num-CS_TEAMVOTE_NO] = qtrue;
 	} else if ( num >= CS_TEAMVOTE_STRING && num <= CS_TEAMVOTE_STRING + 1) {
 		Q_strncpyz( cgs.teamVoteString[num-CS_TEAMVOTE_STRING], str, sizeof( cgs.teamVoteString[0] ) );
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 		trap_S_StartLocalSound( cgs.media.voteNow, CHAN_ANNOUNCER );
-#endif
+//#endif
 	} else if ( num == CS_INTERMISSION ) {
 		cg.intermissionStarted = atoi( str );
 	} else if ( num >= CS_MODELS && num < CS_MODELS+MAX_MODELS ) {
@@ -429,11 +429,11 @@ static void CG_ConfigStringModified( void ) {
 			cgs.redflag = str[0] - '0';
 			cgs.blueflag = str[1] - '0';
 		}
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 		else if( cgs.gametype == GT_1FCTF ) {
 			cgs.flagStatus = str[0] - '0';
 		}
-#endif
+//#endif
 	}
 	else if ( num == CS_SHADERSTATE ) {
 		CG_ShaderStateChanged();
@@ -563,19 +563,19 @@ static void CG_MapRestart( void ) {
 		cg.warmupCount = -1;
 	}
 
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	if (cg_singlePlayerActive.integer) {
 		trap_Cvar_Set("ui_matchStartTime", va("%i", cg.time));
 		if (cg_recordSPDemo.integer && *cg_recordSPDemoName.string) {
 			trap_SendConsoleCommand(va("set g_synchronousclients 1 ; record %s \n", cg_recordSPDemoName.string));
 		}
 	}
-#endif
+//#endif
 
 	trap_Cvar_Set( "cg_thirdPerson", "0" );
 }
 
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 
 #define MAX_VOICEFILESIZE	16384
 #define MAX_VOICEFILES		8
@@ -1049,7 +1049,7 @@ void CG_VoiceChat( int mode ) {
 
 	CG_VoiceChatLocal( mode, voiceOnly, clientNum, color, cmd );
 }
-#endif // MISSIONPACK
+//#endif // MISSIONPACK
 
 
 /*
@@ -1102,7 +1102,7 @@ static void CG_ServerCommand( void ) {
 
 	if ( !strcmp( cmd, "print" ) ) {
 		CG_Printf( "%s", CG_Argv(1) );
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 		cmd = CG_Argv(1);			// yes, this is obviously a hack, but so is the way we hear about
 									// votes passing or failing
 		if ( !Q_stricmpn( cmd, "vote failed", 11 ) || !Q_stricmpn( cmd, "team vote failed", 16 )) {
@@ -1110,7 +1110,7 @@ static void CG_ServerCommand( void ) {
 		} else if ( !Q_stricmpn( cmd, "vote passed", 11 ) || !Q_stricmpn( cmd, "team vote passed", 16 ) ) {
 			trap_S_StartLocalSound( cgs.media.votePassed, CHAN_ANNOUNCER );
 		}
-#endif
+//#endif
 		return;
 	}
 
@@ -1141,7 +1141,7 @@ static void CG_ServerCommand( void ) {
 		return;
 	}
 
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	if ( !strcmp( cmd, "vchat" ) ) {
 		CG_VoiceChat( SAY_ALL );
 		return;
@@ -1156,7 +1156,7 @@ static void CG_ServerCommand( void ) {
 		CG_VoiceChat( SAY_TELL );
 		return;
 	}
-#endif
+//#endif
 
 	if ( !strcmp( cmd, "scores" ) ) {
 		CG_ParseScores();

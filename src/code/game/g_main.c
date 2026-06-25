@@ -202,7 +202,7 @@ void G_FindTeams( void ) {
 
 
 void G_RemapTeamShaders( void ) {
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	char string[1024];
 	float f = level.time * 0.001;
 
@@ -229,7 +229,7 @@ void G_RemapTeamShaders( void ) {
     }
 
     trap_SetConfigstring(CS_SHADERSTATE, BuildShaderStateConfig());
-#endif
+//#endif
 }
 
 
@@ -304,14 +304,14 @@ void G_RegisterWeapon(void) {
 		RegisterItem( BG_FindItemForWeapon( WP_PLASMAGUN ) );
 	if ( wpflags & 128 )
 		RegisterItem( BG_FindItemForWeapon( WP_BFG ) );
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	if ( wpflags & 256 )
 		RegisterItem( BG_FindItemForWeapon( WP_NAILGUN ) );
 	if ( wpflags & 512 )
 		RegisterItem( BG_FindItemForWeapon( WP_PROX_LAUNCHER ) );
 	if ( wpflags & 1024 )
 		RegisterItem( BG_FindItemForWeapon( WP_CHAINGUN ) );
-#endif
+//#endif
 // ~Dimmskii
 	if ( wpflags & 2048 )
 		RegisterItem( BG_FindItemForWeapon( WP_HMG ) );
@@ -398,7 +398,7 @@ void G_SpawnWeapon ( gclient_t *client ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_BFG;
 			client->ps.ammo[ WP_BFG ] = getAmmoValue ( "g_startAmmoBFG" );
 		}
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 		if ( g_wpflags.integer & 256 ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_NAILGUN;
 			client->ps.ammo[ WP_NAILGUN ] = getAmmoValue ( "g_startAmmoNG" );
@@ -411,7 +411,7 @@ void G_SpawnWeapon ( gclient_t *client ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_CHAINGUN;
 			client->ps.ammo[ WP_CHAINGUN ] = getAmmoValue ( "g_startAmmoCG" );
 		}
-#endif
+//#endif
 	}
 }
 */
@@ -464,7 +464,7 @@ void G_SpawnWeapon ( gclient_t *client ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_BFG;
 			client->ps.ammo[ WP_BFG ] = getAmmoValue ( "BFG" );
 		}
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 		if ( wpflags & 256 ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_NAILGUN;
 			client->ps.ammo[ WP_NAILGUN ] = getAmmoValue ( "NG" );
@@ -477,7 +477,7 @@ void G_SpawnWeapon ( gclient_t *client ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_CHAINGUN;
 			client->ps.ammo[ WP_CHAINGUN ] = getAmmoValue ( "CG" );
 		}
-#endif
+//#endif
 		if ( wpflags & 2048 ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_HMG;
 			client->ps.ammo[ WP_HMG ] = getAmmoValue ( "HMG" );
@@ -504,12 +504,12 @@ qboolean G_RemoveWeapon ( gitem_t *item ) {
 		|| ( ( g_removeweapon.integer & 64 ) && ( !Q_stricmp( item->classname, "weapon_plasmagun" ) ) )
 		|| ( ( g_removeweapon.integer & 128 ) && ( !Q_stricmp( item->classname, "weapon_bfg" ) ) ) )
 			return qtrue;
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	if ( ( ( g_removeweapon.integer & 256 ) && ( !Q_stricmp( item->classname, "weapon_nailgun" ) ) )
 		|| ( ( g_removeweapon.integer & 512 ) && ( !Q_stricmp( item->classname, "weapon_prox_launcher" ) ) )
 		|| ( ( g_removeweapon.integer & 1024 ) && ( !Q_stricmp( item->classname, "weapon_chaingun" ) ) ) )
 			return qtrue;
-#endif
+//#endif
 // ~Dimmskii
 	if ( ( ( g_removeweapon.integer & 2048 ) && ( !Q_stricmp( item->classname, "weapon_hmg" ) ) ) )
 			return qtrue;
@@ -532,12 +532,12 @@ qboolean G_RemoveAmmo ( gitem_t *item ) {
 		|| ( ( g_removeammo.integer & 64 ) && ( !Q_stricmp( item->classname, "ammo_cells" ) ) )
 		|| ( ( g_removeammo.integer & 128 ) && ( !Q_stricmp( item->classname, "ammo_bfg" ) ) ) )
 			return qtrue;
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	if ( ( ( g_removeammo.integer & 256 ) && ( !Q_stricmp( item->classname, "ammo_nails" ) ) )
 		|| ( ( g_removeammo.integer & 512 ) && ( !Q_stricmp( item->classname, "ammo_mines" ) ) )
 		|| ( ( g_removeammo.integer & 1024 ) && ( !Q_stricmp( item->classname, "ammo_belt" ) ) ) )
 			return qtrue;
-#endif
+//#endif
 // ~Dimmskii
 	if ( ( ( g_removeammo.integer & 2048 ) && ( !Q_stricmp( item->classname, "ammo_hmg" ) ) ) )
 			return qtrue;
@@ -561,12 +561,12 @@ qboolean G_RemoveItem ( gitem_t *item ) {
 		|| ( ( g_removeitem.integer & 128 ) && ( !Q_stricmp( item->classname, "holdable_teleporter" ) ) )
 		|| ( ( g_removeitem.integer & 256 ) && ( !Q_stricmp( item->classname, "holdable_medkit" ) ) ) )
 			return qtrue;
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	if ( ( ( g_removeitem.integer & 512 ) && ( !Q_stricmp( item->classname, "holdable_kamikaze" ) ) )
 		|| ( ( g_removeitem.integer & 1024 ) && ( !Q_stricmp( item->classname, "holdable_portal" ) ) )
 		|| ( ( g_removeitem.integer & 2048 ) && ( !Q_stricmp( item->classname, "holdable_invulnerability" ) ) ) )
 			return qtrue;
-#endif
+//#endif
 // ~Dimmskii
 	if ( ( g_removeitem.integer & 4096 ) && ( !Q_stricmp( item->classname, "item_armor_jacket" ) ) )
 			return qtrue;
@@ -587,13 +587,13 @@ qboolean G_RemovePowerup ( gitem_t *item ) {
 		|| ( ( g_removepowerup.integer & 16 ) && ( !Q_stricmp( item->classname, "item_regen" ) ) )
 		|| ( ( g_removepowerup.integer & 32 ) && ( !Q_stricmp( item->classname, "item_flight" ) ) ) )
 			return qtrue;
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	if ( ( ( g_removepowerup.integer & 64 ) && ( !Q_stricmp( item->classname, "item_scout" ) ) )
 		|| ( ( g_removepowerup.integer & 128 ) && ( !Q_stricmp( item->classname, "item_guard" ) ) )
 		|| ( ( g_removepowerup.integer & 256 ) && ( !Q_stricmp( item->classname, "item_doubler" ) ) )
 		|| ( ( g_removepowerup.integer & 512 ) && ( !Q_stricmp( item->classname, "item_ammoregen" ) ) ) )
 			return qtrue;
-#endif
+//#endif
 	return qfalse;
 }
 
@@ -1381,18 +1381,18 @@ void BeginIntermission( void ) {
 		MoveClientToIntermission( client );
 	}
 
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	if (g_singlePlayer.integer) {
 		trap_Cvar_Set("ui_singlePlayerActive", "0");
 		UpdateTournamentInfo();
 	}
-#else
-	// if single player game
-	if ( g_gametype.integer == GT_SINGLE_PLAYER ) {
-		UpdateTournamentInfo();
-		SpawnModelsOnVictoryPads();
-	}
-#endif
+//#else
+//	// if single player game
+//	if ( g_gametype.integer == GT_SINGLE_PLAYER ) {
+//		UpdateTournamentInfo();
+//		SpawnModelsOnVictoryPads();
+//	}
+//#endif
 
 	// send the current scoring to all clients
 	SendScoreboardMessageToAllClients();
@@ -1511,9 +1511,9 @@ Append information about this game to the log file
 void LogExit( const char *string ) {
 	int				i, numSorted;
 	gclient_t		*cl;
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	qboolean won = qtrue;
-#endif
+//#endif
 	G_LogPrintf( "Exit: %s\n", string );
 
 	level.intermissionQueued = level.time;
@@ -1548,24 +1548,24 @@ void LogExit( const char *string ) {
 		ping = cl->ps.ping < 999 ? cl->ps.ping : 999;
 
 		G_LogPrintf( "score: %i  ping: %i  client: %i %s\n", cl->ps.persistant[PERS_SCORE], ping, level.sortedClients[i],	cl->pers.netname );
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 		if (g_singlePlayer.integer && g_gametype.integer == GT_TOURNAMENT) {
 			if (g_entities[cl - level.clients].r.svFlags & SVF_BOT && cl->ps.persistant[PERS_RANK] == 0) {
 				won = qfalse;
 			}
 		}
-#endif
+//#endif
 
 	}
 
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	if (g_singlePlayer.integer) {
 		if (g_gametype.integer >= GT_CTF) {
 			won = level.teamScores[TEAM_RED] > level.teamScores[TEAM_BLUE];
 		}
 		trap_SendConsoleCommand( EXEC_APPEND, (won) ? "spWin\n" : "spLose\n" );
 	}
-#endif
+//#endif
 
 
 }
@@ -1707,18 +1707,18 @@ static void CheckExitRules( void ) {
 	}
 
 	if ( level.intermissionQueued ) {
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 		int time = (g_singlePlayer.integer) ? SP_INTERMISSION_DELAY_TIME : INTERMISSION_DELAY_TIME;
 		if ( level.time - level.intermissionQueued >= time ) {
 			level.intermissionQueued = 0;
 			BeginIntermission();
 		}
-#else
-		if ( level.time - level.intermissionQueued >= INTERMISSION_DELAY_TIME ) {
-			level.intermissionQueued = 0;
-			BeginIntermission();
-		}
-#endif
+//#else
+//		if ( level.time - level.intermissionQueued >= INTERMISSION_DELAY_TIME ) {
+//			level.intermissionQueued = 0;
+//			BeginIntermission();
+//		}
+//#endif
 		return;
 	}
 	

@@ -19,10 +19,10 @@ static int		ui_numArenas;
 static char		*ui_arenaInfos[MAX_ARENAS];
 
 /*
-#ifndef MISSIONPACK // bk001206
-static int		ui_numSinglePlayerArenas;
-static int		ui_numSpecialSinglePlayerArenas;
-#endif
+//#ifndef MISSIONPACK // bk001206
+//static int		ui_numSinglePlayerArenas;
+//static int		ui_numSpecialSinglePlayerArenas;
+//#endif
 */
 
 /*

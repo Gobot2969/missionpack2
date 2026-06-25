@@ -35,7 +35,7 @@
 #include "match.h"				//string matching types and vars
 
 // for the voice chats
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 #include "../../ui/menudef.h"
 
 typedef struct voiceCommand_s
@@ -43,7 +43,7 @@ typedef struct voiceCommand_s
 	char *cmd;
 	void(*func)(bot_state_t *bs, int client, int mode);
 } voiceCommand_t;
-#endif
+//#endif
 
 /*
 ==================
@@ -56,12 +56,12 @@ void BotVoiceChat_GetFlag(bot_state_t *bs, int client, int mode) {
 		if (!ctf_redflag.areanum || !ctf_blueflag.areanum)
 			return;
 	}
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	else if (gametype == GT_1FCTF) {
 		if (!ctf_neutralflag.areanum || !ctf_redflag.areanum || !ctf_blueflag.areanum)
 			return;
 	}
-#endif
+//#endif
 	else {
 		return;
 	}
@@ -96,14 +96,14 @@ BotVoiceChat_Offense
 */
 void BotVoiceChat_Offense(bot_state_t *bs, int client, int mode) {
 	if ( gametype == GT_CTF
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 		|| gametype == GT_1FCTF
-#endif
+//#endif
 		) {
 		BotVoiceChat_GetFlag(bs, client, mode);
 		return;
 	}
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	if (gametype == GT_HARVESTER) {
 		//
 		bs->decisionmaker = client;
@@ -122,7 +122,7 @@ void BotVoiceChat_Offense(bot_state_t *bs, int client, int mode) {
 		BotRememberLastOrderedTask(bs);
 	}
 	else
-#endif
+//#endif
 	{
 		//
 		bs->decisionmaker = client;
@@ -151,7 +151,7 @@ BotVoiceChat_Defend
 ==================
 */
 void BotVoiceChat_Defend(bot_state_t *bs, int client, int mode) {
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	if ( gametype == GT_OBELISK || gametype == GT_HARVESTER) {
 		//
 		switch(BotTeam(bs)) {
@@ -161,11 +161,11 @@ void BotVoiceChat_Defend(bot_state_t *bs, int client, int mode) {
 		}
 	}
 	else
-#endif
+//#endif
 		if (gametype == GT_CTF
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 			|| gametype == GT_1FCTF
-#endif
+//#endif
 			) {
 		//
 		switch(BotTeam(bs)) {
@@ -222,9 +222,9 @@ void BotVoiceChat_Patrol(bot_state_t *bs, int client, int mode) {
 	//
 	BotAI_BotInitialChat(bs, "dismissed", NULL);
 	trap_BotEnterChat(bs->cs, client, CHAT_TELL);
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	BotVoiceChatOnly(bs, -1, VOICECHAT_ONPATROL);
-#endif
+//#endif
 	//
 	BotSetTeamStatus(bs);
 #ifdef DEBUG
@@ -367,9 +367,9 @@ void BotVoiceChat_ReturnFlag(bot_state_t *bs, int client, int mode) {
 	//if not in CTF mode
 	if (
 		gametype != GT_CTF
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 		&& gametype != GT_1FCTF
-#endif
+//#endif
 		) {
 		return;
 	}
@@ -428,9 +428,9 @@ void BotVoiceChat_WhoIsLeader(bot_state_t *bs, int client, int mode) {
 	if (!Q_stricmp(netname, bs->teamleader)) {
 		BotAI_BotInitialChat(bs, "iamteamleader", NULL);
 		trap_BotEnterChat(bs->cs, 0, CHAT_TEAM);
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 		BotVoiceChatOnly(bs, -1, VOICECHAT_STARTLEADER);
-#endif
+//#endif
 	}
 }
 
@@ -451,9 +451,9 @@ void BotVoiceChat_WantOnDefense(bot_state_t *bs, int client, int mode) {
 	EasyClientName(client, netname, sizeof(netname));
 	BotAI_BotInitialChat(bs, "keepinmind", netname, NULL);
 	trap_BotEnterChat(bs->cs, client, CHAT_TELL);
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	BotVoiceChatOnly(bs, client, VOICECHAT_YES);
-#endif
+//#endif
 	trap_EA_Action(bs->client, ACTION_AFFIRMATIVE);
 }
 
@@ -474,16 +474,16 @@ void BotVoiceChat_WantOnOffense(bot_state_t *bs, int client, int mode) {
 	EasyClientName(client, netname, sizeof(netname));
 	BotAI_BotInitialChat(bs, "keepinmind", netname, NULL);
 	trap_BotEnterChat(bs->cs, client, CHAT_TELL);
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	BotVoiceChatOnly(bs, client, VOICECHAT_YES);
-#endif
+//#endif
 	trap_EA_Action(bs->client, ACTION_AFFIRMATIVE);
 }
 
 void BotVoiceChat_Dummy(bot_state_t *bs, int client, int mode) {
 }
 
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 voiceCommand_t voiceCommands[] = {
 	{VOICECHAT_GETFLAG, BotVoiceChat_GetFlag},
 	{VOICECHAT_OFFENSE, BotVoiceChat_Offense },
@@ -501,10 +501,10 @@ voiceCommand_t voiceCommands[] = {
 	{VOICECHAT_WANTONOFFENSE, BotVoiceChat_WantOnOffense },
 	{NULL, BotVoiceChat_Dummy}
 };
-#endif
+//#endif
 
 int BotVoiceChatCommand(bot_state_t *bs, int mode, char *voiceChat) {
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	int i, voiceOnly, clientNum, color;
 	char *ptr, buf[MAX_MESSAGE_SIZE], *cmd;
 
@@ -538,6 +538,6 @@ int BotVoiceChatCommand(bot_state_t *bs, int mode, char *voiceChat) {
 			return qtrue;
 		}
 	}
-#endif
+//#endif
 	return qfalse;
 }
