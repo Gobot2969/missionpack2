@@ -230,9 +230,9 @@ static char* netnames[] = {
 };
 
 /*
-#ifndef MISSIONPACK // bk001206
-static char quake3worldMessage[] = "Visit www.quake3world.com - News, Community, Events, Files";
-#endif
+//#ifndef MISSIONPACK // bk001206
+//static char quake3worldMessage[] = "Visit www.quake3world.com - News, Community, Events, Files";
+//#endif
 */
 
 static int gamecodetoui[] = {4,2,3,0,5,1,6};
@@ -1119,9 +1119,9 @@ void UI_Load() {
 
 static const char *handicapValues[] = {"None","95","90","85","80","75","70","65","60","55","50","45","40","35","30","25","20","15","10","5",NULL};
 /*
-#ifndef MISSIONPACK // bk001206
-static int numHandicaps = sizeof(handicapValues) / sizeof(const char*);
-#endif
+//#ifndef MISSIONPACK // bk001206
+//static int numHandicaps = sizeof(handicapValues) / sizeof(const char*);
+//#endif
 */
 
 static void UI_DrawHandicap(rectDef_t *rect, float scale, vec4_t color, int textStyle) {
@@ -1585,12 +1585,12 @@ static void UI_DrawTierGameType(rectDef_t *rect, float scale, vec4_t color, int 
 
 
 /*
-#ifndef MISSIONPACK // bk001206
-static const char *UI_OpponentLeaderName() {
-  int i = UI_TeamIndexFromName(UI_Cvar_VariableString("ui_opponentName"));
-	return uiInfo.teamList[i].teamMembers[0];
-}
-#endif
+//#ifndef MISSIONPACK // bk001206
+//static const char *UI_OpponentLeaderName() {
+//  int i = UI_TeamIndexFromName(UI_Cvar_VariableString("ui_opponentName"));
+//	return uiInfo.teamList[i].teamMembers[0];
+//}
+//#endif
 */
 
 static const char *UI_AIFromName(const char *name) {
@@ -1604,50 +1604,50 @@ static const char *UI_AIFromName(const char *name) {
 }
 
 /*
-#ifndef MISSIONPACK // bk001206
-static const int UI_AIIndex(const char *name) {
-	int j;
-	for (j = 0; j < uiInfo.characterCount; j++) {
-		if (Q_stricmp(name, uiInfo.characterList[j].name) == 0) {
-			return j;
-		}
-	}
-	return 0;
-}
-#endif
+//#ifndef MISSIONPACK // bk001206
+//static const int UI_AIIndex(const char *name) {
+//	int j;
+//	for (j = 0; j < uiInfo.characterCount; j++) {
+//		if (Q_stricmp(name, uiInfo.characterList[j].name) == 0) {
+//			return j;
+//		}
+//	}
+//	return 0;
+//}
+//#endif
 
-#ifndef MISSIONPACK // bk001206
-static const int UI_AIIndexFromName(const char *name) {
-	int j;
-	for (j = 0; j < uiInfo.aliasCount; j++) {
-		if (Q_stricmp(uiInfo.aliasList[j].name, name) == 0) {
-			return UI_AIIndex(uiInfo.aliasList[j].ai);
-		}
-	}
-	return 0;
-}
-#endif
+//#ifndef MISSIONPACK // bk001206
+//static const int UI_AIIndexFromName(const char *name) {
+//	int j;
+//	for (j = 0; j < uiInfo.aliasCount; j++) {
+//		if (Q_stricmp(uiInfo.aliasList[j].name, name) == 0) {
+//			return UI_AIIndex(uiInfo.aliasList[j].ai);
+//		}
+//	}
+//	return 0;
+//}
+//#endif
 
 
-#ifndef MISSIONPACK // bk001206
-static const char *UI_OpponentLeaderHead() {
-	const char *leader = UI_OpponentLeaderName();
-	return UI_AIFromName(leader);
-}
-#endif
+//#ifndef MISSIONPACK // bk001206
+//static const char *UI_OpponentLeaderHead() {
+//	const char *leader = UI_OpponentLeaderName();
+//	return UI_AIFromName(leader);
+//}
+//#endif
 
-#ifndef MISSIONPACK // bk001206
-static const char *UI_OpponentLeaderModel() {
-	int i;
-	const char *head = UI_OpponentLeaderHead();
-	for (i = 0; i < uiInfo.characterCount; i++) {
-		if (Q_stricmp(head, uiInfo.characterList[i].name) == 0) {
-			return uiInfo.characterList[i].base;
-		}
-	}
-	return "James";
-}
-#endif
+//#ifndef MISSIONPACK // bk001206
+//static const char *UI_OpponentLeaderModel() {
+//	int i;
+//	const char *head = UI_OpponentLeaderHead();
+//	for (i = 0; i < uiInfo.characterCount; i++) {
+//		if (Q_stricmp(head, uiInfo.characterList[i].name) == 0) {
+//			return uiInfo.characterList[i].base;
+//		}
+//	}
+//	return "James";
+//}
+//#endif
 */
 
 
@@ -3644,7 +3644,7 @@ static void UI_RunMenuScript(char **args) {
 			UI_LoadArenas();
 			UI_MapCountByGameType(qfalse);
 			Menu_SetFeederSelection(NULL, FEEDER_ALLMAPS, 0, "createserver");
-		} else if (Q_stricmp(name, "loadArenas_new") == 0) {
+		} else if (Q_stricmp(name, "loadArenas_new") == 0) { // ~Dimmskii
 			UI_LoadArenas();
 			UI_MapCountTotal(qfalse);
 			Menu_SetFeederSelection(NULL, FEEDER_MAPS_NEW, ui_currentMap.integer, "maps");
@@ -4037,6 +4037,7 @@ static int UI_MapCountByGameType(qboolean singlePlayer) {
 	return c;
 }
 
+// ~Dimmskii
 /*
 ==================
 UI_MapCountTotal
@@ -4053,6 +4054,7 @@ static int UI_MapCountTotal( void ) {
 	}
 	return c;
 }
+// END Dimmskii
 
 qboolean UI_hasSkinForBase(const char *base, const char *team) {
 	char	test[1024];
@@ -4698,7 +4700,7 @@ static int UI_FeederCount(float feederID) {
 		return uiInfo.movieCount;
 	} else if (feederID == FEEDER_MAPS || feederID == FEEDER_ALLMAPS) {
 		return UI_MapCountByGameType(feederID == FEEDER_MAPS ? qtrue : qfalse);
-	} else if (feederID == FEEDER_MAPS_NEW) {
+	} else if (feederID == FEEDER_MAPS_NEW) { // ~Dimmskii
 		return UI_MapCountTotal();
 	} else if (feederID == FEEDER_SERVERS) {
 		return uiInfo.serverStatus.numDisplayServers;
@@ -4945,7 +4947,8 @@ static qhandle_t UI_FeederItemImage(float feederID, int index) {
     if (index >= 0 && index < uiInfo.q3HeadCount) {
       return uiInfo.q3HeadIcons[index];
     }
-	} else if (feederID == FEEDER_ALLMAPS || feederID == FEEDER_MAPS || feederID == FEEDER_MAPS_NEW ) {
+	//} else if (feederID == FEEDER_ALLMAPS || feederID == FEEDER_MAPS) {
+	} else if (feederID == FEEDER_ALLMAPS || feederID == FEEDER_MAPS || feederID == FEEDER_MAPS_NEW ) { // ~Dimmskii
 		int actual;
 		UI_SelectedMap(index, &actual);
 		index = actual;
@@ -5009,7 +5012,7 @@ static void UI_FeederSelection(float feederID, int index) {
 	  	uiInfo.mapList[ui_currentNetMap.integer].cinematic = trap_CIN_PlayCinematic(va("%s.roq", uiInfo.mapList[ui_currentNetMap.integer].mapLoadName), 0, 0, 0, 0, (CIN_loop | CIN_silent) );
 		}
 
-  } else if (feederID == FEEDER_MAPS_NEW) {
+  } else if (feederID == FEEDER_MAPS_NEW) { // ~Dimmskii
 	  	int actual, map;
 		map = ui_currentNetMap.integer;
 		if (uiInfo.mapList[map].cinematic >= 0) {
@@ -5450,7 +5453,7 @@ static void UI_ParseGameInfo(const char *teamFile) {
 		if (Q_stricmp(token, "gametypes") == 0) {
 
 			//if (GameType_Parse(&p, qfalse)) {
-			if (GameType_Parse(&p, qfalse, qfalse)) {
+			if (GameType_Parse(&p, qfalse, qfalse)) { // ~Dimmskii
 				continue;
 			} else {
 				break;
@@ -5472,7 +5475,7 @@ static void UI_ParseGameInfo(const char *teamFile) {
 		if (Q_stricmp(token, "joingametypes") == 0) {
 
 			//if (GameType_Parse(&p, qtrue)) {
-			if (GameType_Parse(&p, qtrue, qfalse)) {
+			if (GameType_Parse(&p, qtrue, qfalse)) { // ~Dimmskii
 				continue;
 			} else {
 				break;
@@ -5501,12 +5504,12 @@ static void UI_Pause(qboolean b) {
 }
 
 /*
-#ifndef MISSIONPACK // bk001206
-static int UI_OwnerDraw_Width(int ownerDraw) {
-  // bk001205 - LCC missing return value
-  return 0;
-}
-#endif
+//#ifndef MISSIONPACK // bk001206
+//static int UI_OwnerDraw_Width(int ownerDraw) {
+//  // bk001205 - LCC missing return value
+//  return 0;
+//}
+//#endif
 */
 
 static int UI_PlayCinematic(const char *name, float x, float y, float w, float h) {

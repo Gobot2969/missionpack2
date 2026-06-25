@@ -328,7 +328,7 @@ void SP_shooter_grenade( gentity_t *ent ) {
 }
 
 
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 static void PortalDie (gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
 	G_FreeEntity( self );
 	//FIXME do something more interesting
@@ -470,4 +470,4 @@ void DropPortalSource( gentity_t *player ) {
 	}
 
 }
-#endif
+//#endif

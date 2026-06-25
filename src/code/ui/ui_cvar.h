@@ -72,21 +72,33 @@ UI_CVAR( ui_teamName, "ui_teamName", "Pagans", CVAR_ARCHIVE )
 UI_CVAR( ui_opponentName, "ui_opponentName", "Stroggs", CVAR_ARCHIVE )
 //UI_CVAR( ui_redteam, "ui_redteam", "Stroggs", CVAR_ARCHIVE )
 //UI_CVAR( ui_blueteam, "ui_blueteam", "Pagans", CVAR_ARCHIVE )
+// ~Dimmskii
 UI_CVAR( ui_redteam, "ui_redteam", "Red", CVAR_ARCHIVE )
 UI_CVAR( ui_blueteam, "ui_blueteam", "Blue", CVAR_ARCHIVE )
+// END Dimmskii
 UI_CVAR( ui_dedicated, "ui_dedicated", "0", CVAR_ARCHIVE )
 UI_CVAR( ui_gameType, "ui_gametype", "3", CVAR_ARCHIVE )
 UI_CVAR( ui_joinGameType, "ui_joinGametype", "0", CVAR_ARCHIVE )
 UI_CVAR( ui_netGameType, "ui_netGametype", "3", CVAR_ARCHIVE )
 UI_CVAR( ui_actualNetGameType, "ui_actualNetGametype", "3", CVAR_ARCHIVE )
+//UI_CVAR( ui_redteam1, "ui_redteam1", "0", CVAR_ARCHIVE )
+//UI_CVAR( ui_redteam2, "ui_redteam2", "0", CVAR_ARCHIVE )
+//UI_CVAR( ui_redteam3, "ui_redteam3", "0", CVAR_ARCHIVE )
+// ~Dimmskii
 UI_CVAR( ui_redteam1, "ui_redteam1", "7", CVAR_ARCHIVE )
 UI_CVAR( ui_redteam2, "ui_redteam2", "17", CVAR_ARCHIVE )
 UI_CVAR( ui_redteam3, "ui_redteam3", "3", CVAR_ARCHIVE )
+// END Dimmskii
 UI_CVAR( ui_redteam4, "ui_redteam4", "0", CVAR_ARCHIVE )
 UI_CVAR( ui_redteam5, "ui_redteam5", "0", CVAR_ARCHIVE )
+//UI_CVAR( ui_blueteam1, "ui_blueteam1", "0", CVAR_ARCHIVE )
+//UI_CVAR( ui_blueteam2, "ui_blueteam2", "0", CVAR_ARCHIVE )
+//UI_CVAR( ui_blueteam3, "ui_blueteam3", "0", CVAR_ARCHIVE )
+// ~Dimmskii
 UI_CVAR( ui_blueteam1, "ui_blueteam1", "1", CVAR_ARCHIVE )
 UI_CVAR( ui_blueteam2, "ui_blueteam2", "2", CVAR_ARCHIVE )
 UI_CVAR( ui_blueteam3, "ui_blueteam3", "8", CVAR_ARCHIVE )
+// END Dimmskii
 UI_CVAR( ui_blueteam4, "ui_blueteam4", "0", CVAR_ARCHIVE )
 UI_CVAR( ui_blueteam5, "ui_blueteam5", "0", CVAR_ARCHIVE )
 // ~Dimmskii
@@ -130,7 +142,8 @@ UI_CVAR( ui_smallFont, "ui_smallFont", "0.25", CVAR_ARCHIVE )
 UI_CVAR( ui_bigFont, "ui_bigFont", "0.4", CVAR_ARCHIVE )
 UI_CVAR( ui_findPlayer, "ui_findPlayer", "Sarge", CVAR_ARCHIVE )
 //UI_CVAR( ui_Q3Model, "ui_q3model", "0", CVAR_ARCHIVE ) // ~Dimmskii - Missionpack 2 only has normal models + pm/bright skins
-UI_CVAR( ui_hudFiles, "cg_hudFiles", "ui/hud.txt", CVAR_ARCHIVE )
+//UI_CVAR( ui_hudFiles, "cg_hudFiles", "ui/mpp.txt", CVAR_ARCHIVE )
+UI_CVAR( ui_hudFiles, "cg_hudFiles", "ui/hud.txt", CVAR_ARCHIVE ) // ~Dimmskii
 UI_CVAR( ui_recordSPDemo, "ui_recordSPDemo", "0", CVAR_ARCHIVE )
 UI_CVAR( ui_teamArenaFirstRun, "ui_teamArenaFirstRun", "0", CVAR_ARCHIVE )
 UI_CVAR( ui_realWarmUp, "g_warmup", "20", CVAR_ARCHIVE )

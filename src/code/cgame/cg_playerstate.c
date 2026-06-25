@@ -32,9 +32,9 @@ void CG_CheckAmmo( void ) {
 		case WP_GRENADE_LAUNCHER:
 		case WP_RAILGUN:
 		case WP_SHOTGUN:
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 		case WP_PROX_LAUNCHER:
-#endif
+//#endif
 			total += cg.snap->ps.ammo[i] * 1000;
 			break;
 		default:
@@ -264,9 +264,9 @@ CG_CheckLocalSounds
 ==================
 */
 void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	int health, armor;
-#endif
+//#endif
 	int	highScore, reward;
 	sfxHandle_t sfx;
 
@@ -278,7 +278,7 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
 	// hit changes
 	if ( ps->persistant[PERS_HITS] > ops->persistant[PERS_HITS] ) {
 /*
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 		armor  = ps->persistant[PERS_ATTACKEE_ARMOR] & 0xff;
 		health = ps->persistant[PERS_ATTACKEE_ARMOR] >> 8;
 		if (armor > 50 ) {
@@ -288,30 +288,30 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
 		} else {
 			trap_S_StartLocalSound( cgs.media.hitSound, CHAN_LOCAL_SOUND );
 		}
-#else
-		if ( cg_hitSounds.integer > 0 && (ps->persistant[PERS_ATTACKEE_ARMOR] & 0xFF00) == 0 )
-		{
-			// high byte of PERS_ATTACKEE_ARMOR is target->health in vq3/ta i.e. it is always non-zero
-			// so we will use this value to filter legacy data from our new hitsounds where it is always 0
-			int damage, index;
-			damage = ps->persistant[PERS_ATTACKEE_ARMOR] & 0xFF;
+//#else
+//		if ( cg_hitSounds.integer > 0 && (ps->persistant[PERS_ATTACKEE_ARMOR] & 0xFF00) == 0 )
+//		{
+//			// high byte of PERS_ATTACKEE_ARMOR is target->health in vq3/ta i.e. it is always non-zero
+//			// so we will use this value to filter legacy data from our new hitsounds where it is always 0
+//			int damage, index;
+//			damage = ps->persistant[PERS_ATTACKEE_ARMOR] & 0xFF;
 
-			// damage value is already scaled by STAT_MAX_HEALTH on server side
-			if ( damage > 75 ) index = 3;
-			else if ( damage > 50 ) index = 2;
-			else if ( damage > 25 ) index = 1;
-			else index = 0;
+//			// damage value is already scaled by STAT_MAX_HEALTH on server side
+//			if ( damage > 75 ) index = 3;
+//			else if ( damage > 50 ) index = 2;
+//			else if ( damage > 25 ) index = 1;
+//			else index = 0;
 
-			if ( cg_hitSounds.integer > 1 ) // reversed: higher damage - higher tone
-				index = 3 - index;
+//			if ( cg_hitSounds.integer > 1 ) // reversed: higher damage - higher tone
+//				index = 3 - index;
 
-			trap_S_StartLocalSound( cgs.media.hitSounds[ index ], CHAN_LOCAL_SOUND );
-		} 
-		else
-		{
-			trap_S_StartLocalSound( cgs.media.hitSound, CHAN_LOCAL_SOUND );
-		}
-#endif
+//			trap_S_StartLocalSound( cgs.media.hitSounds[ index ], CHAN_LOCAL_SOUND );
+//		} 
+//		else
+//		{
+//			trap_S_StartLocalSound( cgs.media.hitSound, CHAN_LOCAL_SOUND );
+//		}
+//#endif
 */
 // ~Dimmskii
 // TODO: RESTORE cg_hitSounds functionality from MPP!!!!!!!!!!!!
@@ -358,43 +358,43 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
 		//Com_Printf("capture\n");
 	}
 	if (ps->persistant[PERS_IMPRESSIVE_COUNT] != ops->persistant[PERS_IMPRESSIVE_COUNT]) {
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 		if (ps->persistant[PERS_IMPRESSIVE_COUNT] == 1) {
 			sfx = cgs.media.firstImpressiveSound;
 		} else {
 			sfx = cgs.media.impressiveSound;
 		}
-#else
-		sfx = cgs.media.impressiveSound;
-#endif
+//#else
+//		sfx = cgs.media.impressiveSound;
+//#endif
 		pushReward(sfx, cgs.media.medalImpressive, ps->persistant[PERS_IMPRESSIVE_COUNT]);
 		reward = qtrue;
 		//Com_Printf("impressive\n");
 	}
 	if (ps->persistant[PERS_EXCELLENT_COUNT] != ops->persistant[PERS_EXCELLENT_COUNT]) {
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 		if (ps->persistant[PERS_EXCELLENT_COUNT] == 1) {
 			sfx = cgs.media.firstExcellentSound;
 		} else {
 			sfx = cgs.media.excellentSound;
 		}
-#else
-		sfx = cgs.media.excellentSound;
-#endif
+//#else
+//		sfx = cgs.media.excellentSound;
+//#endif
 		pushReward(sfx, cgs.media.medalExcellent, ps->persistant[PERS_EXCELLENT_COUNT]);
 		reward = qtrue;
 		//Com_Printf("excellent\n");
 	}
 	if (ps->persistant[PERS_GAUNTLET_FRAG_COUNT] != ops->persistant[PERS_GAUNTLET_FRAG_COUNT]) {
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 		if (ps->persistant[PERS_GAUNTLET_FRAG_COUNT] == 1) {
 			sfx = cgs.media.firstHumiliationSound;
 		} else {
 			sfx = cgs.media.humiliationSound;
 		}
-#else
-		sfx = cgs.media.humiliationSound;
-#endif
+//#else
+//		sfx = cgs.media.humiliationSound;
+//#endif
 		pushReward(sfx, cgs.media.medalGauntlet, ps->persistant[PERS_GAUNTLET_FRAG_COUNT]);
 		reward = qtrue;
 		//Com_Printf("guantlet frag\n");
@@ -409,7 +409,6 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
 		reward = qtrue;
 		//Com_Printf("assist\n");
 	}
-
 	// if any of the player event bits changed
 	if (ps->persistant[PERS_PLAYEREVENTS] != ops->persistant[PERS_PLAYEREVENTS]) {
 		if ((ps->persistant[PERS_PLAYEREVENTS] & PLAYEREVENT_DENIEDREWARD) !=

@@ -30,7 +30,7 @@ foreach(src ${UI_SOURCES})
   set(asm_out "${UI_VM_DIR}/${name}.asm")
   add_custom_command(
     OUTPUT "${asm_out}"
-    COMMAND "${Q3LCC}" -DMISSIONPACK -DQ3_VM ${Q3_DEBUG_FLAG}
+    COMMAND "${Q3LCC}" -DQ3_VM ${Q3_DEBUG_FLAG}
             -S -Wf-target=bytecode -Wf-g ${Q3_INCLUDE_FLAGS}
             "${src_path}"
     WORKING_DIRECTORY "${UI_VM_DIR}"
@@ -70,7 +70,7 @@ foreach(src ${UI_SOURCES})
   set(asm_out "${UI_VM_DEBUG_DIR}/${name}.asm")
   add_custom_command(
     OUTPUT "${asm_out}"
-    COMMAND "${Q3LCC}" -DMISSIONPACK -DQ3_VM -DDEBUG
+    COMMAND "${Q3LCC}" -DQ3_VM -DDEBUG
             -S -Wf-target=bytecode -Wf-g ${Q3_INCLUDE_FLAGS}
             "${src_path}"
     WORKING_DIRECTORY "${UI_VM_DEBUG_DIR}"

@@ -11,9 +11,9 @@
 // If you absolutely need something stored, it can either be kept
 // by the server in the server stored userinfos, or stashed in a cvar.
 
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 #define CG_FONT_THRESHOLD 0.1
-#endif
+//#endif
 
 #define	POWERUP_BLINKS		5
 
@@ -67,13 +67,13 @@
 #define TEAM_OVERLAY_MAXLOCATION_WIDTH	16
 
 #define	DEFAULT_MODEL			"sarge"
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 #define	DEFAULT_TEAM_MODEL		"james"
 #define	DEFAULT_TEAM_HEAD		"*james"
-#else
-#define	DEFAULT_TEAM_MODEL		"sarge"
-#define	DEFAULT_TEAM_HEAD		"sarge"
-#endif
+//#else
+//#define	DEFAULT_TEAM_MODEL		"sarge"
+//#define	DEFAULT_TEAM_HEAD		"sarge"
+//#endif
 
 #define DEFAULT_REDTEAM_NAME		"Stroggs"
 #define DEFAULT_BLUETEAM_NAME		"Pagans"
@@ -230,11 +230,11 @@ typedef enum {
 	LE_FADE_RGB,
 	LE_SCALE_FADE,
 	LE_SCOREPLUM,
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	LE_KAMIKAZE,
 	LE_INVULIMPACT,
 	LE_INVULJUICED,
-#endif
+//#endif
 	LE_SHOWREFENTITY
 } leType_t;
 
@@ -571,10 +571,10 @@ typedef struct {
 	int				spectatorOffset;										// current offset from start
 	int				spectatorPaintLen; 									// current offset from start
 
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	// skull trails
 	skulltrail_t	skulltrails[MAX_CLIENTS];
-#endif
+//#endif
 
 	// centerprinting
 	int			centerPrintTime;
@@ -619,11 +619,11 @@ typedef struct {
 	qhandle_t	soundPlaying;
 
 	// for voice chat buffer
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	int			voiceChatTime;
 	int			voiceChatBufferIn;
 	int			voiceChatBufferOut;
-#endif
+//#endif
 
 	// warmup countdown
 	int			warmup;
@@ -727,7 +727,7 @@ typedef struct {
 	qhandle_t	blueFlagBaseModel;
 	qhandle_t	neutralFlagBaseModel;
 
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	qhandle_t	overloadBaseModel;
 	qhandle_t	overloadTargetModel;
 	qhandle_t	overloadLightsModel;
@@ -737,7 +737,7 @@ typedef struct {
 	qhandle_t	harvesterRedSkin;
 	qhandle_t	harvesterBlueSkin;
 	qhandle_t	harvesterNeutralModel;
-#endif
+//#endif
 
 	qhandle_t	armorModel;
 	qhandle_t	armorIcon;
@@ -788,10 +788,10 @@ typedef struct {
 	qhandle_t	waterBubbleShader;
 	qhandle_t	bloodTrailShader;
 	qhandle_t	grappleShader;	// leilei - grapple hook
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	qhandle_t	nailPuffShader;
 	qhandle_t	blueProxMine;
-#endif
+//#endif
 
 	qhandle_t	numberShaders[11];
 
@@ -816,10 +816,10 @@ typedef struct {
 	qhandle_t	battleSuitShader;
 	qhandle_t	battleWeaponShader;
 	qhandle_t	hastePuffShader;
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	qhandle_t	redKamikazeShader;
 	qhandle_t	blueKamikazeShader;
-#endif
+//#endif
 
 	// weapon effect models
 	qhandle_t	bulletFlashModel;
@@ -839,7 +839,7 @@ typedef struct {
 	// special effects models
 	qhandle_t	teleportEffectModel;
 	qhandle_t	teleportEffectShader;
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	qhandle_t	kamikazeEffectModel;
 	qhandle_t	kamikazeShockWave;
 	qhandle_t	kamikazeHeadModel;
@@ -854,7 +854,7 @@ typedef struct {
 	qhandle_t	dustPuffShader;
 	qhandle_t	heartShader;
 	qhandle_t	invulnerabilityPowerupModel;
-#endif
+//#endif
 
 	// scoreboard headers
 	qhandle_t	scoreboardName;
@@ -892,7 +892,7 @@ typedef struct {
 	sfxHandle_t	sfx_railg;
 	sfxHandle_t	sfx_rockexp;
 	sfxHandle_t	sfx_plasmaexp;
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	sfxHandle_t	sfx_proxexp;
 	sfxHandle_t	sfx_nghit;
 	sfxHandle_t	sfx_nghitflesh;
@@ -914,7 +914,7 @@ typedef struct {
 	sfxHandle_t	obeliskRespawnSound;
 	sfxHandle_t	winnerSound;
 	sfxHandle_t	loserSound;
-#endif
+//#endif
 	sfxHandle_t	gibSound;
 	sfxHandle_t	gibBounce1Sound;
 	sfxHandle_t	gibBounce2Sound;
@@ -937,10 +937,10 @@ typedef struct {
 
 	sfxHandle_t hitSound;
 	sfxHandle_t hitSounds[4];
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	sfxHandle_t hitSoundHighArmor;
 	sfxHandle_t hitSoundLowArmor;
-#endif
+//#endif
 	sfxHandle_t hitTeamSound;
 	sfxHandle_t impressiveSound;
 	sfxHandle_t excellentSound;
@@ -948,19 +948,19 @@ typedef struct {
 	sfxHandle_t humiliationSound;
 	sfxHandle_t assistSound;
 	sfxHandle_t defendSound;
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	sfxHandle_t firstImpressiveSound;
 	sfxHandle_t firstExcellentSound;
 	sfxHandle_t firstHumiliationSound;
-#endif
+//#endif
 	sfxHandle_t takenLeadSound;
 	sfxHandle_t tiedLeadSound;
 	sfxHandle_t lostLeadSound;
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	sfxHandle_t voteNow;
 	sfxHandle_t votePassed;
 	sfxHandle_t voteFailed;
-#endif
+//#endif
 	sfxHandle_t watrInSound;
 	sfxHandle_t watrOutSound;
 	sfxHandle_t watrUnSound;
@@ -968,9 +968,9 @@ typedef struct {
 	sfxHandle_t flightSound;
 	sfxHandle_t medkitSound;
 
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	sfxHandle_t weaponHoverSound;
-#endif
+//#endif
 
 	// teamplay sounds
 	sfxHandle_t captureAwardSound;
@@ -989,9 +989,9 @@ typedef struct {
 
 	sfxHandle_t redFlagReturnedSound;
 	sfxHandle_t blueFlagReturnedSound;
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	sfxHandle_t neutralFlagReturnedSound;
-#endif
+//#endif
 	sfxHandle_t	enemyTookYourFlagSound;
 	sfxHandle_t	enemyTookTheFlagSound;
 	sfxHandle_t yourTeamTookEnemyFlagSound;
@@ -1007,7 +1007,7 @@ typedef struct {
 	sfxHandle_t	countFightSound;
 	sfxHandle_t	countPrepareSound;
 
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	// new stuff
 	qhandle_t patrolShader;
 	qhandle_t assaultShader;
@@ -1026,7 +1026,7 @@ typedef struct {
 	sfxHandle_t doublerSound;
 	sfxHandle_t guardSound;
 	sfxHandle_t scoutSound;
-#endif
+//#endif
 	qhandle_t cursor;
 
 	sfxHandle_t	regenSound;
@@ -1123,7 +1123,7 @@ typedef struct {
 	int				teamChatPos;
 	int				teamLastChatPos;
 
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	//int cursorX;
 	//int cursorY;
 	qboolean eventHandling;
@@ -1141,7 +1141,7 @@ typedef struct {
 	int acceptTask;
 	int acceptLeader;
 	char acceptVoice[MAX_NAME_LENGTH];
-#endif
+//#endif
 
 	// media
 	cgMedia_t		media;
@@ -1231,9 +1231,9 @@ void CG_MouseEvent( int x, int y );
 void CG_EventHandling( cgame_event_t type );
 void CG_RankRunFrame( void );
 void CG_SetScoreSelection(void *menu);
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 score_t *CG_GetSelectedScore( void );
-#endif
+//#endif
 void CG_BuildSpectatorString( void );
 
 void CG_SetScoreCatcher( qboolean enable );
@@ -1443,14 +1443,14 @@ localEntity_t *CG_SmokePuff( const vec3_t p,
 void CG_BubbleTrail( const vec3_t start, const vec3_t end, float spacing );
 void CG_SpawnEffect( const vec3_t origin );
 
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 void CG_KamikazeEffect( vec3_t org );
 void CG_ObeliskExplode( vec3_t org, int entityNum );
 void CG_ObeliskPain( vec3_t org );
 void CG_InvulnerabilityImpact( vec3_t org, vec3_t angles );
 void CG_InvulnerabilityJuiced( vec3_t org );
 void CG_LightningBoltBeam( vec3_t start, vec3_t end );
-#endif
+//#endif
 void CG_ScorePlum( int client, const vec3_t origin, int score );
 
 void CG_GibPlayer( const vec3_t playerOrigin );
@@ -1496,11 +1496,11 @@ void CG_ParseServerinfo( void );
 void CG_ParseSysteminfo( void );
 void CG_SetConfigValues( void );
 void CG_ShaderStateChanged(void);
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 void CG_LoadVoiceChats( void );
 void CG_VoiceChatLocal( int mode, qboolean voiceOnly, int clientNum, int color, const char *cmd );
 void CG_PlayBufferedVoiceChats( void );
-#endif
+//#endif
 
 //
 // cg_playerstate.c

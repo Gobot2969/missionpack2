@@ -58,11 +58,11 @@
 #define NUM_VISIBLE_TEAMMATES		203
 
 // if running the mission pack
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 
 //#error "running mission pack"
 
-#endif
+//#endif
 
 //item numbers (make sure they are in sync with bg_itemlist in bg_misc.c)
 #define MODELINDEX_ARMORSHARD		1

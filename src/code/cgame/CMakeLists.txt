@@ -48,7 +48,7 @@ foreach(src ${CGAME_SOURCES})
   set(asm_out "${CGAME_VM_DIR}/${name}.asm")
   add_custom_command(
     OUTPUT "${asm_out}"
-    COMMAND "${Q3LCC}" -DQ3_VM -DMISSIONPACK -DCGAME ${Q3_DEBUG_FLAG}
+    COMMAND "${Q3LCC}" -DQ3_VM -DCGAME ${Q3_DEBUG_FLAG}
             -S -Wf-target=bytecode -Wf-g ${Q3_INCLUDE_FLAGS}
             "${src_path}"
     WORKING_DIRECTORY "${CGAME_VM_DIR}"
@@ -88,7 +88,7 @@ foreach(src ${CGAME_SOURCES})
   set(asm_out "${CGAME_VM_DEBUG_DIR}/${name}.asm")
   add_custom_command(
     OUTPUT "${asm_out}"
-    COMMAND "${Q3LCC}" -DQ3_VM -DMISSIONPACK -DCGAME -DDEBUG
+    COMMAND "${Q3LCC}" -DQ3_VM -DCGAME -DDEBUG
             -S -Wf-target=bytecode -Wf-g ${Q3_INCLUDE_FLAGS}
             "${src_path}"
     WORKING_DIRECTORY "${CGAME_VM_DEBUG_DIR}"

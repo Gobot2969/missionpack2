@@ -4,10 +4,10 @@
 // executed by a key binding
 
 #include "cg_local.h"
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 #include "../ui/ui_shared.h"
 extern menuDef_t *menuScoreboard;
-#endif
+//#endif
 
 
 /*
@@ -70,9 +70,9 @@ static void CG_Viewpos_f (void) {
 
 static void CG_ScoresDown_f( void ) {
 
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	CG_BuildSpectatorString();
-#endif
+//#endif
 	if ( cg.scoresRequestTime + 2000 < cg.time && !cg.demoPlayback ) {
 		// the scores are more than two seconds out of data,
 		// so request new ones
@@ -91,9 +91,9 @@ static void CG_ScoresDown_f( void ) {
 		cg.showScores = qtrue;
 	}
 
-#ifndef MISSIONPACK
-	CG_SetScoreCatcher( cg.showScores );
-#endif
+//#ifndef MISSIONPACK
+//	CG_SetScoreCatcher( cg.showScores );
+//#endif
 }
 
 
@@ -109,13 +109,13 @@ static void CG_ScoresUp_f( void ) {
 		cg.scoreFadeTime = cg.time;
 	}
 
-#ifndef MISSIONPACK
-	CG_SetScoreCatcher( cg.showScores );
-#endif
+//#ifndef MISSIONPACK
+//	CG_SetScoreCatcher( cg.showScores );
+//#endif
 }
 
 
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 extern menuDef_t *menuScoreboard;
 void Menu_Reset( void );			// FIXME: add to right include file
 
@@ -130,7 +130,8 @@ static void CG_LoadHud_f( void) {
 	trap_Cvar_VariableStringBuffer("cg_hudFiles", buff, sizeof(buff));
 	hudSet = buff;
 	if (hudSet[0] == '\0') {
-		hudSet = "ui/hud.txt";
+		//hudSet = "ui/mpp.txt";
+		hudSet = "ui/hud.txt"; // ~Dimmskii
 	}
 
 	CG_LoadMenus(hudSet);
@@ -178,7 +179,7 @@ static void CG_spLose_f( void) {
 	CG_CenterPrint("YOU LOSE...", SCREEN_HEIGHT * .30, 0);
 }
 
-#endif
+//#endif
 
 /*
 ==================
@@ -222,7 +223,7 @@ static void CG_TellAttacker_f( void ) {
 }
 
 
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 /*
 ==================
 CG_VoiceTellTarget_f
@@ -428,7 +429,7 @@ static void CG_EditHud_f( void ) {
 }
 */
 
-#endif
+//#endif
 
 /*
 ==================
@@ -494,7 +495,7 @@ static consoleCommand_t	commands[] = {
 	{ "tcmd", CG_TargetCommand_f },
 	{ "tell_target", CG_TellTarget_f },
 	{ "tell_attacker", CG_TellAttacker_f },
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	{ "vtell_target", CG_VoiceTellTarget_f },
 	{ "vtell_attacker", CG_VoiceTellAttacker_f },
 	{ "loadhud", CG_LoadHud_f },
@@ -521,7 +522,7 @@ static consoleCommand_t	commands[] = {
 	{ "spLose", CG_spLose_f },
 	{ "scoresDown", CG_scrollScoresDown_f },
 	{ "scoresUp", CG_scrollScoresUp_f },
-#endif
+//#endif
 	{ "startOrbit", CG_StartOrbit_f },
 	//{ "camera", CG_Camera_f },
 	{ "loaddeferred", CG_LoadDeferredPlayers }	
@@ -576,7 +577,7 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand ("say");
 	trap_AddCommand ("say_team");
 	trap_AddCommand ("tell");
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	trap_AddCommand ("vsay");
 	trap_AddCommand ("vsay_team");
 	trap_AddCommand ("vtell");
@@ -584,7 +585,7 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand ("vosay");
 	trap_AddCommand ("vosay_team");
 	trap_AddCommand ("votell");
-#endif
+//#endif
 	trap_AddCommand ("give");
 	trap_AddCommand ("loaded");
 	trap_AddCommand ("god");

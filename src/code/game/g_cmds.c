@@ -2,9 +2,9 @@
 //
 #include "g_local.h"
 
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 #include "../../ui/menudef.h"			// for the voice chats
-#endif
+//#endif
 
 /*
 ==================
@@ -1200,7 +1200,7 @@ static void Cmd_Tell_f( gentity_t *ent ) {
 	}
 }
 
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 
 static void G_VoiceTo( gentity_t *ent, gentity_t *other, int mode, const char *id, qboolean voiceonly ) {
 	int color;
@@ -1397,7 +1397,7 @@ static void Cmd_VoiceTaunt_f( gentity_t *ent ) {
 	// just say something
 	G_Voice( ent, NULL, SAY_ALL, VOICECHAT_TAUNT, qfalse );
 }
-#endif
+//#endif
 
 
 static char	*gc_orders[] = {
@@ -1991,7 +1991,7 @@ void ClientCommand( int clientNum ) {
 		Cmd_Tell_f ( ent );
 		return;
 	}
-#ifdef MISSIONPACK
+//#ifdef MISSIONPACK
 	if (Q_stricmp (cmd, "vsay") == 0) {
 		Cmd_Voice_f (ent, SAY_ALL, qfalse, qfalse);
 		return;
@@ -2020,7 +2020,7 @@ void ClientCommand( int clientNum ) {
 		Cmd_VoiceTaunt_f ( ent );
 		return;
 	}
-#endif
+//#endif
 	if (Q_stricmp (cmd, "score") == 0) {
 		Cmd_Score_f (ent);
 		return;
