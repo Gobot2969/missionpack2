@@ -1,4 +1,7 @@
 /*.pk3
+/games.log
+/q3config.cfg
+/servercache.dat
 /src/code/cgame/vm
 /src/code/cgame/vm/*.*
 /src/code/game/vm
