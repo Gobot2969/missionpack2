@@ -1728,7 +1728,7 @@ static void CheckExitRules( void ) {
 	}
 	
 // ~Dimmskii
-	if ( (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) && g_roundtime.integer && !level.warmupTime && !level.arenaRoundQueued ) {
+	if ( GT_IsArenaGame(g_gametype.integer) && g_roundtime.integer && !level.warmupTime && !level.arenaRoundQueued ) {
 		if ( level.time - level.startTime >= g_roundtime.integer*1000 ) {
 			G_BroadcastServerCommand( -1, "print \"Round timelimit hit.\n\"");
 			Arena_TimeoutRound();
@@ -1746,7 +1746,7 @@ static void CheckExitRules( void ) {
 	if ( g_timelimit.integer && !level.warmupTime ) {
 		if ( level.time - level.startTime >= g_timelimit.integer*60000 ) {
 // ~Dimmskii
-			if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
+			if ( GT_IsArenaGame(g_gametype.integer) ) {
 				return;
 			}
 // END Dimmskii
@@ -1869,7 +1869,7 @@ static void G_WarmupEnd( void )
 	qboolean isArena = qfalse;
 	
 // ~Dimmskii
-	if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
+	if ( GT_IsArenaGame(g_gametype.integer) ) {
 		isArena = qtrue;
 	}
 // END Dimmskii

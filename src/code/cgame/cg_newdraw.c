@@ -35,7 +35,8 @@ void CG_SetPrintString(int type, const char *p) {
 }
 
 void CG_CheckOrderPending() {
-	if (cgs.gametype < GT_CTF) {
+//	if (cgs.gametype < GT_CTF) {
+	if (!GT_IsFlagGame(cgs.gametype)) { // ~Dimmskii
 		return;
 	}
 	if (cgs.orderPending) {
@@ -808,7 +809,8 @@ static void CG_OneFlagStatus(rectDef_t *rect) {
 static void CG_DrawCTFPowerUp(rectDef_t *rect) {
 	int		value;
 
-	if (cgs.gametype < GT_CTF) {
+//	if (cgs.gametype < GT_CTF) {
+	if (!GT_IsFlagGame(cgs.gametype)) { // ~Dimmskii
 		return;
 	}
 	value = cg.snap->ps.stats[STAT_PERSISTANT_POWERUP];
@@ -1205,9 +1207,9 @@ static void CG_DrawCapFragLimit(rectDef_t *rect, float scale, vec4_t color, qhan
 	//int limit = (cgs.gametype >= GT_CTF) ? cgs.capturelimit : cgs.fraglimit;
 // ~Dimmskii
 	int limit;
-	if (cgs.gametype == GT_ARENA || cgs.gametype == GT_TEAMARENA) {
+	if ( GT_IsArenaGame(cgs.gametype) ) {
 		limit = cgs.winlimit;
-	} else if (cgs.gametype >= GT_CTF) {
+	} else if ( GT_IsFlagGame(cgs.gametype) ) {
 		limit = cgs.capturelimit;
 	} else {
 		limit = cgs.fraglimit;

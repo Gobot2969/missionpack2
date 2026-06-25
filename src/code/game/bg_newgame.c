@@ -17,6 +17,21 @@ qboolean GT_IsTeam( int gt ) {
 
 /*
 ===============
+GT_IsDMGame
+
+Returns whether or not gametype is frag-based. See GT_ enums in bg_public.h
+Should be equivalent of gt <= GT_TEAM
+===============
+*/
+qboolean GT_IsDMGame( int gt ) {
+	if (gt > GT_TEAM) {
+		return qfalse;
+	}
+	return qtrue;
+}
+
+/*
+===============
 GT_IsArenaGame
 
 Returns whether or not gametype is round-based. See GT_ enums in bg_public.h
@@ -43,4 +58,3 @@ qboolean GT_IsFlagGame( int gt ) {
 	}
 	return qtrue;
 }
-

@@ -309,7 +309,8 @@ static qboolean	CG_FindClientModelFile( char *filename, int length, clientInfo_t
 	char *team, *charactersFolder;
 	int i;
 
-	if ( cgs.gametype >= GT_TEAM ) {
+//	if ( cgs.gametype >= GT_TEAM ) {
+	if ( GT_IsTeam(cgs.gametype) ) { // ~Dimmskii
 		switch ( ci->team ) {
 			case TEAM_BLUE: {
 				team = "blue";
@@ -347,7 +348,8 @@ static qboolean	CG_FindClientModelFile( char *filename, int length, clientInfo_t
 			if ( CG_FileExists( filename ) ) {
 				return qtrue;
 			}
-			if ( cgs.gametype >= GT_TEAM ) {
+//			if ( cgs.gametype >= GT_TEAM ) {
+			if ( GT_IsTeam(cgs.gametype) ) { // ~Dimmskii
 				if ( i == 0 && teamName && *teamName ) {
 					//								"models/players/characters/james/stroggs/lower_red.skin"
 					Com_sprintf( filename, length, "models/players/%s%s/%s%s_%s.%s", charactersFolder, modelName, teamName, base, team, ext );
@@ -394,7 +396,8 @@ static qboolean	CG_FindClientHeadFile( char *filename, int length, clientInfo_t 
 	char *team, *headsFolder;
 	int i;
 
-	if ( cgs.gametype >= GT_TEAM ) {
+//	if ( cgs.gametype >= GT_TEAM ) {
+	if ( GT_IsTeam(cgs.gametype) ) { // ~Dimmskii
 		switch ( ci->team ) {
 			case TEAM_RED: {
 				team = "red";
@@ -440,7 +443,8 @@ static qboolean	CG_FindClientHeadFile( char *filename, int length, clientInfo_t 
 			if ( CG_FileExists( filename ) ) {
 				return qtrue;
 			}
-			if ( cgs.gametype >= GT_TEAM ) {
+//			if ( cgs.gametype >= GT_TEAM ) {
+			if ( GT_IsTeam(cgs.gametype) ) { // ~Dimmskii
 				if ( i == 0 &&  teamName && *teamName ) {
 					Com_sprintf( filename, length, "models/players/%s%s/%s%s_%s.%s", headsFolder, headModelName, teamName, base, team, ext );
 				}
@@ -768,7 +772,8 @@ static void CG_LoadClientInfo( clientInfo_t *ci ) {
 	}
 
 //#ifdef MISSIONPACK
-	if( cgs.gametype >= GT_TEAM) {
+//	if( cgs.gametype >= GT_TEAM) {
+	if ( GT_IsTeam(cgs.gametype) ) { // ~Dimmskii
 		if( ci->team == TEAM_BLUE ) {
 			Q_strncpyz(teamname, cg_blueTeamName.string, sizeof(teamname) );
 		} else {
@@ -786,7 +791,8 @@ static void CG_LoadClientInfo( clientInfo_t *ci ) {
 		}
 
 		// fall back to default team name
-		if( cgs.gametype >= GT_TEAM) {
+//		if( cgs.gametype >= GT_TEAM) {
+		if ( GT_IsTeam(cgs.gametype) ) { // ~Dimmskii
 			// keep skin name
 			if( ci->team == TEAM_BLUE ) {
 				Q_strncpyz(teamname, DEFAULT_BLUETEAM_NAME, sizeof(teamname) );
@@ -938,7 +944,8 @@ static void CG_SetDeferredClientInfo( clientInfo_t *ci ) {
 			 Q_stricmp( ci->modelName, match->modelName ) ||
 //			 Q_stricmp( ci->headModelName, match->headModelName ) ||
 //			 Q_stricmp( ci->headSkinName, match->headSkinName ) ||
-			 (cgs.gametype >= GT_TEAM && ci->team != match->team) ) {
+//			 (cgs.gametype >= GT_TEAM && ci->team != match->team) ) {
+			 (GT_IsTeam(cgs.gametype) && ci->team != match->team) ) { // ~Dimmskii
 			continue;
 		}
 		// just load the real info cause it uses the same models and skins

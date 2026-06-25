@@ -193,8 +193,8 @@ qboolean EntityIsDead(aas_entityinfo_t *entinfo) {
 		if (ps.pm_type != PM_NORMAL) return qtrue;
 // ~Dimmskii
 		// dead arena players in follow mode have PM_NORMAL copied from followed player
-		if ( ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA )
-			&& g_entities[entinfo->number].health <= 0 ) return qtrue;
+		if ( GT_IsArenaGame(g_gametype.integer) && g_entities[entinfo->number].health <= 0 )
+			return qtrue;
 // END Dimmskii
 	}
 	return qfalse;
@@ -1634,7 +1634,8 @@ void BotCheckItemPickup(bot_state_t *bs, int *oldinventory) {
 //#ifdef MISSIONPACK
 	int offence, leader;
 
-	if (gametype <= GT_TEAM)
+//	if (gametype <= GT_TEAM)
+	if ( GT_IsDMGame(gametype) ) // ~Dimmskii
 		return;
 
 	offence = -1;
@@ -2222,7 +2223,7 @@ BotAggression
 */
 float BotAggression(bot_state_t *bs) {
 // BEGIN ~DIMMSKII
-	if ( gametype == GT_ARENA || gametype == GT_TEAMARENA ) {
+	if ( GT_IsArenaGame(gametype) ) {
 		return 100; // Always agressive in arena gamemodes
 	}
 // END ~DIMMSKII
@@ -2275,7 +2276,7 @@ BotFeelingBad
 */
 float BotFeelingBad(bot_state_t *bs) {
 // BEGIN ~DIMMSKII
-	if ( gametype == GT_ARENA || gametype == GT_TEAMARENA ) {
+	if ( GT_IsArenaGame(gametype) ) {
 		return 0; // Bots never feel bad in arena gamemodes
 	}
 // END ~DIMMSKII
