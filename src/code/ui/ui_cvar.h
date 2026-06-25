@@ -72,16 +72,23 @@ UI_CVAR( ui_teamName, "ui_teamName", "Pagans", CVAR_ARCHIVE )
 UI_CVAR( ui_opponentName, "ui_opponentName", "Stroggs", CVAR_ARCHIVE )
 //UI_CVAR( ui_redteam, "ui_redteam", "Stroggs", CVAR_ARCHIVE )
 //UI_CVAR( ui_blueteam, "ui_blueteam", "Pagans", CVAR_ARCHIVE )
+// ~Dimmskii
 UI_CVAR( ui_redteam, "ui_redteam", "Red", CVAR_ARCHIVE )
 UI_CVAR( ui_blueteam, "ui_blueteam", "Blue", CVAR_ARCHIVE )
+// END Dimmskii
 UI_CVAR( ui_dedicated, "ui_dedicated", "0", CVAR_ARCHIVE )
 UI_CVAR( ui_gameType, "ui_gametype", "3", CVAR_ARCHIVE )
 UI_CVAR( ui_joinGameType, "ui_joinGametype", "0", CVAR_ARCHIVE )
 UI_CVAR( ui_netGameType, "ui_netGametype", "3", CVAR_ARCHIVE )
 UI_CVAR( ui_actualNetGameType, "ui_actualNetGametype", "3", CVAR_ARCHIVE )
+//UI_CVAR( ui_redteam1, "ui_redteam1", "0", CVAR_ARCHIVE )
+//UI_CVAR( ui_redteam2, "ui_redteam2", "0", CVAR_ARCHIVE )
+//UI_CVAR( ui_redteam3, "ui_redteam3", "0", CVAR_ARCHIVE )
+// ~Dimmskii
 UI_CVAR( ui_redteam1, "ui_redteam1", "7", CVAR_ARCHIVE )
 UI_CVAR( ui_redteam2, "ui_redteam2", "17", CVAR_ARCHIVE )
 UI_CVAR( ui_redteam3, "ui_redteam3", "3", CVAR_ARCHIVE )
+// END Dimmskii
 UI_CVAR( ui_redteam4, "ui_redteam4", "0", CVAR_ARCHIVE )
 UI_CVAR( ui_redteam5, "ui_redteam5", "0", CVAR_ARCHIVE )
 UI_CVAR( ui_blueteam1, "ui_blueteam1", "1", CVAR_ARCHIVE )

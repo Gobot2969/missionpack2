@@ -109,7 +109,7 @@ G_CVAR( g_enableDust, "g_enableDust", "0", CVAR_SERVERINFO, 0, qtrue, qfalse )
 G_CVAR( g_enableBreath, "g_enableBreath", "0", CVAR_SERVERINFO, 0, qtrue, qfalse )
 G_CVAR( g_proxMineTimeout, "g_proxMineTimeout", "20000", 0, 0, qfalse, qfalse )
 
-G_CVAR( g_nailBounce, "g_nailBounce", "1", CVAR_ARCHIVE, 0, qtrue, qtrue )
+G_CVAR( g_nailBounce, "g_nailBounce", "1", CVAR_ARCHIVE, 0, qtrue, qtrue ) // ~Dimmskii
 #endif
 G_CVAR( g_smoothClients, "g_smoothClients", "1", 0, 0, qfalse, qfalse )
 G_CVAR( pmove_fixed, "pmove_fixed", "0", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
@@ -125,9 +125,11 @@ G_CVAR( g_startHealth, "g_startHealth", "0", 0, 0, qfalse, qfalse )
 G_CVAR( g_grapple, "g_grapple", "0", 0, 0, qtrue, qfalse )
 G_CVAR( g_grappleDelayTime, "g_grappleDelayTime", "400", CVAR_SERVERINFO, 0, qtrue, qfalse )
 G_CVAR( g_grappleHoldTime, "g_grappleHoldTime", "0", 0, 0, qtrue, qfalse )
-G_CVAR( g_grappleSpeed, "g_grappleSpeed", "1600", 0, 0, qtrue, qfalse )
+//G_CVAR( g_grappleSpeed, "g_grappleSpeed", "800", 0, 0, qtrue, qfalse )
+G_CVAR( g_grappleSpeed, "g_grappleSpeed", "1600", 0, 0, qtrue, qfalse ) // ~Dimmskii
 G_CVAR( g_grapplePull, "g_grapplePull", "800", CVAR_SERVERINFO, 0, qtrue, qfalse )
-G_CVAR( g_grappleDamage, "g_grappleDamage", "2", 0, 0, qfalse, qfalse )
+//G_CVAR( g_grappleDamage, "g_grappleDamage", "0", 0, 0, qfalse, qfalse )
+G_CVAR( g_grappleDamage, "g_grappleDamage", "2", 0, 0, qfalse, qfalse ) // ~Dimmskii
 
 G_CVAR( g_startAmmoMG, "g_startAmmoMG", "50", 0, 0, qfalse, qfalse )
 G_CVAR( g_startAmmoSG, "g_startAmmoSG", "10", 0, 0, qfalse, qfalse )
@@ -218,6 +220,6 @@ G_CVAR( g_loadCustomEnts, "g_loadCustomEnts", "0", 0, 0, qfalse, qfalse)
 
 G_CVAR( g_rotation, "g_rotation", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
 
-G_CVAR( g_fastWeaponSwitch, "g_fastWeaponSwitch", "0", 0, 0, qfalse, qfalse )
+G_CVAR( g_fastWeaponSwitch, "g_fastWeaponSwitch", "0", 0, 0, qfalse, qfalse ) // ~Dimmskii
 
 #undef G_CVAR

@@ -78,7 +78,8 @@ CG_CVAR( cg_deferPlayers, "cg_deferPlayers", "0", CVAR_ARCHIVE )
 #else
 CG_CVAR( cg_deferPlayers, "cg_deferPlayers", "1", CVAR_ARCHIVE )
 #endif
-CG_CVAR( cg_drawTeamOverlay, "cg_drawTeamOverlay", "1", CVAR_ARCHIVE )
+//CG_CVAR( cg_drawTeamOverlay, "cg_drawTeamOverlay", "0", CVAR_ARCHIVE )
+CG_CVAR( cg_drawTeamOverlay, "cg_drawTeamOverlay", "1", CVAR_ARCHIVE ) // ~Dimmskii
 CG_CVAR( cg_teamOverlayUserinfo, "teamoverlay", "0", CVAR_ROM | CVAR_USERINFO )
 CG_CVAR( cg_stats, "cg_stats", "0", 0 )
 CG_CVAR( cg_drawFriend, "cg_drawFriend", "1", CVAR_ARCHIVE )
@@ -104,7 +105,8 @@ CG_CVAR( cg_singlePlayerActive, "ui_singlePlayerActive", "0", CVAR_USERINFO )
 CG_CVAR( cg_recordSPDemo, "ui_recordSPDemo", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_recordSPDemoName, "ui_recordSPDemoName", "", CVAR_ARCHIVE )
 CG_CVAR( cg_obeliskRespawnDelay, "g_obeliskRespawnDelay", "10", CVAR_SERVERINFO )
-CG_CVAR( cg_hudFiles, "cg_hudFiles", "ui/hud.txt", CVAR_ARCHIVE )
+//CG_CVAR( cg_hudFiles, "cg_hudFiles", "ui/mpp.txt", CVAR_ARCHIVE )
+CG_CVAR( cg_hudFiles, "cg_hudFiles", "ui/hud.txt", CVAR_ARCHIVE ) // ~Dimmskii
 #endif
 CG_CVAR( cg_cameraOrbit, "cg_cameraOrbit", "0", CVAR_CHEAT )
 CG_CVAR( cg_cameraOrbitDelay, "cg_cameraOrbitDelay", "50", CVAR_ARCHIVE )
@@ -124,8 +126,12 @@ CG_CVAR( cg_oldPlasma, "cg_oldPlasma", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_trueLightning, "cg_trueLightning", "0.0", CVAR_ARCHIVE )
 CG_CVAR( cg_kickScale, "cg_kickScale", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_hitSounds, "cg_hitSounds", "0", CVAR_ARCHIVE )
+//CG_CVAR( cg_enemyModel, "cg_enemyModel", "", CVAR_ARCHIVE )
+//CG_CVAR( cg_enemyColors, "cg_enemyColors", "", CVAR_ARCHIVE )
+// ~Dimmskii
 CG_CVAR( cg_enemyModel, "cg_enemyModel", "pm", CVAR_ARCHIVE )
 CG_CVAR( cg_enemyColors, "cg_enemyColors", "222", CVAR_ARCHIVE )
+// END Dimmskii
 CG_CVAR( cg_teamModel, "cg_teamModel", "", CVAR_ARCHIVE )
 CG_CVAR( cg_teamColors, "cg_teamColors", "", CVAR_ARCHIVE )
 CG_CVAR( cg_deadBodyDarken, "cg_deadBodyDarken", "1", CVAR_ARCHIVE )

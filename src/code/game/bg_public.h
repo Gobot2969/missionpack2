@@ -163,7 +163,7 @@ typedef enum {
 #define PMF_FOLLOW			4096	// spectate following another player
 #define PMF_SCOREBOARD		8192	// spectate as a scoreboard
 #define PMF_INVULEXPAND		16384	// invulnerability sphere set to full size
-#define PMF_NOSHOOT			32768	// can't shoot
+#define PMF_NOSHOOT			32768	// can't shoot // ~Dimmskii
 
 #define	PMF_ALL_TIMES	(PMF_TIME_WATERJUMP|PMF_TIME_LAND|PMF_TIME_KNOCKBACK)
 
@@ -197,7 +197,7 @@ typedef struct {
 
 	int			grapplePull;
 	
-	qboolean	fastWeapSwitch;
+	qboolean	fastWeapSwitch; // ~Dimmskii
 
 	// callbacks to test the world
 	// these will be different functions during game and cgame

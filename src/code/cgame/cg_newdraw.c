@@ -1228,6 +1228,7 @@ static void CG_Draw2ndPlace(rectDef_t *rect, float scale, vec4_t color, qhandle_
 	}
 }
 
+// ~Dimmskii
 const char *CG_GetMapName() {
 	const char	*info;
 
@@ -1238,6 +1239,7 @@ const char *CG_GetMapName() {
 static void CG_DrawMapName(rectDef_t *rect, float scale, vec4_t color, qhandle_t shader, int textStyle) {
 	CG_Text_Paint(rect->x, rect->y + rect->h, scale, color, CG_GetMapName(), 0, 0, textStyle);
 }
+// END Dimmskii
 
 const char *CG_GetGameStatusText() {
 	const char *s = "";

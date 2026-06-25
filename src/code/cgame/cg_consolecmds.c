@@ -130,7 +130,8 @@ static void CG_LoadHud_f( void) {
 	trap_Cvar_VariableStringBuffer("cg_hudFiles", buff, sizeof(buff));
 	hudSet = buff;
 	if (hudSet[0] == '\0') {
-		hudSet = "ui/hud.txt";
+		//hudSet = "ui/mpp.txt";
+		hudSet = "ui/hud.txt"; // ~Dimmskii
 	}
 
 	CG_LoadMenus(hudSet);
