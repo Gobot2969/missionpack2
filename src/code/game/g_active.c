@@ -967,7 +967,7 @@ void ClientThink_real( gentity_t *ent ) {
 	
 // ~DIMMSKII
 	// Set fast weapon switch on pmove
-	pm.fastWeapSwitch = ( g_fastWeaponSwitch.integer || g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) ? qtrue : qfalse;
+	pm.fastWeapSwitch = ( g_fastWeaponSwitch.integer ) ? qtrue : qfalse;
 // END DIMMSKII
 
 	VectorCopy( client->ps.origin, client->oldOrigin );
