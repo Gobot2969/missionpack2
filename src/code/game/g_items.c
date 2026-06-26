@@ -1004,7 +1004,7 @@ void G_SpawnItem( gentity_t *ent, gitem_t *item ) {
 	
 // ~Dimmskii
 	// don't spawn items in arena gamemodes
-	if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
+	if ( GT_IsArenaGame(g_gametype.integer) ) {
 		ent->tag = TAG_DONTSPAWN;
 		return;
 	}

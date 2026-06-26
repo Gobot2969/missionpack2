@@ -129,7 +129,7 @@ qboolean Arena_MatchDecided( void ) {
 			}
 		}
 		return qfalse;
-	} else if ( g_gametype.integer == GT_TEAMARENA ) {
+	} else if ( g_gametype.integer == GT_CLAN_ARENA || g_gametype.integer == GT_FREEZE ) {
 		return ( level.teamScores[TEAM_RED] >= g_winlimit.integer || level.teamScores[TEAM_BLUE] >= g_winlimit.integer );
 	}
 
@@ -163,7 +163,7 @@ void Arena_CheckRules( void ) {
 		if ( Team_PlayerCountAlive(TEAM_FREE) < 2 ) {
 			Arena_EndRound( TEAM_FREE ); // The round wins the round
 		}
-	} else if ( g_gametype.integer == GT_TEAMARENA ) {
+	} else if ( g_gametype.integer == GT_CLAN_ARENA || g_gametype.integer == GT_FREEZE ) {
 		// Check if either team has no players remaining ; if so, call Arena_EndRound
 		if ( Team_PlayerCountAlive(TEAM_RED) < 1 ) {
 			Arena_EndRound( TEAM_BLUE ); // Blue wins the round

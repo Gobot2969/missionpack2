@@ -478,7 +478,7 @@ void respawn( gentity_t *ent ) {
 respawnAll
 
 Iterates through every (in-use) client entity and respawns them unless on TEAM_SPECTATOR
-Added mainly for GT_ARENA and GT_TEAMARENA
+Added mainly for GT_ARENA and GT_CLAN_ARENA
 ================
 */
 void respawnAll( void ) {

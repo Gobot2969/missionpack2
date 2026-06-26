@@ -2446,13 +2446,15 @@ static qboolean UI_OwnerDrawVisible(int flags) {
 			flags &= ~UI_SHOW_NOTFAVORITESERVERS;
 		} 
 		if (flags & UI_SHOW_ANYTEAMGAME) {
-			if ( GT_IsDMGame(uiInfo.gameTypes[ui_gameType.integer].gtEnum) ) {
+//			if (uiInfo.gameTypes[ui_gameType.integer].gtEnum <= GT_TEAM ) {
+			if ( GT_IsDMGame(uiInfo.gameTypes[ui_gameType.integer].gtEnum) ) { // ~Dimmskii
 				vis = qfalse;
 			}
 			flags &= ~UI_SHOW_ANYTEAMGAME;
 		} 
 		if (flags & UI_SHOW_ANYNONTEAMGAME) {
-			if ( !GT_IsDMGame(uiInfo.gameTypes[ui_gameType.integer].gtEnum) ) {
+//			if (uiInfo.gameTypes[ui_gameType.integer].gtEnum > GT_TEAM ) {
+			if ( !GT_IsDMGame(uiInfo.gameTypes[ui_gameType.integer].gtEnum) ) { // ~Dimmskii
 				vis = qfalse;
 			}
 			flags &= ~UI_SHOW_ANYNONTEAMGAME;
@@ -2472,13 +2474,13 @@ static qboolean UI_OwnerDrawVisible(int flags) {
 		} */
 // ~Dimmskii
 		if (flags & UI_SHOW_ARENAGAME) {
-			if (uiInfo.gameTypes[ui_gameType.integer].gtEnum != GT_ARENA && uiInfo.gameTypes[ui_gameType.integer].gtEnum != GT_TEAMARENA) {
+			if ( !GT_IsArenaGame(uiInfo.gameTypes[ui_gameType.integer].gtEnum) ) {
 				vis = qfalse;
 			}
 			flags &= ~UI_SHOW_ARENAGAME;
 		} 
 		if (flags & UI_SHOW_NOTARENAGAME) {
-			if (uiInfo.gameTypes[ui_gameType.integer].gtEnum == GT_ARENA || uiInfo.gameTypes[ui_gameType.integer].gtEnum == GT_TEAMARENA) {
+			if ( GT_IsArenaGame(uiInfo.gameTypes[ui_gameType.integer].gtEnum) ) {
 				vis = qfalse;
 			}
 			flags &= ~UI_SHOW_NOTARENAGAME;
@@ -4811,7 +4813,7 @@ static const char *UI_FeederItemText(float feederID, int index, int column, qhan
 			if ( uiInfo.mapList[index].typeBits & (1 << GT_CTF) ) {
 				active = qtrue;
 			}
-		} else if (gametype == GT_ARENA || gametype == GT_TEAMARENA) {
+		} else if ( GT_IsArenaGame(gametype) ) {
 					active = uiInfo.mapList[index].typeBits & (1 << GT_TOURNAMENT ) || uiInfo.mapList[index].typeBits & (1 << GT_FFA );
 // End Dimmskii
 		} else if (gametype == GT_1FCTF || gametype == GT_OBELISK || gametype == GT_HARVESTER ) {

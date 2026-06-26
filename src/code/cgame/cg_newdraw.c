@@ -1283,11 +1283,20 @@ const char *CG_GameTypeString() {
 		return "Harvester";
 	}
 // ~Dimmskii
-	else if ( cgs.gametype == GT_ARENA ) { // Arener
+	else if ( cgs.gametype == GT_ARENA ) {
 		return "Arena";
-	}
-	else if ( cgs.gametype == GT_TEAMARENA ) { // Clan arener
-		return "Team Arena";
+	} else if ( cgs.gametype == GT_TEAMARENA ) {
+		return "Clan Arena";
+	} else if ( cgs.gametype == GT_FREEZE ) {
+		return "Freeze Tag";
+	} else if ( cgs.gametype == GT_DOMINATION ) {
+		return "Domination";
+	} else if ( cgs.gametype == GT_ATTACK_DEFEND ) {
+		return "Attack & Defend";
+	} else if ( cgs.gametype == GT_RED_ROVER ) {
+		return "Red Rover";
+	} else if ( cgs.gametype == GT_TEAMTOURNAMENT ) {
+		return "Team Tournament";
 	}
 // END Dimmskii
 	return "";

@@ -2297,7 +2297,7 @@ static qboolean CG_DrawScoreboard( void ) {
 // As always, TODO: implement some sort of cg isDeadArenaPlayer canned method and/or use a shared method isArenaGame(int gt)
 	if ( cg.showScores || cg.predictedPlayerState.pm_type == PM_INTERMISSION
 		|| ( cg.predictedPlayerState.pm_type == PM_DEAD
-			&& !( ( cgs.gametype == GT_ARENA || cgs.gametype == GT_TEAMARENA )
+			&& !( GT_IsArenaGame(cgs.gametype)
 				&& ( cg.snap->ps.pm_flags & PMF_FOLLOW ) ) ) ) {
 // END Dimmskii
 		fade = 1.0;
@@ -2530,6 +2530,16 @@ static void CG_DrawWarmup( void ) {
 			s = "Arena";
 		} else if ( cgs.gametype == GT_TEAMARENA ) {
 			s = "Clan Arena";
+		} else if ( cgs.gametype == GT_FREEZE ) {
+			s = "Freeze Tag";
+		} else if ( cgs.gametype == GT_DOMINATION ) {
+			s = "Domination";
+		} else if ( cgs.gametype == GT_ATTACK_DEFEND ) {
+			s = "Attack & Defend";
+		} else if ( cgs.gametype == GT_RED_ROVER ) {
+			s = "Red Rover";
+		} else if ( cgs.gametype == GT_TEAMTOURNAMENT ) {
+			s = "Team Tournament";
 //END Dimmskii
 		} else {
 			s = "";

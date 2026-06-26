@@ -290,7 +290,7 @@ void CG_DrawInformation( void ) {
 	y += PROP_HEIGHT;
 		
 // ~Dimmskii
-	if (cgs.gametype != GT_ARENA && cgs.gametype != GT_TEAMARENA && cgs.gametype != GT_FREEZETAG) { // ~Dimmskii // TODO: Shared function isRoundBased(int gt) or something
+	if ( !GT_IsArenaGame(cgs.gametype) ) { // ~Dimmskii
 // END ~Dimmskii
 
 	value = atoi( Info_ValueForKey( info, "timelimit" ) );
@@ -305,7 +305,7 @@ void CG_DrawInformation( void ) {
 // END ~Dimmskii
 
 	//if (cgs.gametype < GT_CTF ) {
-	if (cgs.gametype < GT_TEAMARENA && cgs.gametype != GT_ARENA) { // ~Dimmskii // TODO: Shared function isRoundBased(int gt) or something
+	if ( !GT_IsFlagGame(cgs.gametype) && !GT_IsArenaGame(cgs.gametype) ) { // ~Dimmskii
 		value = atoi( Info_ValueForKey( info, "fraglimit" ) );
 		if ( value ) {
 			UI_DrawProportionalString( 320, y, va( "fraglimit %i", value ),
@@ -325,7 +325,7 @@ void CG_DrawInformation( void ) {
 	}
 	
 // ~Dimmskii
-	if (cgs.gametype == GT_ARENA || cgs.gametype == GT_TEAMARENA || cgs.gametype == GT_FREEZETAG) {
+	if ( GT_IsArenaGame(cgs.gametype) ) {
 
 		value = atoi( Info_ValueForKey( info, "roundtime" ) );
 		if ( value ) {

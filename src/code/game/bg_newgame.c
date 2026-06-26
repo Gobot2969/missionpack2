@@ -38,7 +38,7 @@ Returns whether or not gametype is round-based. See GT_ enums in bg_public.h
 ===============
 */
 qboolean GT_IsArenaGame( int gt ) {
-	if (gt == GT_CLAN_ARENA || gt == GT_ARENA) {
+	if (gt == GT_CLAN_ARENA || gt == GT_ARENA || gt == GT_FREEZE) { // GT_FREEZE should behave identically to Clan Arena; in that case, we might just flip on the g_freeze cvar upon detecting it. QL reverse-compat.
 		return qtrue;
 	}
 	return qfalse;

@@ -281,7 +281,7 @@ void G_RegisterWeapon(void) {
 	int wpflags = g_wpflags.integer;
 	
  // ~Dimmskii
-	if (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) {
+	if ( GT_IsArenaGame(g_gametype.integer) ) {
 		wpflags = g_arenaWpflags.integer;
 	}
 // END Dimmskii
@@ -337,7 +337,7 @@ static int getAmmoValue( const char *cvarSuffix ) {
 	int ammo = 0;
 	const char	*cvarPrefix;
 	
-	if (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) {
+	if ( GT_IsArenaGame(g_gametype.integer) ) {
 		cvarPrefix = "g_arenaAmmo";
 	} else {
 		cvarPrefix = "g_startAmmo";
@@ -423,7 +423,7 @@ void G_SpawnWeapon ( gclient_t *client ) {
 	client->ps.ammo[ WP_MACHINEGUN ] = getAmmoValue ( "MG" );
 		
 
-	if (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) {
+	if ( GT_IsArenaGame(g_gametype.integer) ) {
 		wpflags = g_arenaWpflags.integer;
 	}
 
@@ -1813,12 +1813,12 @@ static void CheckExitRules_old( void ) { // ~Dimmskii
 	}
 	
 	// Don't check any more fraglimit or capture limit stuff in Arena gametypes
-	if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
+	if ( GT_IsArenaGame(g_gametype.integer) ) {
 		return;
 	}
 // END Dimmskii
 
-	if ( g_gametype.integer < GT_CTF && g_fraglimit.integer ) {
+	if ( !GT_IsFlagGame(g_gametype.integer) && g_fraglimit.integer ) {
 		if ( level.teamScores[TEAM_RED] >= g_fraglimit.integer ) {
 			G_BroadcastServerCommand( -1, "print \"Red hit the fraglimit.\n\"" );
 			LogExit( "Fraglimit hit." );
@@ -2500,7 +2500,7 @@ static void G_RunFrame( int levelTime ) {
 */
 	
 // ~Dimmskii
-	if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
+	if ( GT_IsArenaGame(g_gametype.integer) ) {
 		// see if Clan arena is
 		Arena_CheckRules();
 	} else {
