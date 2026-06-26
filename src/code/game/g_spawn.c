@@ -430,9 +430,6 @@ void G_SpawnGEntityFromSpawnVars( void ) {
 	gentity_t	*ent;
 	char		*s, *value, *gametypeName;
 //	static char *gametypeNames[] = {"ffa", "tournament", "single", "team", "ctf", "oneflag", "obelisk", "harvester", "teamtournament"};
-// ~Dimmskii
-	static char *gametypeNames[] = {"ffa", "tournament", "single", "arena", "team", "teamarena", "ft", "ctf", "oneflag", "obelisk", "harvester", "teamtournament"};
-// END Dimmskii
 
 	// get the next free entity
 	ent = G_Spawn();
@@ -451,7 +448,7 @@ void G_SpawnGEntityFromSpawnVars( void ) {
 	}
 	// check for "notteam" flag (GT_FFA, GT_TOURNAMENT, GT_SINGLE_PLAYER)
 //	if ( g_gametype.integer >= GT_TEAM ) {
-	if ( GT_IsTeam(g_gametype.integer) && !GT_IsArenaGame(g_gametype.integer) ) { // ~Dimmskii -- and don't limit CA/LMS spawns while we're at it
+	if ( GT_IsTeam(g_gametype.integer) ) { // ~Dimmskii
 		G_SpawnInt( "notteam", "0", &i );
 		if ( i ) {
 			G_FreeEntity( ent );
