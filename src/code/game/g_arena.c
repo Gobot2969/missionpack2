@@ -61,6 +61,7 @@ void Arena_EndRound( team_t winningTeam ) {
 			CalculateRanks(); // Make sure FFA arena scoreboard is sorted immediately
 			if ( g_winlimit.integer ) {
 				if ( clientEntWon->client->ps.persistant[PERS_ROUNDWINS] >= g_winlimit.integer ) {
+					level.arenaRoundQueued = level.time; // Stops CheckExitRules from re-triggering the round timeout every frame
 					return; // Round enqueue after winning preventative measure
 				}
 			}
@@ -69,6 +70,7 @@ void Arena_EndRound( team_t winningTeam ) {
 	
 	if ( g_winlimit.integer ) {
 		if ( level.teamScores[TEAM_RED] >= g_winlimit.integer || level.teamScores[TEAM_BLUE] >= g_winlimit.integer ) {
+			level.arenaRoundQueued = level.time; // Stops CheckExitRules from re-triggering the round timeout every frame
 			return; // Round enqueue after winning preventative measure
 		}
 	}
@@ -95,6 +97,45 @@ void Arena_TimeoutRound( void ) {
 	Arena_EndRound( TEAM_FREE ); // FFA Arena and undecided Team Arena round end
 }
 
+/*
+=============
+Arena_MatchDecided
+
+True once a side/player has already reached g_winlimit. Lets callers in the
+round-timeout path know the match outcome is final so they don't keep
+re-triggering round-end logic (and re-broadcasting/re-scoring) while waiting
+for CheckExitRules to queue the intermission.
+=============
+*/
+qboolean Arena_MatchDecided( void ) {
+	if ( !g_winlimit.integer ) {
+		return qfalse;
+	}
+
+	if ( g_gametype.integer == GT_ARENA ) {
+		int			i;
+		gclient_t	*cl;
+
+		for ( i = 0 ; i < level.maxclients ; i++ ) {
+			cl = level.clients + i;
+			if ( cl->pers.connected != CON_CONNECTED ) {
+				continue;
+			}
+			if ( cl->sess.sessionTeam != TEAM_FREE ) {
+				continue;
+			}
+			if ( cl->ps.persistant[PERS_ROUNDWINS] >= g_winlimit.integer ) {
+				return qtrue;
+			}
+		}
+		return qfalse;
+	} else if ( g_gametype.integer == GT_TEAMARENA ) {
+		return ( level.teamScores[TEAM_RED] >= g_winlimit.integer || level.teamScores[TEAM_BLUE] >= g_winlimit.integer );
+	}
+
+	return qfalse;
+}
+
 void Arena_CheckRules( void ) {
 	if ( level.warmupTime || level.intermissiontime || level.intermissionQueued ) {
 		return;
@@ -106,6 +147,11 @@ void Arena_CheckRules( void ) {
 	
 	if ( level.arenaRoundQueued ) {
 		if ( level.time - level.arenaRoundQueued >= ARENA_ROUND_DELAY_TIME ) {
+			// Don't spin up a new round once the match is already decided;
+			// CheckExitRules will queue the intermission shortly.
+			if ( Arena_MatchDecided() ) {
+				return;
+			}
 			level.arenaRoundQueued = 0;
 			Arena_BeginRound();
 		}

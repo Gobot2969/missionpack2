@@ -1385,6 +1385,8 @@ void CheckTeamStatus( void ) {
 	// team position relay
     if ( g_teamVisibility.integer ) {
 		if (level.time - level.lastTeamPositionTime > TEAM_POSITION_UPDATE_TIME) {
+			level.lastTeamPositionTime = level.time;
+			
 			for ( i = 0; i < level.maxclients; i++ ) {
 				ent = g_entities + i;
 

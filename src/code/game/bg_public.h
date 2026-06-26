@@ -590,7 +590,7 @@ typedef enum {
 #define TEAM_LOCATION_UPDATE_TIME		500	// ~Dimmskii
 
 // ~DIMMSKII
-#define TEAM_POSITION_UPDATE_TIME		250		// Time between team position updates (when g_teamVisibility is enabled)
+#define TEAM_POSITION_UPDATE_TIME		100		// Time between team position updates (when g_teamVisibility is enabled)
 #define ITEM_POSITION_UPDATE_TIME		1000	// Time between item POI msgs
 
 // Item position types

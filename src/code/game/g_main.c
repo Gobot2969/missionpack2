@@ -1695,7 +1695,26 @@ and the time everyone is moved to the intermission spot, so you
 can see the last frag.
 =================
 */
-static void CheckExitRules( void ) {
+// ~Dimmskii - Recursion safeguard. Because let's just allow calls however from wherever I'm done without natives and a way to stack trace these trivial things
+static void CheckExitRules( void ) {                                                                                                                                                                                                         
+	static qboolean inCheckExitRules = qfalse;                                                                                                                                                                                                
+	
+	// CalculateRanks() calls back into CheckExitRules(), and Arena_EndRound() calls                                                                                                                                                          
+	// CalculateRanks() before it finishes updating round/match state. Without this guard,                                                                                                                                                    
+	// a single round-timeout recurses through Arena_TimeoutRound -> Arena_EndRound ->                                                                                                                                                        
+	// CalculateRanks -> CheckExitRules repeatedly within the same frame, scoring once per                                                                                                                                                    
+	// recursion level instead of once per real round. Crusty but effective.                                                                                                                                                                                        
+	if ( inCheckExitRules ) {                                                                                                                                                                                                                 
+		return;                                                                                                                                                                                                                                
+	}                                                                                                                                                                                                                                         
+	inCheckExitRules = qtrue;                                                                                                                                                                                                                 
+	CheckExitRules_old();                                                                                                                                                                                                                    
+	inCheckExitRules = qfalse;                                                                                                                                                                                                                
+}   
+// END Dimmskii
+
+//static void CheckExitRules( void ) {
+static void CheckExitRules_old( void ) { // ~Dimmskii
  	int			i;
 	gclient_t	*cl;
 
@@ -1723,7 +1742,7 @@ static void CheckExitRules( void ) {
 	}
 	
 // ~Dimmskii
-	if ( (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) && g_roundtime.integer && !level.warmupTime && !level.arenaRoundQueued ) {
+	if ( (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) && g_roundtime.integer && !level.warmupTime && !level.arenaRoundQueued && !Arena_MatchDecided() ) {
 		if ( level.time - level.startTime >= g_roundtime.integer*1000 ) {
 			G_BroadcastServerCommand( -1, "print \"Round timelimit hit.\n\"");
 			Arena_TimeoutRound();
