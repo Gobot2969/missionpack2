@@ -1247,7 +1247,8 @@ static void CG_DrawMapName(rectDef_t *rect, float scale, vec4_t color, qhandle_t
 
 const char *CG_GetGameStatusText() {
 	const char *s = "";
-	if ( cgs.gametype < GT_TEAM) {
+//	if ( cgs.gametype < GT_TEAM) {
+	if ( !GT_IsTeam(cgs.gametype) ) { // ~Dimmskii
 		if (cg.snap->ps.persistant[PERS_TEAM] != TEAM_SPECTATOR ) {
 			s = va("%s place with %i",CG_PlaceString( cg.snap->ps.persistant[PERS_RANK] + 1 ),cg.snap->ps.persistant[PERS_SCORE] );
 		}

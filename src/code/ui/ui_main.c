@@ -4818,7 +4818,8 @@ static const char *UI_FeederItemText(float feederID, int index, int column, qhan
 			active = uiInfo.mapList[index].typeBits & (1 << gametype);
 		} else if (gametype == GT_TOURNAMENT ) {
 			active = uiInfo.mapList[index].typeBits & (1 << GT_TOURNAMENT ) || uiInfo.mapList[index].typeBits & (1 << GT_FFA );
-		} else if (gametype <= GT_TEAM ) {
+//		} else if (gametype <= GT_TEAM ) {
+		} else if ( GT_IsDMGame(gametype) ) { // ~Dimmskii
 			active = uiInfo.mapList[index].typeBits & (1 << GT_FFA);
 		}
 		

@@ -648,7 +648,9 @@ typedef struct {
 
 // bg_newgame.c
 qboolean GT_IsTeam( int gt );
-qboolean GT_IsArena( int gt );
+qboolean GT_IsDMGame( int gt );
+qboolean GT_IsArenaGame( int gt );
+qboolean GT_IsFlagGame( int gt );
 
 // END DIMMSKII
 

@@ -905,7 +905,8 @@ static qboolean CG_ScanForExistingClientInfo( clientInfo_t *ci ) {
 			&& !Q_stricmp( ci->headSkinName, match->headSkinName ) 
 			//&& !Q_stricmp( ci->blueTeam, match->blueTeam ) 
 			//&& !Q_stricmp( ci->redTeam, match->redTeam )
-			&& (cgs.gametype < GT_TEAM || ci->team == match->team) ) {
+//			&& (cgs.gametype < GT_TEAM || ci->team == match->team) ) {
+			&& (!GT_IsTeam(cgs.gametype) || ci->team == match->team) ) { // ~Dimmskii
 			// this clientinfo is identical, so use it's handles
 
 			ci->deferred = qfalse;
@@ -1254,7 +1255,8 @@ void CG_NewClientInfo( int clientNum ) {
 	}
 
 	allowNativeModel = qfalse;
-	if ( cgs.gametype < GT_TEAM ) {
+//	if ( cgs.gametype < GT_TEAM ) {
+	if ( !GT_IsTeam(cgs.gametype) ) { // ~Dimmskii
 		if ( !cg.snap || ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_FREE && cg.snap->ps.clientNum == clientNum ) ) {
 			if ( cg.demoPlayback || ( cg.snap && cg.snap->ps.pm_flags & PMF_FOLLOW ) ) {
 				allowNativeModel = qtrue;
