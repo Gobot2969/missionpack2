@@ -133,6 +133,16 @@ typedef enum {
 #define GT_FREEZETAG	GT_FREEZE		// Old UA temporary compat
 
 #define GT_MAX_TEAM	GT_TEAMTOURNAMENT
+
+
+// QL Factory cvars
+static const char *CVARS_FACTORY[] = {
+    "g_gametype",           // GT_ enum Gametype
+    "fraglimit",
+    "timelimit",
+    NULL                    // Null-terminator for safe iteration loops
+};
+
 // END DIMMSKII
 
 typedef enum { GENDER_MALE, GENDER_FEMALE, GENDER_NEUTER } gender_t;
