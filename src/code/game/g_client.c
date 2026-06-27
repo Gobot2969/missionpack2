@@ -1205,14 +1205,18 @@ void ClientSpawn(gentity_t *ent) {
 	} else {
 		client->ps.stats[STAT_WEAPONS] = ( 1 << WP_MACHINEGUN );
 		if ( g_gametype.integer == GT_TEAM ) {
-			if ( g_startAmmoMG.integer ) {
-				client->ps.ammo[WP_MACHINEGUN] = g_startAmmoMG.integer;
+			//if ( g_startAmmoMG.integer ) {
+				//client->ps.ammo[WP_MACHINEGUN] = g_startAmmoMG.integer;
+			if ( g_startingAmmo_mg.integer ) { // ~Dimmskii
+				client->ps.ammo[WP_MACHINEGUN] = g_startingAmmo_mg.integer; // ~Dimmskii
 			} else {
 				client->ps.ammo[WP_MACHINEGUN] = 50;
 			}			
 		} else {
-			if ( g_startAmmoMG.integer ) {
-				client->ps.ammo[WP_MACHINEGUN] = g_startAmmoMG.integer;
+			//if ( g_startAmmoMG.integer ) {
+				//client->ps.ammo[WP_MACHINEGUN] = g_startAmmoMG.integer;
+			if ( g_startingAmmo_mg.integer ) { // ~Dimmskii
+				client->ps.ammo[WP_MACHINEGUN] = g_startingAmmo_mg.integer; // ~Dimmskii
 			} else {
 				client->ps.ammo[WP_MACHINEGUN] = 100;
 			}			
