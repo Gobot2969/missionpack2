@@ -1210,7 +1210,7 @@ static void CG_DrawCapFragLimit(rectDef_t *rect, float scale, vec4_t color, qhan
 // ~Dimmskii
 	int limit;
 	if ( GT_IsArenaGame(cgs.gametype) ) {
-		limit = cgs.winlimit;
+		limit = cgs.roundlimit;
 	} else if ( GT_IsFlagGame(cgs.gametype) ) {
 		limit = cgs.capturelimit;
 	} else {

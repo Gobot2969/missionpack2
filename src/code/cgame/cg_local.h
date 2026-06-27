@@ -1075,7 +1075,7 @@ typedef struct {
 	int				fraglimit;
 	int				capturelimit;
 // ~Dimmskii
-	int				winlimit;
+	int				roundlimit;
 	int				g_teamVisibility;
 	int				g_itemVisibility;
 // END ~Dimmskii

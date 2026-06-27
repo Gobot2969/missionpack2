@@ -1780,7 +1780,7 @@ static void CheckExitRules_old( void ) { // ~Dimmskii
 	}
 	
 // ~Dimmskii
-	if ( g_gametype.integer == GT_ARENA && g_winlimit.integer ) {
+	if ( g_gametype.integer == GT_ARENA && g_roundlimit.integer ) {
 		for ( i = 0 ; i < level.maxclients ; i++ ) {
 			cl = level.clients + i;
 			if ( cl->pers.connected != CON_CONNECTED ) {
@@ -1790,24 +1790,24 @@ static void CheckExitRules_old( void ) { // ~Dimmskii
 				continue;
 			}
 
-			if ( cl->ps.persistant[PERS_ROUNDWINS] >= g_winlimit.integer ) {
-				LogExit( "Winlimit hit." );
-				G_BroadcastServerCommand( -1, va("print \"%s" S_COLOR_WHITE " hit the winlimit.\n\"",
+			if ( cl->ps.persistant[PERS_ROUNDWINS] >= g_roundlimit.integer ) {
+				LogExit( "Roundlimit hit." );
+				G_BroadcastServerCommand( -1, va("print \"%s" S_COLOR_WHITE " hit the roundlimit.\n\"",
 					cl->pers.netname ) );
 				return;
 			}
 		}
-	} else if ( g_gametype.integer == GT_TEAMARENA && g_winlimit.integer ) {
+	} else if ( g_gametype.integer == GT_TEAMARENA && g_roundlimit.integer ) {
 
-		if ( level.teamScores[TEAM_RED] >= g_winlimit.integer ) {
-			G_BroadcastServerCommand( -1, "print \"Red hit the winlimit.\n\"" );
-			LogExit( "Winlimit hit." );
+		if ( level.teamScores[TEAM_RED] >= g_roundlimit.integer ) {
+			G_BroadcastServerCommand( -1, "print \"Red hit the roundlimit.\n\"" );
+			LogExit( "Roundlimit hit." );
 			return;
 		}
 
-		if ( level.teamScores[TEAM_BLUE] >= g_winlimit.integer ) {
-			G_BroadcastServerCommand( -1, "print \"Blue hit the winlimit.\n\"" );
-			LogExit( "Winlimit hit." );
+		if ( level.teamScores[TEAM_BLUE] >= g_roundlimit.integer ) {
+			G_BroadcastServerCommand( -1, "print \"Blue hit the roundlimit.\n\"" );
+			LogExit( "Roundlimit hit." );
 			return;
 		}
 	}

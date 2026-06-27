@@ -441,7 +441,7 @@ itemDef {
 	group grpsettings
 	type ITEM_TYPE_NUMERICFIELD
 	text "Round Limit:"
-	cvar "winlimit"
+	cvar "roundlimit"
       	rect 260 70 128 12 
       	textalign ITEM_ALIGN_RIGHT
       	textalignx 65

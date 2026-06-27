@@ -334,9 +334,9 @@ void CG_DrawInformation( void ) {
 			y += PROP_HEIGHT;
 		}
 
-		value = atoi( Info_ValueForKey( info, "winlimit" ) );
+		value = atoi( Info_ValueForKey( info, "roundlimit" ) );
 		if ( value ) {
-			UI_DrawProportionalString( 320, y, va( "winlimit %i", value ),
+			UI_DrawProportionalString( 320, y, va( "roundlimit %i", value ),
 				UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, colorWhite );
 			y += PROP_HEIGHT;
 		}
