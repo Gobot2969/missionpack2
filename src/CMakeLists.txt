@@ -30,7 +30,7 @@ else()
   set(Q3_DEBUG_FLAG "")
 endif()
 
-set(Q3_VERSION "060" CACHE STRING "Mod version digits, matches release.bat's VERSION")
+set(Q3_VERSION "061" CACHE STRING "Mod version digits, matches release.bat's VERSION")
 
 add_subdirectory(code/game)
 add_subdirectory(code/cgame)

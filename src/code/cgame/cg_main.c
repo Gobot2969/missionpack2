@@ -429,7 +429,8 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.countPrepareTeamSound = trap_S_RegisterSound( "sound/feedback/prepare_team.wav", qtrue );
 //#endif
 
-	if ( cgs.gametype >= GT_TEAM || cg_buildScript.integer ) {
+//	if ( cgs.gametype >= GT_TEAM || cg_buildScript.integer ) {
+	if ( GT_IsTeam(cgs.gametype) || cg_buildScript.integer ) { // ~Dimmskii
 
 		cgs.media.captureAwardSound = trap_S_RegisterSound( "sound/teamplay/flagcapture_yourteam.wav", qtrue );
 		cgs.media.redLeadsSound = trap_S_RegisterSound( "sound/feedback/redleads.wav", qtrue );
@@ -826,7 +827,8 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.dustPuffShader = trap_R_RegisterShader("hasteSmokePuff" );
 //#endif
 
-	if ( cgs.gametype >= GT_TEAM || cg_buildScript.integer ) {
+//	if ( cgs.gametype >= GT_TEAM || cg_buildScript.integer ) {
+	if ( GT_IsTeam(cgs.gametype) || cg_buildScript.integer ) { // ~Dimmskii
 		cgs.media.friendShader = trap_R_RegisterShader( "sprites/foe" );
 		cgs.media.redQuadShader = trap_R_RegisterShader("powerups/blueflag" );
 		cgs.media.teamStatusBar = trap_R_RegisterShader( "gfx/2d/colorbar.tga" );
@@ -1461,7 +1463,8 @@ void CG_SetScoreSelection(void *p) {
 		return;
 	}
 
-	if ( cgs.gametype >= GT_TEAM ) {
+//	if ( cgs.gametype >= GT_TEAM ) {
+	if ( GT_IsTeam(cgs.gametype) ) { // ~Dimmskii
 		int feeder = FEEDER_REDTEAM_LIST;
 		i = red;
 		if (cg.scores[cg.selectedScore].team == TEAM_BLUE) {
@@ -1477,7 +1480,8 @@ void CG_SetScoreSelection(void *p) {
 // FIXME: might need to cache this info
 static clientInfo_t * CG_InfoFromScoreIndex(int index, int team, int *scoreIndex) {
 	int i, count;
-	if ( cgs.gametype >= GT_TEAM ) {
+//	if ( cgs.gametype >= GT_TEAM ) {
+	if ( GT_IsTeam(cgs.gametype) ) { // ~Dimmskii
 		count = 0;
 		for (i = 0; i < cg.numScores; i++) {
 			if (cg.scores[i].team == team) {
@@ -1589,7 +1593,8 @@ static qhandle_t CG_FeederItemImage(float feederID, int index) {
 }
 
 static void CG_FeederSelection(float feederID, int index) {
-	if ( cgs.gametype >= GT_TEAM ) {
+//	if ( cgs.gametype >= GT_TEAM ) {
+	if ( GT_IsTeam(cgs.gametype) ) { // ~Dimmskii
 		int i, count;
 		int team = (feederID == FEEDER_REDTEAM_LIST) ? TEAM_RED : TEAM_BLUE;
 		count = 0;

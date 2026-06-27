@@ -281,7 +281,7 @@ void G_RegisterWeapon(void) {
 	int wpflags = g_wpflags.integer;
 	
  // ~Dimmskii
-	if (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) {
+	if ( GT_IsArenaGame(g_gametype.integer) ) {
 		wpflags = g_arenaWpflags.integer;
 	}
 // END Dimmskii
@@ -337,11 +337,7 @@ static int getAmmoValue( const char *cvarSuffix ) {
 	int ammo = 0;
 	const char	*cvarPrefix;
 	
-	if (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) {
-		cvarPrefix = "g_arenaAmmo";
-	} else {
-		cvarPrefix = "g_startAmmo";
-	}
+	cvarPrefix = "g_startingAmmo_";
 	
 	ammo = trap_Cvar_VariableIntegerValue( va("%s%s", cvarPrefix, cvarSuffix) );
 	if (ammo < 0)
@@ -420,10 +416,10 @@ void G_SpawnWeapon ( gclient_t *client ) {
 void G_SpawnWeapon ( gclient_t *client ) {
 	int wpflags = g_wpflags.integer;
 	
-	client->ps.ammo[ WP_MACHINEGUN ] = getAmmoValue ( "MG" );
+	client->ps.ammo[ WP_MACHINEGUN ] = getAmmoValue ( "mg" );
 		
 
-	if (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) {
+	if ( GT_IsArenaGame(g_gametype.integer) ) {
 		wpflags = g_arenaWpflags.integer;
 	}
 
@@ -438,49 +434,49 @@ void G_SpawnWeapon ( gclient_t *client ) {
 		}
 		if ( wpflags & 2 ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_SHOTGUN;
-			client->ps.ammo[ WP_SHOTGUN ] = getAmmoValue ( "SG" );
+			client->ps.ammo[ WP_SHOTGUN ] = getAmmoValue ( "sg" );
 		}
 		if ( wpflags & 4 ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_GRENADE_LAUNCHER;
-			client->ps.ammo[ WP_GRENADE_LAUNCHER ] = getAmmoValue ( "GL" );
+			client->ps.ammo[ WP_GRENADE_LAUNCHER ] = getAmmoValue ( "gl" );
 		}
 		if ( wpflags & 8 ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_ROCKET_LAUNCHER;
-			client->ps.ammo[ WP_ROCKET_LAUNCHER ] = getAmmoValue ( "RL" );
+			client->ps.ammo[ WP_ROCKET_LAUNCHER ] = getAmmoValue ( "rl" );
 		}
 		if ( wpflags & 16 ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_LIGHTNING;
-			client->ps.ammo[ WP_LIGHTNING ] = getAmmoValue ( "LG" );
+			client->ps.ammo[ WP_LIGHTNING ] = getAmmoValue ( "lg" );
 		}
 		if ( wpflags & 32 ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_RAILGUN;
-			client->ps.ammo[ WP_RAILGUN ] = getAmmoValue ( "RG" );
+			client->ps.ammo[ WP_RAILGUN ] = getAmmoValue ( "rg" );
 		}
 		if ( wpflags & 64 ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_PLASMAGUN;
-			client->ps.ammo[ WP_PLASMAGUN ] = getAmmoValue ( "PG" );
+			client->ps.ammo[ WP_PLASMAGUN ] = getAmmoValue ( "pg" );
 		}
 		if ( wpflags & 128 ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_BFG;
-			client->ps.ammo[ WP_BFG ] = getAmmoValue ( "BFG" );
+			client->ps.ammo[ WP_BFG ] = getAmmoValue ( "bfg" );
 		}
 //#ifdef MISSIONPACK
 		if ( wpflags & 256 ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_NAILGUN;
-			client->ps.ammo[ WP_NAILGUN ] = getAmmoValue ( "NG" );
+			client->ps.ammo[ WP_NAILGUN ] = getAmmoValue ( "ng" );
 		}
 		if ( wpflags & 512 ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_PROX_LAUNCHER;
-			client->ps.ammo[ WP_PROX_LAUNCHER ] = getAmmoValue ( "PL" );
+			client->ps.ammo[ WP_PROX_LAUNCHER ] = getAmmoValue ( "pl" );
 		}
 		if ( wpflags & 1024 ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_CHAINGUN;
-			client->ps.ammo[ WP_CHAINGUN ] = getAmmoValue ( "CG" );
+			client->ps.ammo[ WP_CHAINGUN ] = getAmmoValue ( "cg" );
 		}
 //#endif
 		if ( wpflags & 2048 ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_HMG;
-			client->ps.ammo[ WP_HMG ] = getAmmoValue ( "HMG" );
+			client->ps.ammo[ WP_HMG ] = getAmmoValue ( "hmg" );
 		}
 		if ( g_grapple.integer > 0 ) {
 			client->ps.stats[ STAT_WEAPONS ] |= 1 << WP_GRAPPLING_HOOK;
@@ -824,7 +820,8 @@ static void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	G_FindTeams();
 
 	// make sure we have flags for CTF, etc
-	if( g_gametype.integer >= GT_TEAM ) {
+//	if( g_gametype.integer >= GT_TEAM ) {
+	if( GT_IsTeam(g_gametype.integer) ) { // ~Dimmskii
 		G_CheckTeamItems();
 	}
 
@@ -1180,7 +1177,8 @@ void CalculateRanks( void ) {
 		sizeof(level.sortedClients[0]), SortRanks );
 
 	// set the rank value for all clients that are connected and not spectators
-	if ( g_gametype.integer >= GT_TEAM ) {
+//	if ( g_gametype.integer >= GT_TEAM ) {
+	if ( GT_IsTeam(g_gametype.integer) ) { // ~Dimmskii
 		// in team games, rank is just the order of the teams, 0=red, 1=blue, 2=tied
 		for ( i = 0;  i < level.numConnectedClients; i++ ) {
 			cl = &level.clients[ level.sortedClients[i] ];
@@ -1215,7 +1213,8 @@ void CalculateRanks( void ) {
 	}
 
 	// set the CS_SCORES1/2 configstrings, which will be visible to everyone
-	if ( g_gametype.integer >= GT_TEAM ) {
+//	if ( g_gametype.integer >= GT_TEAM ) {
+	if ( GT_IsTeam(g_gametype.integer) ) { // ~Dimmskii
 		trap_SetConfigstring( CS_SCORES1, va("%i", level.teamScores[TEAM_RED] ) );
 		trap_SetConfigstring( CS_SCORES2, va("%i", level.teamScores[TEAM_BLUE] ) );
 	} else {
@@ -1528,7 +1527,8 @@ void LogExit( const char *string ) {
 		numSorted = 32;
 	}
 
-	if ( g_gametype.integer >= GT_TEAM ) {
+//	if ( g_gametype.integer >= GT_TEAM ) {
+	if ( GT_IsTeam(g_gametype.integer) ) { // ~Dimmskii
 		G_LogPrintf( "red:%i  blue:%i\n",
 			level.teamScores[TEAM_RED], level.teamScores[TEAM_BLUE] );
 	}
@@ -1675,7 +1675,8 @@ static qboolean ScoreIsTied( void ) {
 		return qfalse;
 	}
 	
-	if ( g_gametype.integer >= GT_TEAM ) {
+//	if ( g_gametype.integer >= GT_TEAM ) {	
+	if ( GT_IsTeam(g_gametype.integer) ) { // ~Dimmskii
 		return level.teamScores[TEAM_RED] == level.teamScores[TEAM_BLUE];
 	}
 
@@ -1742,7 +1743,7 @@ static void CheckExitRules_old( void ) { // ~Dimmskii
 	}
 	
 // ~Dimmskii
-	if ( (g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA) && g_roundtime.integer && !level.warmupTime && !level.arenaRoundQueued && !Arena_MatchDecided() ) {
+	if ( GT_IsArenaGame(g_gametype.integer) && g_roundtime.integer && !level.warmupTime && !level.arenaRoundQueued && !Arena_MatchDecided() ) {
 		if ( level.time - level.startTime >= g_roundtime.integer*1000 ) {
 			G_BroadcastServerCommand( -1, "print \"Round timelimit hit.\n\"");
 			Arena_TimeoutRound();
@@ -1760,7 +1761,7 @@ static void CheckExitRules_old( void ) { // ~Dimmskii
 	if ( g_timelimit.integer && !level.warmupTime ) {
 		if ( level.time - level.startTime >= g_timelimit.integer*60000 ) {
 // ~Dimmskii
-			if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
+			if ( GT_IsArenaGame(g_gametype.integer) ) {
 				return;
 			}
 // END Dimmskii
@@ -1775,7 +1776,7 @@ static void CheckExitRules_old( void ) { // ~Dimmskii
 	}
 	
 // ~Dimmskii
-	if ( g_gametype.integer == GT_ARENA && g_winlimit.integer ) {
+	if ( g_gametype.integer == GT_ARENA && g_roundlimit.integer ) {
 		for ( i = 0 ; i < level.maxclients ; i++ ) {
 			cl = level.clients + i;
 			if ( cl->pers.connected != CON_CONNECTED ) {
@@ -1785,35 +1786,35 @@ static void CheckExitRules_old( void ) { // ~Dimmskii
 				continue;
 			}
 
-			if ( cl->ps.persistant[PERS_ROUNDWINS] >= g_winlimit.integer ) {
-				LogExit( "Winlimit hit." );
-				G_BroadcastServerCommand( -1, va("print \"%s" S_COLOR_WHITE " hit the winlimit.\n\"",
+			if ( cl->ps.persistant[PERS_ROUNDWINS] >= g_roundlimit.integer ) {
+				LogExit( "Roundlimit hit." );
+				G_BroadcastServerCommand( -1, va("print \"%s" S_COLOR_WHITE " hit the roundlimit.\n\"",
 					cl->pers.netname ) );
 				return;
 			}
 		}
-	} else if ( g_gametype.integer == GT_TEAMARENA && g_winlimit.integer ) {
+	} else if ( g_gametype.integer == GT_TEAMARENA && g_roundlimit.integer ) {
 
-		if ( level.teamScores[TEAM_RED] >= g_winlimit.integer ) {
-			G_BroadcastServerCommand( -1, "print \"Red hit the winlimit.\n\"" );
-			LogExit( "Winlimit hit." );
+		if ( level.teamScores[TEAM_RED] >= g_roundlimit.integer ) {
+			G_BroadcastServerCommand( -1, "print \"Red hit the roundlimit.\n\"" );
+			LogExit( "Roundlimit hit." );
 			return;
 		}
 
-		if ( level.teamScores[TEAM_BLUE] >= g_winlimit.integer ) {
-			G_BroadcastServerCommand( -1, "print \"Blue hit the winlimit.\n\"" );
-			LogExit( "Winlimit hit." );
+		if ( level.teamScores[TEAM_BLUE] >= g_roundlimit.integer ) {
+			G_BroadcastServerCommand( -1, "print \"Blue hit the roundlimit.\n\"" );
+			LogExit( "Roundlimit hit." );
 			return;
 		}
 	}
 	
 	// Don't check any more fraglimit or capture limit stuff in Arena gametypes
-	if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
+	if ( GT_IsArenaGame(g_gametype.integer) ) {
 		return;
 	}
 // END Dimmskii
 
-	if ( g_gametype.integer < GT_CTF && g_fraglimit.integer ) {
+	if ( !GT_IsFlagGame(g_gametype.integer) && g_fraglimit.integer ) {
 		if ( level.teamScores[TEAM_RED] >= g_fraglimit.integer ) {
 			G_BroadcastServerCommand( -1, "print \"Red hit the fraglimit.\n\"" );
 			LogExit( "Fraglimit hit." );
@@ -1883,7 +1884,7 @@ static void G_WarmupEnd( void )
 	qboolean isArena = qfalse;
 	
 // ~Dimmskii
-	if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
+	if ( GT_IsArenaGame(g_gametype.integer) ) {
 		isArena = qtrue;
 	}
 // END Dimmskii
@@ -2083,7 +2084,8 @@ static void CheckTournament( void ) {
 		int		counts[TEAM_NUM_TEAMS];
 		qboolean	notEnough = qfalse;
 
-		if ( g_gametype.integer >= GT_TEAM ) {
+//		if ( g_gametype.integer >= GT_TEAM ) {
+		if ( GT_IsTeam(g_gametype.integer) ) { // ~Dimmskii
 			counts[TEAM_BLUE] = TeamConnectedCount( -1, TEAM_BLUE );
 			counts[TEAM_RED] = TeamConnectedCount( -1, TEAM_RED );
 
@@ -2494,7 +2496,7 @@ static void G_RunFrame( int levelTime ) {
 */
 	
 // ~Dimmskii
-	if ( g_gametype.integer == GT_ARENA || g_gametype.integer == GT_TEAMARENA ) {
+	if ( GT_IsArenaGame(g_gametype.integer) ) {
 		// see if Clan arena is
 		Arena_CheckRules();
 	} else {

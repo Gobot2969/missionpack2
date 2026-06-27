@@ -186,7 +186,7 @@ void CG_ParseServerinfo( void ) {
 	cgs.fraglimit = atoi( Info_ValueForKey( info, "fraglimit" ) );
 	cgs.capturelimit = atoi( Info_ValueForKey( info, "capturelimit" ) );
 // ~Dimmskii
-	cgs.winlimit = atoi( Info_ValueForKey( info, "winlimit" ) );
+	cgs.roundlimit = atoi( Info_ValueForKey( info, "roundlimit" ) );
 	cgs.g_teamVisibility = atoi( Info_ValueForKey( info, "g_teamVisibility" ) );
 	cgs.g_itemVisibility = atoi( Info_ValueForKey( info, "g_itemVisibility" ) );
 // END ~Dimmskii

@@ -776,6 +776,7 @@ void Hook_Fire( gentity_t *ent );
 
 // ~DIMMSKII
 	#include "g_arena.h" // arena/team arena specific stuff
+	#include "g_newgame.h"
 //END ~DIMMSKII
 
 extern	level_locals_t	level;

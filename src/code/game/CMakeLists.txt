@@ -16,10 +16,12 @@ set(GAME_SOURCES
   ai_vcmd.c
   bg_lib.c
   bg_misc.c
+  bg_newgame.c
   bg_pmove.c
   bg_slidemove.c
   g_active.c
   g_arena.c
+  g_newgame.c
   g_arenas.c
   g_bot.c
   g_client.c
