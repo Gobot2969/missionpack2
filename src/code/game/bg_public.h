@@ -103,20 +103,94 @@ typedef enum {
 // ~DIMMSKII
 typedef enum {
 	GT_FFA,				// free for all
-	GT_TOURNAMENT,		// one on one tournament
-	GT_SINGLE_PLAYER,	// single player ffa
-	GT_ARENA,			// free for all arena AKA clanless arena AKA last man standing
+	GT_TOURNAMENT,	// one on one tournament
+	GT_SINGLE_PLAYER,	// race replaces the original single player slot
+
+	//-- team games go after this --
+
 	GT_TEAM,			// team deathmatch
-	GT_TEAMARENA,		// team arena AKA clan arena AKA team last man standing
-	GT_FREEZETAG,		// freeze tag
-//#ifdef MISSIONPACK
+	GT_CLAN_ARENA,	// clan arena
 	GT_CTF,				// capture the flag
-	GT_1FCTF,			// one flag ctf
-	GT_OBELISK,			// overload
-	GT_HARVESTER,		// harvester
-//#endif
+	GT_1FCTF,
+	GT_OBELISK,
+	GT_HARVESTER,
+	GT_FREEZE,
+	GT_DOMINATION,
+	GT_ATTACK_DEFEND,
+	GT_RED_ROVER,
+	GT_TEAMTOURNAMENT,
+
+	//-- team games go before this --
+	
+	GT_ARENA,
 	GT_MAX_GAME_TYPE
 } gametype_t;
+
+// Quake Live repurposes the single-player slot for Race.
+#define GT_RACE			GT_SINGLE_PLAYER
+#define GT_CA			GT_CLAN_ARENA
+#define GT_TEAMARENA	GT_CLAN_ARENA	// Old UA temporary compat
+#define GT_FREEZETAG	GT_FREEZE		// Old UA temporary compat
+
+#define GT_MAX_TEAM	GT_TEAMTOURNAMENT
+
+
+// QL Factory cvars
+static const char *GFACTORY_CVARS[] = {
+	// General gameplay params
+    "g_gametype",           // GT_ enum Gametype
+    "fraglimit",
+    "timelimit",
+	"roundlimit",
+	"capturelimit",
+	"g_warmup",
+	"dmflags",
+	"g_instagib",
+//	"g_fastWeaponSwitch", // exists in ql?
+	
+	// Starting things
+	"g_startingHealth",
+	"g_startingHealthBonus",
+	"g_startingArmor",
+	
+	// Weapon and loadout related
+	"g_startingWeapons",
+	
+	// Starting ammo
+	"g_startingAmmo_mg",
+	"g_startingAmmo_sg",
+	"g_startingAmmo_gl",
+	"g_startingAmmo_rl",
+	"g_startingAmmo_lg",
+	"g_startingAmmo_rg",
+	"g_startingAmmo_pg",
+	"g_startingAmmo_bfg",
+	"g_startingAmmo_ng",
+	"g_startingAmmo_pl",
+	"g_startingAmmo_cg",
+	"g_startingAmmo_hmg",
+    NULL                    // Null-terminator for safe iteration loops
+};
+
+#define GFACTORY_MAX_CVAR_VALUE_LEN 64
+#define GFACTORY_CVARS_COUNT       24 /* Total elements in GFACTORY_CVARS excluding NULL */
+
+// QL-Compatible game factories
+typedef struct {
+	const char		*id;
+	char			*title;
+	char			*author;
+	char			*description;
+
+	// Indexed the same as GFACTORY_CVARS. NULL means this factory does not
+	// set that cvar (left at whatever value it already had); non-NULL
+	// points at a null-terminated value string.
+	char			*cvar_values[GFACTORY_CVARS_COUNT];
+
+} gfactory_t;
+
+#define MAX_FACTORIES 32 // factories.txt currently ships ~22 entries
+
 // END DIMMSKII
 
 typedef enum { GENDER_MALE, GENDER_FEMALE, GENDER_NEUTER } gender_t;
@@ -627,6 +701,14 @@ typedef struct {
     const char *classname;      // entity classname to match
     int type;                   // itemPosType_t value
 } itemPositionType_t;
+
+
+
+// bg_newgame.c
+qboolean GT_IsTeam( int gt );
+qboolean GT_IsDMGame( int gt );
+qboolean GT_IsArenaGame( int gt );
+qboolean GT_IsFlagGame( int gt );
 
 // END DIMMSKII
 

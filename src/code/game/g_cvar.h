@@ -18,6 +18,7 @@ G_CVAR( g_mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM, 0, qfalse, qfalse 
 G_CVAR( sv_fps, "sv_fps", "30", CVAR_ARCHIVE, 0, qfalse, qfalse )
 
 // latched vars
+G_CVAR( g_factory, "g_factory", "ffa", CVAR_SERVERINFO | CVAR_USERINFO | CVAR_LATCH, 0, qfalse, qfalse ) // ~Dimmskii
 G_CVAR( g_gametype, "g_gametype", "0", CVAR_SERVERINFO | CVAR_USERINFO | CVAR_LATCH, 0, qfalse, qfalse )
 
 G_CVAR( g_maxclients, "sv_maxclients", "8", CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE, 0, qfalse, qfalse ) // allow this many total, including spectators
@@ -30,7 +31,7 @@ G_CVAR( g_timelimit, "timelimit", "0", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NOR
 G_CVAR( g_capturelimit, "capturelimit", "8", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue, qfalse )
 
 // ~DIMMSKII
-G_CVAR( g_winlimit, "winlimit", "10", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue, qfalse )
+G_CVAR( g_roundlimit, "roundlimit", "10", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue, qfalse )
 G_CVAR( g_roundtime, "roundtime", "300", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue, qfalse )
 
 G_CVAR( g_teamVisibility, "g_teamVisibility", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )
@@ -119,10 +120,15 @@ G_CVAR( g_railJump, "g_railJump", "0", CVAR_ARCHIVE, 0, qtrue, qtrue )
 G_CVAR( g_railJumpDamage, "g_railJumpDamage", "100", CVAR_ARCHIVE, 0, qtrue, qtrue )
 G_CVAR( g_noSelfDamage, "g_noSelfDamage", "0", CVAR_ARCHIVE, 0, qtrue,qtrue )
 
-G_CVAR( g_startArmor, "g_startArmor", "0", 0, 0, qfalse, qfalse )
-G_CVAR( g_startHealth, "g_startHealth", "0", 0, 0, qfalse, qfalse )
+//G_CVAR( g_startArmor, "g_startArmor", "0", 0, 0, qfalse, qfalse )
+//G_CVAR( g_startHealth, "g_startHealth", "0", 0, 0, qfalse, qfalse )
 
-G_CVAR( g_grapple, "g_grapple", "0", 0, 0, qtrue, qfalse )
+G_CVAR( g_startingArmor, "g_startingArmor", "0", 0, 0, qfalse, qfalse ) // ~Dimmskii - QL Factory compatible
+G_CVAR( g_startingHealth, "g_startingHealth", "0", 0, 0, qfalse, qfalse ) // ~Dimmskii - QL Factory compatible
+G_CVAR( g_startingHealthBonus, "g_startingHealthBonus", "0", 0, 0, qfalse, qfalse ) // ~Dimmskii - QL Factory compatible
+
+//G_CVAR( g_grapple, "g_grapple", "0", 0, 0, qtrue, qfalse )
+G_CVAR( g_grapple, "g_grapple", "0", CVAR_ROM, 0, qtrue, qfalse ) // ~Dimmskii - now symbolic. Auto-sets based on the flipping of bit 512 in ql factory cvar g_startingWeapons
 G_CVAR( g_grappleDelayTime, "g_grappleDelayTime", "400", CVAR_SERVERINFO, 0, qtrue, qfalse )
 G_CVAR( g_grappleHoldTime, "g_grappleHoldTime", "0", 0, 0, qtrue, qfalse )
 //G_CVAR( g_grappleSpeed, "g_grappleSpeed", "800", 0, 0, qtrue, qfalse )
@@ -131,6 +137,7 @@ G_CVAR( g_grapplePull, "g_grapplePull", "800", CVAR_SERVERINFO, 0, qtrue, qfalse
 //G_CVAR( g_grappleDamage, "g_grappleDamage", "0", 0, 0, qfalse, qfalse )
 G_CVAR( g_grappleDamage, "g_grappleDamage", "2", 0, 0, qfalse, qfalse ) // ~Dimmskii
 
+/*
 G_CVAR( g_startAmmoMG, "g_startAmmoMG", "50", 0, 0, qfalse, qfalse )
 G_CVAR( g_startAmmoSG, "g_startAmmoSG", "10", 0, 0, qfalse, qfalse )
 G_CVAR( g_startAmmoGL, "g_startAmmoGL", "5", 0, 0, qfalse, qfalse )
@@ -139,6 +146,7 @@ G_CVAR( g_startAmmoLG, "g_startAmmoLG", "60", 0, 0, qfalse, qfalse )
 G_CVAR( g_startAmmoRG, "g_startAmmoRG", "10", 0, 0, qfalse, qfalse )
 G_CVAR( g_startAmmoPG, "g_startAmmoPG", "30", 0, 0, qfalse, qfalse )
 G_CVAR( g_startAmmoBFG, "g_startAmmoBFG", "15", 0, 0, qfalse, qfalse )
+*/
 
 G_CVAR( g_damageG, "g_damageG", "50", 0, 0, qfalse, qfalse )
 
@@ -171,9 +179,9 @@ G_CVAR( g_splashDamageBFG, "g_splashDamageBFG", "100", 0, 0, qfalse, qfalse )
 G_CVAR( g_splashRadiusBFG, "g_splashRadiusBFG", "120", 0, 0, qfalse, qfalse )
 
 //#ifdef MISSIONPACK
-G_CVAR( g_startAmmoNG, "g_startAmmoNG", "20", 0, 0, qfalse, qfalse )
-G_CVAR( g_startAmmoPL, "g_startAmmoPL", "10", 0, 0, qfalse, qfalse )
-G_CVAR( g_startAmmoCG, "g_startAmmoCG", "100", 0, 0, qfalse, qfalse )
+//G_CVAR( g_startAmmoNG, "g_startAmmoNG", "20", 0, 0, qfalse, qfalse )
+//G_CVAR( g_startAmmoPL, "g_startAmmoPL", "10", 0, 0, qfalse, qfalse )
+//G_CVAR( g_startAmmoCG, "g_startAmmoCG", "100", 0, 0, qfalse, qfalse )
 
 G_CVAR( g_damageNG, "g_damageNG", "20", 0, 0, qfalse, qfalse )
 G_CVAR( g_damagePL, "g_damagePL", "100", 0, 0, qfalse, qfalse )
@@ -182,28 +190,22 @@ G_CVAR( g_damageCG, "g_damageCG", "7", 0, 0, qfalse, qfalse )
 //#endif
 
 // ~Dimmskii
-G_CVAR( g_startAmmoHMG, "g_startAmmoHMG", "50", 0, 0, qfalse, qfalse ) // TODO: what is QL HMG starting ammo? ~Dimmskii
 G_CVAR( g_damageHMG, "g_damageHMG", "8", 0, 0, qfalse, qfalse )
 
-G_CVAR( g_arenaArmor, "g_arenaArmor", "100", 0, 0, qfalse, qfalse )
-G_CVAR( g_arenaHealth, "g_arenaHealth", "200", 0, 0, qfalse, qfalse )
+G_CVAR( g_startingAmmo_mg, "g_startingAmmo_mg", "50", 0, 0, qfalse, qfalse )
+G_CVAR( g_startingAmmo_sg, "g_startingAmmo_sg", "10", 0, 0, qfalse, qfalse )
+G_CVAR( g_startingAmmo_gl, "g_startingAmmo_gl", "5", 0, 0, qfalse, qfalse )
+G_CVAR( g_startingAmmo_rl, "g_startingAmmo_rl", "5", 0, 0, qfalse, qfalse )
+G_CVAR( g_startingAmmo_lg, "g_startingAmmo_lg", "60", 0, 0, qfalse, qfalse )
+G_CVAR( g_startingAmmo_rg, "g_startingAmmo_rg", "10", 0, 0, qfalse, qfalse )
+G_CVAR( g_startingAmmo_pg, "g_startingAmmo_pg", "30", 0, 0, qfalse, qfalse )
+G_CVAR( g_startingAmmo_bfg, "g_startingAmmo_bfg", "15", 0, 0, qfalse, qfalse )
+G_CVAR( g_startingAmmo_ng, "g_startingAmmo_ng", "20", 0, 0, qfalse, qfalse )
+G_CVAR( g_startingAmmo_pl, "g_startingAmmo_pl", "10", 0, 0, qfalse, qfalse )
+G_CVAR( g_startingAmmo_cg, "g_startingAmmo_cg", "100", 0, 0, qfalse, qfalse )
+G_CVAR( g_startingAmmo_hmg, "g_startingAmmo_hmg", "50", 0, 0, qfalse, qfalse )
 
-G_CVAR( g_arenaAmmoMG, "g_arenaAmmoMG", "100", 0, 0, qfalse, qfalse )
-G_CVAR( g_arenaAmmoSG, "g_arenaAmmoSG", "50", 0, 0, qfalse, qfalse )
-G_CVAR( g_arenaAmmoGL, "g_arenaAmmoGL", "50", 0, 0, qfalse, qfalse )
-G_CVAR( g_arenaAmmoRL, "g_arenaAmmoRL", "50", 0, 0, qfalse, qfalse )
-G_CVAR( g_arenaAmmoLG, "g_arenaAmmoLG", "150", 0, 0, qfalse, qfalse )
-G_CVAR( g_arenaAmmoRG, "g_arenaAmmoRG", "30", 0, 0, qfalse, qfalse )
-G_CVAR( g_arenaAmmoPG, "g_arenaAmmoPG", "100", 0, 0, qfalse, qfalse )
-G_CVAR( g_arenaAmmoBFG, "g_arenaAmmoBFG", "5", 0, 0, qfalse, qfalse )
-//#ifdef MISSIONPACK
-G_CVAR( g_arenaAmmoNG, "g_arenaAmmoNG", "40", 0, 0, qfalse, qfalse )
-G_CVAR( g_arenaAmmoPL, "g_arenaAmmoPL", "5", 0, 0, qfalse, qfalse )
-G_CVAR( g_arenaAmmoCG, "g_arenaAmmoCG", "100", 0, 0, qfalse, qfalse )
-//#endif
-G_CVAR( g_arenaAmmoHMG, "g_arenaAmmoHMG", "150", 0, 150, qfalse, qfalse )
-
-G_CVAR( g_arenaWpflags, "arenaWpflags", "2175", 0, 0, qfalse, qfalse )
+G_CVAR( g_startingWeapons, "g_startingWeapons", "3", 0, 0, qfalse, qfalse )
 // END Dimmskii
 
 G_CVAR( g_tossWeapon, "g_tossWeapon", "1", CVAR_ARCHIVE, 0, qtrue, qtrue )
@@ -213,7 +215,7 @@ G_CVAR( g_removeammo, "removeammo", "0", 0, 0, qfalse, qfalse )
 G_CVAR( g_removeitem, "removeitem", "0", 0, 0, qfalse, qfalse )
 G_CVAR( g_removepowerup, "removepowerup", "0", 0, 0, qfalse, qfalse )
 G_CVAR( g_removeweapon, "removeweapon", "0", 0, 0, qfalse, qfalse )
-G_CVAR( g_wpflags, "wpflags", "0", 0, 0, qfalse, qfalse )
+//G_CVAR( g_wpflags, "wpflags", "0", 0, 0, qfalse, qfalse )
 
 G_CVAR( g_1FRespawn, "g_1FRespawn", "0", 0, 0, qfalse, qfalse)
 G_CVAR( g_loadCustomEnts, "g_loadCustomEnts", "0", 0, 0, qfalse, qfalse)
