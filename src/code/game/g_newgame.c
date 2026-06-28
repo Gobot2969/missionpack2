@@ -53,6 +53,26 @@ const char *const s_gametypeSpawnNames[GT_MAX_GAME_TYPE][MAX_GAMETYPE_NAME_ALIAS
 
 /*
 =================
+G_GametypeFromSpawnName
+
+Reverse lookup of s_gametypeSpawnNames - returns the GT_ enum whose alias
+list contains name (case-insensitive), or -1 if nothing matches.
+=================
+*/
+static int G_GametypeFromSpawnName( const char *name ) {
+	int gt, a;
+	for ( gt = 0; gt < GT_MAX_GAME_TYPE; gt++ ) {
+		for ( a = 0; a < MAX_GAMETYPE_NAME_ALIASES; a++ ) {
+			if ( s_gametypeSpawnNames[gt][a] && !Q_stricmp( s_gametypeSpawnNames[gt][a], name ) ) {
+				return gt;
+			}
+		}
+	}
+	return -1;
+}
+
+/*
+=================
 G_FactoryCvarIndex
 
 Returns the index of cvarName in GFACTORY_CVARS, or -1 if it isn't one of
@@ -220,6 +240,7 @@ void ParseFactories( const char *json, int len ) {
 	for ( i = 1; i < num_toks; i++ ) {
 		gfactory_t *factory;
 		int j;
+		char basegt[GFACTORY_MAX_CVAR_VALUE_LEN];
 
 		// Only care about objects directly inside the root array
 		if ( tokens[i].parent != 0 || tokens[i].type != JSON_OBJECT ) {
@@ -232,6 +253,7 @@ void ParseFactories( const char *json, int len ) {
 			break;
 		}
 
+		basegt[0] = '\0';
 		factory = &g_factories[g_numFactories];
 		factory->id = g_factoryIdStorage[g_numFactories];
 		factory->title = g_factoryTitleStorage[g_numFactories];
@@ -292,9 +314,33 @@ void ParseFactories( const char *json, int len ) {
 
 					k++; // skip the value token on the next iteration
 				}
+			} else if ( JSON_ValueEquals( json, &tokens[j], "basegt" ) ) {
+				G_CopyJsonToken( basegt, sizeof( basegt ), json, &tokens[valIdx] );
 			}
-			// "basegt" and any other unrecognized fields are intentionally
-			// ignored for now.
+			// any other unrecognized fields are intentionally ignored for now.
+		}
+
+		// QL reverse-compat shim: a factory whose "basegt" is itself (e.g.
+		// id "ca", basegt "ca") is, by happenstance, a base/canonical
+		// gametype rather than a derived variant (practice, instagib,
+		// vampiric, ...) - naively presume basegt names the same gametype
+		// s_gametypeSpawnNames already knows and force the GT_ enum into
+		// this factory's g_gametype slot, unless its own "cvars" already
+		// set one explicitly.
+		if ( basegt[0] && !Q_stricmp( g_factoryIdStorage[g_numFactories], basegt ) ) {
+			int gtCvarIdx = G_FactoryCvarIndex( "g_gametype" );
+			if ( gtCvarIdx >= 0 && factory->cvar_values[gtCvarIdx] == NULL ) {
+				int gt = G_GametypeFromSpawnName( basegt );
+				if ( gt >= 0 ) {
+					Com_sprintf( g_factoryCvarStorage[g_numFactories][gtCvarIdx],
+					             GFACTORY_MAX_CVAR_VALUE_LEN, "%d", gt );
+					factory->cvar_values[gtCvarIdx] = g_factoryCvarStorage[g_numFactories][gtCvarIdx];
+				} else {
+					Com_Printf( "ParseFactories: self-referencing factory '%s' has no "
+					            "s_gametypeSpawnNames alias for basegt '%s', leaving "
+					            "g_gametype unset.\n", factory->id, basegt );
+				}
+			}
 		}
 
 		g_numFactories++;
