@@ -172,10 +172,15 @@ typedef struct {
 	char			*title;
 	char			*author;
 	char			*description;
-	
-	char        cvar_values[GFACTORY_CVARS_COUNT][GFACTORY_MAX_CVAR_VALUE_LEN];
+
+	// Indexed the same as GFACTORY_CVARS. NULL means this factory does not
+	// set that cvar (left at whatever value it already had); non-NULL
+	// points at a null-terminated value string.
+	char			*cvar_values[GFACTORY_CVARS_COUNT];
 
 } gfactory_t;
+
+#define MAX_FACTORIES 32 // factories.txt currently ships ~22 entries
 
 // END DIMMSKII
 

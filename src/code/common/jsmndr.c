@@ -76,12 +76,37 @@ int jsmndr_parse(jsmndr_parser *parser, const char *js, size_t len, jsmndrtok_t 
                 jsmndr_fill_token(tok, JSON_STRING, start, parser->pos);
                 if (parser->toksuper != -1) tokens[parser->toksuper].size++;
                 break;
-            /* Primitives (numbers, booleans, null) logic goes here */
+            case '\t': case '\r': case '\n': case ' ': case ',': case ':':
+                break;
             default:
+                /* Primitive: number, true, false, or null - runs until a
+                   structural/whitespace delimiter. Reuses the func-local
+                   'start'/'c' from the string-token case above. */
+                start = parser->pos;
+                for (; parser->pos < len && js[parser->pos] != '\0'; parser->pos++) {
+                    c = js[parser->pos];
+                    if (c == '\t' || c == '\r' || c == '\n' || c == ' ' ||
+                        c == ',' || c == ']' || c == '}' || c == ':') {
+                        break;
+                    }
+                }
+                if (tokens != NULL) {
+                    tok = jsmndr_alloc_token(parser, tokens, num_tokens);
+                    if (tok == NULL) return -1;
+                    jsmndr_fill_token(tok, JSON_PRIMITIVE, start, parser->pos);
+                    if (parser->toksuper != -1) tokens[parser->toksuper].size++;
+                }
+                parser->pos--; /* outer for-loop's pos++ lands back on the delimiter */
                 break;
         }
     }
-    return count;
+    /* count only tallies '{'/'[' opens, not string/primitive tokens - it
+       undercounts real usage. When actually filling tokens (the only mode
+       this codebase uses), parser->toknext is the true number of tokens
+       written and is what callers need to know how far to iterate. Keep
+       returning count for the tokens==NULL dry-run case to preserve its
+       original (still partial) counting behavior. */
+    return tokens != NULL ? (int)parser->toknext : count;
 }
 
 qboolean JSON_ValueEquals(const char *json, jsmndrtok_t *tok, const char *s) {
