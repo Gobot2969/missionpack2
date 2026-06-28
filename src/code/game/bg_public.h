@@ -136,12 +136,46 @@ typedef enum {
 
 
 // QL Factory cvars
-static const char *CVARS_FACTORY[] = {
+static const char *GFACTORY_CVARS[] = {
+	// General gameplay params
     "g_gametype",           // GT_ enum Gametype
     "fraglimit",
     "timelimit",
+	"roundlimit",
+	"capturelimit",
+	"g_warmup",
+//	"g_fastWeaponSwitch", // exists in ql?
+	
+	
+	// Starting ammo
+	"g_startingAmmo_mg",
+	"g_startingAmmo_sg",
+	"g_startingAmmo_gl",
+	"g_startingAmmo_rl",
+	"g_startingAmmo_lg",
+	"g_startingAmmo_rg",
+	"g_startingAmmo_pg",
+	"g_startingAmmo_bfg",
+	"g_startingAmmo_ng",
+	"g_startingAmmo_pl",
+	"g_startingAmmo_cg",
+	"g_startingAmmo_hmg",
     NULL                    // Null-terminator for safe iteration loops
 };
+
+#define GFACTORY_MAX_CVAR_VALUE_LEN 64
+#define GFACTORY_CVARS_COUNT       18 /* Total elements in GFACTORY_CVARS excluding NULL */
+
+// QL-Compatible game factories
+typedef struct {
+	const char		*id;
+	char			*title;
+	char			*author;
+	char			*description;
+	
+	char        cvar_values[GFACTORY_CVARS_COUNT][GFACTORY_MAX_CVAR_VALUE_LEN];
+
+} gfactory_t;
 
 // END DIMMSKII
 

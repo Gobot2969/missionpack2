@@ -741,6 +741,8 @@ static void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	}
 
 	srand( randomSeed );
+	
+	G_LoadFactories(); // ~Dimmskii
 
 	G_RegisterCvars();
 
