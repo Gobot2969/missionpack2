@@ -71,6 +71,23 @@ static int G_FactoryCvarIndex( const char *cvarName ) {
 
 /*
 =================
+G_FindFactoryById
+
+Returns the parsed factory whose "id" matches (case-insensitive), or NULL.
+=================
+*/
+static gfactory_t *G_FindFactoryById( const char *id ) {
+	int i;
+	for ( i = 0; i < g_numFactories; i++ ) {
+		if ( !Q_stricmp( g_factories[i].id, id ) ) {
+			return &g_factories[i];
+		}
+	}
+	return NULL;
+}
+
+/*
+=================
 G_CopyJsonToken
 
 Copies a JSON token's text out of the parse buffer into dst, truncating to
@@ -148,11 +165,22 @@ void G_LoadFactories( void ) {
 
 	Com_Printf( "G_LoadFactories: %d factories loaded.\n", g_numFactories );
 
-	// TODO: real factory selection (by id, via a cvar, whatever the server
-	// wants to boot into). For now just apply the first one parsed so the
-	// cvar-setting path actually runs end to end.
+	// g_factory is CVAR_LATCH - like g_gametype, a change only takes effect
+	// on the next map init, which is exactly when this function runs. Force
+	// the register here (ahead of G_RegisterCvars(), which runs after us)
+	// so g_factory.string is actually populated with either the engine's
+	// already-set value (server.cfg/+set) or the "ffa" default - reading it
+	// before any registration would just see an empty, unregistered cvar.
+	trap_Cvar_Register( &g_factory, "g_factory", "ffa", CVAR_SERVERINFO | CVAR_USERINFO | CVAR_LATCH );
+
 	if ( g_numFactories > 0 ) {
-		G_ApplyFactory( &g_factories[0] );
+		gfactory_t *selected = G_FindFactoryById( g_factory.string );
+		if ( !selected ) {
+			Com_Printf( "G_LoadFactories: g_factory '%s' not found, defaulting to '%s'.\n",
+			            g_factory.string, g_factories[0].id );
+			selected = &g_factories[0];
+		}
+		G_ApplyFactory( selected );
 	}
 }
 
