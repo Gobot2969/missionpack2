@@ -1,4 +1,4 @@
-#include "..\common\jsmndr.h"
+#include "../common/jsmndr.h"
 #include "g_local.h"
 
 #define MAX_JSON_FILE_SIZE 65536

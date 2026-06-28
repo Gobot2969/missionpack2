@@ -20,6 +20,7 @@ set(Q3_INCLUDE_FLAGS
   "-I${CMAKE_CURRENT_SOURCE_DIR}/code/cgame"
   "-I${CMAKE_CURRENT_SOURCE_DIR}/code/game"
   "-I${CMAKE_CURRENT_SOURCE_DIR}/code/ui"
+  "-I${CMAKE_CURRENT_SOURCE_DIR}/code/common"
 )
 
 # Mirrors the %1 (-DDEBUG) argument debug.bat passes to every module bat.

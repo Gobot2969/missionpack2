@@ -6,6 +6,7 @@ set(GAME_VM_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vm")
 file(MAKE_DIRECTORY "${GAME_VM_DIR}")
 
 set(GAME_SOURCES
+  ../common/jsmndr.c
   g_main.c
   ai_chat.c
   ai_cmd.c
