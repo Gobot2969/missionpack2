@@ -120,8 +120,12 @@ G_CVAR( g_railJump, "g_railJump", "0", CVAR_ARCHIVE, 0, qtrue, qtrue )
 G_CVAR( g_railJumpDamage, "g_railJumpDamage", "100", CVAR_ARCHIVE, 0, qtrue, qtrue )
 G_CVAR( g_noSelfDamage, "g_noSelfDamage", "0", CVAR_ARCHIVE, 0, qtrue,qtrue )
 
-G_CVAR( g_startArmor, "g_startArmor", "0", 0, 0, qfalse, qfalse )
-G_CVAR( g_startHealth, "g_startHealth", "0", 0, 0, qfalse, qfalse )
+//G_CVAR( g_startArmor, "g_startArmor", "0", 0, 0, qfalse, qfalse )
+//G_CVAR( g_startHealth, "g_startHealth", "0", 0, 0, qfalse, qfalse )
+
+G_CVAR( g_startingArmor, "g_startingArmor", "0", 0, 0, qfalse, qfalse ) // ~Dimmskii - QL Factory compatible
+G_CVAR( g_startingHealth, "g_startingHealth", "0", 0, 0, qfalse, qfalse ) // ~Dimmskii - QL Factory compatible
+G_CVAR( g_startingHealthBonus, "g_startingHealthBonus", "0", 0, 0, qfalse, qfalse ) // ~Dimmskii - QL Factory compatible
 
 G_CVAR( g_grapple, "g_grapple", "0", 0, 0, qtrue, qfalse )
 G_CVAR( g_grappleDelayTime, "g_grappleDelayTime", "400", CVAR_SERVERINFO, 0, qtrue, qfalse )
@@ -186,9 +190,6 @@ G_CVAR( g_damageCG, "g_damageCG", "7", 0, 0, qfalse, qfalse )
 
 // ~Dimmskii
 G_CVAR( g_damageHMG, "g_damageHMG", "8", 0, 0, qfalse, qfalse )
-
-G_CVAR( g_arenaArmor, "g_arenaArmor", "100", 0, 0, qfalse, qfalse )
-G_CVAR( g_arenaHealth, "g_arenaHealth", "200", 0, 0, qfalse, qfalse )
 
 G_CVAR( g_startingAmmo_mg, "g_startingAmmo_mg", "50", 0, 0, qfalse, qfalse )
 G_CVAR( g_startingAmmo_sg, "g_startingAmmo_sg", "10", 0, 0, qfalse, qfalse )

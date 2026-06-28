@@ -1061,7 +1061,7 @@ void ClientSpawn(gentity_t *ent) {
 	int		eventSequence;
 	char	userinfo[MAX_INFO_STRING];
 	qboolean isSpectator;
-	int startHealth, startArmor; 	// ~Dimmskii
+	int startHealth, startHealthBonus, startArmor; 	// ~Dimmskii
 	char *classname;				// ~Dimmskii
 
 	index = ent - g_entities;
@@ -1249,28 +1249,31 @@ void ClientSpawn(gentity_t *ent) {
 */
 	
 // ~Dimmskii
+
+	// Disable shooting upon respawn in Arena gamemodes if there is warmup time (  re-enabled on G_WarmupEnd in g_main.c  )
 	if ( GT_IsArenaGame(g_gametype.integer) ) {
-		startHealth = g_arenaHealth.integer;
-		startArmor = g_arenaArmor.integer;
-		
-		// Disable shooting upon respawn in Arena gamemodes if there is warmup time (  re-enabled on G_WarmupEnd in g_main.c  )
 		if (g_warmup.integer > 0) {
 			client->ps.pm_flags |= PMF_NOSHOOT;
 		}
-	} else {
-		startHealth = g_startHealth.integer;
-		startArmor = g_startArmor.integer;
 	}
 
+	// Starting health
+	startHealth = g_startingHealth.integer;
+	startHealthBonus = g_startingHealthBonus.integer;
 	if (startHealth > 0) {
 		client->ps.stats[STAT_HEALTH] = startHealth;
+		if (startHealthBonus > 0) {
+			client->ps.stats[STAT_HEALTH] += startHealthBonus;
+		}
 		if (client->ps.stats[STAT_HEALTH] > client->ps.stats[STAT_MAX_HEALTH] * 2)
 			client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] * 2;
 		ent->health = client->ps.stats[STAT_HEALTH];
 	}
 
+	// Starting armor
+	startArmor = g_startingArmor.integer;
 	if (startArmor > 0) {
-		client->ps.stats[STAT_ARMOR] = g_startArmor.integer;
+		client->ps.stats[STAT_ARMOR] = startArmor;
 		if (client->ps.stats[STAT_ARMOR] > client->ps.stats[STAT_MAX_HEALTH] * 2) {
 			client->ps.stats[STAT_ARMOR] = client->ps.stats[STAT_MAX_HEALTH] * 2;
 		}

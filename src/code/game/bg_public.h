@@ -144,8 +144,14 @@ static const char *GFACTORY_CVARS[] = {
 	"roundlimit",
 	"capturelimit",
 	"g_warmup",
+	"dmflags",
+	"g_instagib",
 //	"g_fastWeaponSwitch", // exists in ql?
 	
+	// Starting things
+	"g_startingHealth",
+	"g_startingHealthBonus",
+	"g_startingArmor",
 	
 	// Starting ammo
 	"g_startingAmmo_mg",

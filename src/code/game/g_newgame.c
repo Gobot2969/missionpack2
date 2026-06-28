@@ -42,8 +42,8 @@ const char *const s_gametypeSpawnNames[GT_MAX_GAME_TYPE][MAX_GAMETYPE_NAME_ALIAS
 	{ "ctf", NULL, NULL },                          /* GT_CTF */
 	{ "oneflag", "1fctf", NULL },                   /* GT_1FCTF */
 	{ "obelisk", "overload", NULL },                /* GT_OBELISK */
-	{ "harvester", NULL, NULL },                    /* GT_HARVESTER */
-	{ "freeze", "freezetag", NULL },                /* GT_FREEZE */
+	{ "harvester", "har", NULL },                   /* GT_HARVESTER */
+	{ "freeze", "freezetag", "ft" },                /* GT_FREEZE */
 	{ "domination", "dom", NULL },                  /* GT_DOMINATION */
 	{ "attackdefend", "ad", NULL },                 /* GT_ATTACK_DEFEND */
 	{ "redrover", "rr", NULL },                     /* GT_RED_ROVER */
