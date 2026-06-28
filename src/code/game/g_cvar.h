@@ -127,7 +127,8 @@ G_CVAR( g_startingArmor, "g_startingArmor", "0", 0, 0, qfalse, qfalse ) // ~Dimm
 G_CVAR( g_startingHealth, "g_startingHealth", "0", 0, 0, qfalse, qfalse ) // ~Dimmskii - QL Factory compatible
 G_CVAR( g_startingHealthBonus, "g_startingHealthBonus", "0", 0, 0, qfalse, qfalse ) // ~Dimmskii - QL Factory compatible
 
-G_CVAR( g_grapple, "g_grapple", "0", 0, 0, qtrue, qfalse )
+//G_CVAR( g_grapple, "g_grapple", "0", 0, 0, qtrue, qfalse )
+G_CVAR( g_grapple, "g_grapple", "0", CVAR_ROM, 0, qtrue, qfalse ) // ~Dimmskii - now symbolic. Auto-sets based on the flipping of bit 512 in ql factory cvar g_startingWeapons
 G_CVAR( g_grappleDelayTime, "g_grappleDelayTime", "400", CVAR_SERVERINFO, 0, qtrue, qfalse )
 G_CVAR( g_grappleHoldTime, "g_grappleHoldTime", "0", 0, 0, qtrue, qfalse )
 //G_CVAR( g_grappleSpeed, "g_grappleSpeed", "800", 0, 0, qtrue, qfalse )
@@ -204,7 +205,7 @@ G_CVAR( g_startingAmmo_pl, "g_startingAmmo_pl", "10", 0, 0, qfalse, qfalse )
 G_CVAR( g_startingAmmo_cg, "g_startingAmmo_cg", "100", 0, 0, qfalse, qfalse )
 G_CVAR( g_startingAmmo_hmg, "g_startingAmmo_hmg", "50", 0, 0, qfalse, qfalse )
 
-G_CVAR( g_arenaWpflags, "arenaWpflags", "2175", 0, 0, qfalse, qfalse )
+G_CVAR( g_startingWeapons, "g_startingWeapons", "3", 0, 0, qfalse, qfalse )
 // END Dimmskii
 
 G_CVAR( g_tossWeapon, "g_tossWeapon", "1", CVAR_ARCHIVE, 0, qtrue, qtrue )
@@ -214,7 +215,7 @@ G_CVAR( g_removeammo, "removeammo", "0", 0, 0, qfalse, qfalse )
 G_CVAR( g_removeitem, "removeitem", "0", 0, 0, qfalse, qfalse )
 G_CVAR( g_removepowerup, "removepowerup", "0", 0, 0, qfalse, qfalse )
 G_CVAR( g_removeweapon, "removeweapon", "0", 0, 0, qfalse, qfalse )
-G_CVAR( g_wpflags, "wpflags", "0", 0, 0, qfalse, qfalse )
+//G_CVAR( g_wpflags, "wpflags", "0", 0, 0, qfalse, qfalse )
 
 G_CVAR( g_1FRespawn, "g_1FRespawn", "0", 0, 0, qfalse, qfalse)
 G_CVAR( g_loadCustomEnts, "g_loadCustomEnts", "0", 0, 0, qfalse, qfalse)
