@@ -169,11 +169,16 @@ static const char *GFACTORY_CVARS[] = {
 	"g_startingAmmo_pl",
 	"g_startingAmmo_cg",
 	"g_startingAmmo_hmg",
+	
+	// Pickup respawns
+	"g_ammoRespawn",
+	"g_weaponRespawn",
+	
     NULL                    // Null-terminator for safe iteration loops
 };
 
 #define GFACTORY_MAX_CVAR_VALUE_LEN 64
-#define GFACTORY_CVARS_COUNT       24 /* Total elements in GFACTORY_CVARS excluding NULL */
+#define GFACTORY_CVARS_COUNT       26 /* Total elements in GFACTORY_CVARS excluding NULL */
 
 // QL-Compatible game factories
 typedef struct {
