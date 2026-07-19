@@ -497,6 +497,26 @@ void G_SpawnGEntityFromSpawnVars( void ) {
 		}
 	}
 
+// ~Dimmskii
+	// Hard-exclude classic team_CTF_* flag entities from non-flag gametypes
+	// when the map doesn't opt into the "gametype" key filtering above.
+	// notteam/notfree only say "team game: yes/no", which now covers many
+	// more team gametypes (Clan Arena, Freeze Tag, Domination, etc.) than
+	// just CTF/1FCTF, so without this, flags on classic maps (which only
+	// ever set "notfree") leak into every team gametype instead of just
+	// the ones that actually use a flag.
+	if ( ent->classname && ( !strcmp( ent->classname, "team_CTF_redflag" )
+			|| !strcmp( ent->classname, "team_CTF_blueflag" )
+			|| !strcmp( ent->classname, "team_CTF_neutralflag" ) ) ) {
+		if ( !G_SpawnString( "gametype", NULL, &value ) ) {
+			if ( g_gametype.integer != GT_CTF && g_gametype.integer != GT_1FCTF ) {
+				G_FreeEntity( ent );
+				return;
+			}
+		}
+	}
+// END Dimmskii
+
 	// move editor origin to pos
 	VectorCopy( ent->s.origin, ent->s.pos.trBase );
 	VectorCopy( ent->s.origin, ent->r.currentOrigin );
