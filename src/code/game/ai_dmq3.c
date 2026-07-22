@@ -5506,6 +5506,50 @@ void BotShutdownDeathmatchAI(void) {
 // ~DIMMSKII
 /*
 ==================
+BotNearestReachableArea
+
+Returns an AAS area near 'origin' that the bot can actually route to - the
+"closest adjacent reachable place." Unlike a bare BotPointAreaNum, this also
+verifies the area is reachable FROM the bot, so a goal built on it won't
+stall. If the enemy's exact origin has no usable area (mid-bounce on a jump
+pad, up on a thin ledge), it probes straight down for the floor beneath them.
+Returns 0 if nothing reachable is near.
+
+Safety: only ever passes AAS AREA NUMBERS (from BotPointAreaNum / TraceAreas,
+which yield an in-range area or 0) to trap_AAS_AreaTravelTimeToGoalArea, which
+range-checks internally and returns 0 for a bad/unreachable areanum. It does
+NOT use trap_AAS_PointReachabilityAreaIndex (returns a cluster reachability
+index, a different numbering) nor trap_AAS_AreaReachability (fatals on an
+out-of-range areanum) - the two mistakes that crashed the earlier attempt when
+a picked enemy was mid-fall into lava on a big map.
+==================
+*/
+int BotNearestReachableArea(bot_state_t *bs, vec3_t origin) {
+	int areanum, numareas, areas[16], i;
+	vec3_t start, end;
+
+	// area containing the enemy (valid area number or 0), then confirm the bot
+	// can route to it
+	areanum = BotPointAreaNum(origin);
+	if (areanum && trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, areanum, TFL_DEFAULT)) {
+		return areanum;
+	}
+	// off-mesh / airborne: trace down and take the nearest routable area below
+	VectorCopy(origin, start);
+	start[2] += 24;
+	VectorCopy(origin, end);
+	end[2] -= 4096;
+	numareas = trap_AAS_TraceAreas(start, end, areas, NULL, 16);
+	for (i = 0; i < numareas && i < 16; i++) {
+		if (areas[i] > 0 && trap_AAS_AreaTravelTimeToGoalArea(bs->areanum, bs->origin, areas[i], TFL_DEFAULT)) {
+			return areas[i];
+		}
+	}
+	return 0;
+}
+
+/*
+==================
 BotArenaPickEnemyToKill
 ==================
 */
@@ -5557,9 +5601,16 @@ void BotArenaPickEnemyToKill(bot_state_t *bs) {
 	#ifdef DEBUG
 		BotAI_Print(PRT_MESSAGE, va("%s gets valid entinfo for arenapick\n", botname));
 	#endif //DEBUG
-		areanum = BotPointAreaNum(entinfo.origin);
+		//areanum = BotPointAreaNum(entinfo.origin);
+		areanum = BotNearestReachableArea(bs, entinfo.origin); // ~Dimmskii - reachable-from-bot area, so the goal updates for airborne/jump-pad enemies (crash-safe, see helper)
 		if (areanum) {// && trap_AAS_AreaReachability(areanum)) {
-			BotRoamGoal(bs,entinfo.origin);
+			//BotRoamGoal(bs,entinfo.origin);
+			// ~Dimmskii - BotRoamGoal above is commented out: it clobbers
+			// entinfo.origin with a random wander point near the bot, so the
+			// VectorCopy(entinfo.origin, bs->teamgoal.origin) below ended up a
+			// random spot instead of the enemy (bot roamed). Left out, so
+			// teamgoal.origin stays the enemy's actual position (matching
+			// areanum) and the bot approaches the enemy instead.
 			//bs->teamgoal.entitynum = clientEnt->client->ps.clientNum;
 			bs->teamgoal.entitynum = found->client->ps.clientNum; // ~Dimmskii
 			bs->teamgoal.areanum = areanum;
